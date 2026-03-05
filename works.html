@@ -12,31 +12,40 @@
     <style>
         /* ========== 全局变量 ========== */
         :root {
-            /* 蓝白主题 */
-            --bg-light: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
-            --text-light-primary: #1565c0;
-            --text-light-secondary: #1976d2;
-            --accent-light: #00bcd4;
-            --glow-light: rgba(0, 188, 212, 0.6);
-            --card-light: rgba(255, 255, 255, 0.9);
-
-            /* 黑色主题 */
-            --bg-dark: #0a0e27;
-            --text-dark-primary: #e6f1ff;
-            --text-dark-secondary: #8892b0;
-            --accent-dark: #64ffda;
-            --glow-dark: rgba(100, 255, 218, 0.4);
-            --card-dark: rgba(17, 34, 64, 0.9);
-
+            /* 蓝白主题 - 优化后的色彩系统 */
+            --bg-light: linear-gradient(135deg, #f0f7ff 0%, #e1f0ff 50%, #d0e8ff 100%);
+            --text-light-primary: #0d47a1;
+            --text-light-secondary: #1565c0;
+            --accent-light: #0097a7;
+            --accent-light-hover: #00acc1;
+            --glow-light: rgba(0, 151, 167, 0.5);
+            --card-light: rgba(255, 255, 255, 0.95);
+            --shadow-light: rgba(13, 71, 161, 0.1);
+            
+            /* 黑色主题 - 优化后的色彩系统 */
+            --bg-dark: #0d1117;
+            --text-dark-primary: #e6edf3;
+            --text-dark-secondary: #8b949e;
+            --accent-dark: #58a6ff;
+            --accent-dark-hover: #79c0ff;
+            --glow-dark: rgba(88, 166, 255, 0.4);
+            --card-dark: rgba(22, 27, 34, 0.95);
+            --shadow-dark: rgba(88, 166, 255, 0.1);
+            
             /* 当前主题 */
             --current-bg: var(--bg-light);
             --current-text: var(--text-light-primary);
             --current-text-sec: var(--text-light-secondary);
             --current-accent: var(--accent-light);
+            --current-accent-hover: var(--accent-light-hover);
             --current-glow: var(--glow-light);
             --current-card: var(--card-light);
-
-            transition: all 0.5s ease;
+            --current-shadow: var(--shadow-light);
+            
+            /* 动画时间函数 */
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+            --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         body.dark-mode {
@@ -44,8 +53,100 @@
             --current-text: var(--text-dark-primary);
             --current-text-sec: var(--text-dark-secondary);
             --current-accent: var(--accent-dark);
+            --current-accent-hover: var(--accent-dark-hover);
             --current-glow: var(--glow-dark);
             --current-card: var(--card-dark);
+            --current-shadow: var(--shadow-dark);
+        }
+        
+        /* ========== 页面加载动画 ========== */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--current-bg);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s var(--ease-out-expo), visibility 0.6s;
+        }
+        
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid transparent;
+            border-top-color: var(--current-accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ========== 滚动进度条 ========== */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--current-accent), var(--current-accent-hover));
+            z-index: 10001;
+            transition: width 0.1s linear;
+        }
+        
+        /* ========== 返回顶部按钮 ========== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--current-card);
+            border: 2px solid var(--current-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.4s var(--ease-smooth);
+            z-index: 999;
+            box-shadow: 0 4px 20px var(--current-shadow);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .back-to-top:hover {
+            background: var(--current-accent);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px var(--current-glow);
+        }
+        
+        .back-to-top svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--current-accent);
+            transition: stroke 0.3s;
+        }
+        
+        .back-to-top:hover svg {
+            stroke: #fff;
         }
 
         /* ========== 基础重置 ========== */
@@ -57,14 +158,28 @@
 
         html {
             scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--current-bg);
             color: var(--current-text);
             overflow-x: hidden;
-            transition: all 0.8s ease;
+            transition: background 0.6s var(--ease-smooth), color 0.6s var(--ease-smooth);
+            line-height: 1.6;
+            letter-spacing: 0.02em;
+        }
+        
+        ::selection {
+            background: var(--current-accent);
+            color: #fff;
+        }
+        
+        :focus-visible {
+            outline: 2px solid var(--current-accent);
+            outline-offset: 3px;
         }
 
         ::-webkit-scrollbar {
@@ -72,12 +187,16 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--current-bg);
+            background: transparent;
         }
 
         ::-webkit-scrollbar-thumb {
             background: var(--current-accent);
             border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--current-accent-hover);
         }
 
         /* ========== 星空背景 ========== */
@@ -796,8 +915,23 @@
     </style>
 </head>
 <body>
+    <!-- 页面加载动画 -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-spinner"></div>
+    </div>
+    
+    <!-- 滚动进度条 -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+    
     <!-- 背景 -->
     <div id="bg-container"></div>
+    
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" aria-label="返回顶部" title="返回顶部">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 
     <!-- 导航栏 -->
     <nav id="navbar">
@@ -1058,6 +1192,14 @@
 
     <!-- JavaScript -->
     <script>
+        // ========== 0. 页面加载动画 ==========
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('pageLoader');
+            setTimeout(() => {
+                loader.classList.add('hidden');
+            }, 500);
+        });
+
         // ========== 1. 主题切换 ==========
         const themeToggle = document.getElementById('themeToggle');
 
@@ -1069,30 +1211,56 @@
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
         }
+        
+        // ========== 2. 滚动进度条和返回顶部 ==========
+        const scrollProgress = document.getElementById('scrollProgress');
+        const backToTop = document.getElementById('backToTop');
+        const navbar = document.getElementById('navbar');
+        
+        function updateScrollProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = scrollPercent + '%';
+            
+            if (scrollTop > 300) {
+                backToTop.classList.add('visible');
+                navbar.classList.add('scrolled');
+            } else {
+                backToTop.classList.remove('visible');
+                navbar.classList.remove('scrolled');
+            }
+        }
+        
+        window.addEventListener('scroll', updateScrollProgress);
+        
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
-        // ========== 2. 创建背景 ==========
+        // ========== 3. 创建背景 ==========
         function createBackground() {
             const container = document.getElementById('bg-container');
+            if (!container) return;
 
-            // 创建星星
             for (let i = 0; i < 150; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                star.style.width = Math.random() * 3 + 'px';
+                star.style.width = Math.random() * 2.5 + 'px';
                 star.style.height = star.style.width;
                 star.style.animationDelay = Math.random() * 3 + 's';
                 container.appendChild(star);
             }
 
-            // 创建流星
             for (let i = 0; i < 5; i++) {
                 setTimeout(() => createMeteor(container), i * 3000);
             }
         }
 
         function createMeteor(container) {
+            if (!container) return;
             const meteor = document.createElement('div');
             meteor.className = 'meteor';
             meteor.style.left = Math.random() * 100 + '%';
@@ -1101,11 +1269,13 @@
 
             meteor.addEventListener('animationend', function() {
                 meteor.remove();
-                createMeteor(container);
+                if (!document.hidden) {
+                    createMeteor(container);
+                }
             });
         }
 
-        // ========== 3. 滚动动画 ==========
+        // ========== 4. 滚动动画 ==========
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1121,24 +1291,44 @@
             observer.observe(el);
         });
 
-        // ========== 4. 导航栏滚动效果 ==========
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
         // ========== 5. 移动端菜单 ==========
-        document.getElementById('menuToggle').addEventListener('click', function() {
-            document.getElementById('navLinks').classList.toggle('active');
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        menuToggle.addEventListener('click', function() {
+            const isActive = navLinks.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+            menuToggle.setAttribute('aria-expanded', isActive);
+        });
+        
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuToggle.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+        
+        // ========== 6. 键盘导航支持 ==========
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                menuToggle.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            }
         });
 
         // ========== 初始化 ==========
         window.addEventListener('load', function() {
             createBackground();
+        });
+        
+        // ========== 性能优化 ==========
+        document.addEventListener('visibilitychange', function() {
+            const container = document.getElementById('bg-container');
+            if (container) {
+                container.style.animationPlayState = document.hidden ? 'paused' : 'running';
+            }
         });
     </script>
 </body>
