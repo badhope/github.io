@@ -6,50 +6,46 @@
     <title>熊泽城 | AI时代的探索者</title>
     <meta name="description" content="大数据专业本科生，全栈开发者，活跃的开源贡献者">
     
-    <!-- Google Fonts - 多种字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700;900&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ========== 全局变量 - 两种主题 ========== */
         :root {
-            /* 蓝白主题 - 优化后的色彩系统 */
-            --bg-light: linear-gradient(135deg, #f0f7ff 0%, #e1f0ff 50%, #d0e8ff 100%);
-            --text-light-primary: #0d47a1;
-            --text-light-secondary: #1565c0;
-            --accent-light: #0097a7;
-            --accent-light-hover: #00acc1;
-            --glow-light: rgba(0, 151, 167, 0.5);
-            --card-light: rgba(255, 255, 255, 0.95);
-            --shadow-light: rgba(13, 71, 161, 0.1);
+            --bg-light: linear-gradient(135deg, #ffffff 0%, #f0f8ff 50%, #e6f3ff 100%);
+            --text-light-primary: #1a365d;
+            --text-light-secondary: #2c5282;
+            --accent-light: #0078d4;
+            --accent-light-hover: #106ebe;
+            --accent-light-soft: rgba(0, 120, 212, 0.15);
+            --glow-light: rgba(0, 120, 212, 0.4);
+            --card-light: rgba(255, 255, 255, 0.92);
+            --shadow-light: rgba(0, 120, 212, 0.12);
+            --border-light: rgba(0, 120, 212, 0.2);
             
-            /* 黑色主题 - 优化后的色彩系统 */
             --bg-dark: #0d1117;
             --text-dark-primary: #e6edf3;
             --text-dark-secondary: #8b949e;
             --accent-dark: #58a6ff;
             --accent-dark-hover: #79c0ff;
-            --glow-dark: rgba(88, 166, 255, 0.4);
+            --accent-dark-soft: rgba(88, 166, 255, 0.15);
+            --glow-dark: rgba(88, 166, 255, 0.35);
             --card-dark: rgba(22, 27, 34, 0.95);
             --shadow-dark: rgba(88, 166, 255, 0.1);
+            --border-dark: rgba(88, 166, 255, 0.2);
             
-            /* 当前主题 */
             --current-bg: var(--bg-light);
             --current-text: var(--text-light-primary);
             --current-text-sec: var(--text-light-secondary);
             --current-accent: var(--accent-light);
             --current-accent-hover: var(--accent-light-hover);
+            --current-accent-soft: var(--accent-light-soft);
             --current-glow: var(--glow-light);
             --current-card: var(--card-light);
             --current-shadow: var(--shadow-light);
+            --current-border: var(--border-light);
             
-            /* 动画时间函数 */
             --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
             --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
             --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
-            
-            /* 安全区域 */
-            --safe-area-top: env(safe-area-inset-top, 0px);
-            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
         }
         
         body.dark-mode {
@@ -58,119 +54,13 @@
             --current-text-sec: var(--text-dark-secondary);
             --current-accent: var(--accent-dark);
             --current-accent-hover: var(--accent-dark-hover);
+            --current-accent-soft: var(--accent-dark-soft);
             --current-glow: var(--glow-dark);
             --current-card: var(--card-dark);
             --current-shadow: var(--shadow-dark);
+            --current-border: var(--border-dark);
         }
         
-        /* ========== 页面加载动画 ========== */
-        .page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--current-bg);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.6s var(--ease-out-expo), visibility 0.6s;
-        }
-        
-        .page-loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-        
-        .loader-spinner {
-            width: 60px;
-            height: 60px;
-            border: 3px solid transparent;
-            border-top-color: var(--current-accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        .loader-spinner::before {
-            content: '';
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border: 3px solid transparent;
-            border-top-color: var(--current-text);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite reverse;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* ========== 滚动进度条 ========== */
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--current-accent), var(--current-accent-hover));
-            z-index: 10001;
-            transition: width 0.1s linear;
-        }
-        
-        /* ========== 返回顶部按钮 ========== */
-        .back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: var(--current-card);
-            border: 2px solid var(--current-accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: all 0.4s var(--ease-smooth);
-            z-index: 999;
-            box-shadow: 0 4px 20px var(--current-shadow);
-        }
-        
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        
-        .back-to-top:hover {
-            background: var(--current-accent);
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px var(--current-glow);
-        }
-        
-        .back-to-top svg {
-            width: 24px;
-            height: 24px;
-            stroke: var(--current-accent);
-            transition: stroke 0.3s;
-        }
-        
-        .back-to-top:hover svg {
-            stroke: var(--bg-dark);
-        }
-        
-        body.dark-mode .back-to-top:hover svg {
-            stroke: #0d1117;
-        }
-        
-        /* ========== 基础重置 ========== */
         * {
             margin: 0;
             padding: 0;
@@ -189,24 +79,21 @@
             color: var(--current-text);
             min-height: 100vh;
             overflow-x: hidden;
-            transition: background 0.6s var(--ease-smooth), color 0.6s var(--ease-smooth);
-            line-height: 1.6;
+            transition: background 0.5s var(--ease-smooth), color 0.5s var(--ease-smooth);
+            line-height: 1.7;
             letter-spacing: 0.02em;
         }
         
-        /* 文本选中样式 */
         ::selection {
             background: var(--current-accent);
             color: #fff;
         }
         
-        /* 焦点样式 - 无障碍优化 */
         :focus-visible {
             outline: 2px solid var(--current-accent);
             outline-offset: 3px;
         }
         
-        /* 平滑滚动指示 */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
@@ -215,7 +102,67 @@
             }
         }
         
-        /* ========== 流星雨背景（蓝白主题） ========== */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--current-bg);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s var(--ease-out-expo), visibility 0.6s;
+        }
+        
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        .loader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .loader-logo {
+            width: 80px;
+            height: 80px;
+            animation: loaderPulse 1.5s ease-in-out infinite;
+        }
+        
+        .loader-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        @keyframes loaderPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .loader-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: var(--current-accent);
+            letter-spacing: 3px;
+        }
+        
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--current-accent), var(--current-accent-hover));
+            z-index: 10001;
+            transition: width 0.1s linear;
+        }
+        
         #meteor-container {
             position: fixed;
             top: 0;
@@ -225,6 +172,7 @@
             z-index: 0;
             pointer-events: none;
             display: block;
+            overflow: hidden;
         }
         
         body.dark-mode #meteor-container {
@@ -234,25 +182,26 @@
         .meteor {
             position: absolute;
             width: 2px;
-            height: 80px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(0, 188, 212, 1));
+            height: 60px;
+            background: linear-gradient(to bottom, rgba(0, 120, 212, 0), rgba(0, 120, 212, 0.8));
             transform: rotate(-45deg);
-            animation: meteorFall 1.5s linear infinite;
-            filter: drop-shadow(0 0 6px #00bcd4);
+            animation: meteorFall 2s linear infinite;
+            filter: drop-shadow(0 0 4px var(--current-accent));
         }
         
         @keyframes meteorFall {
             0% {
                 transform: translateX(100vw) translateY(-100vh) rotate(-45deg);
-                opacity: 1;
+                opacity: 0;
             }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
             100% {
                 transform: translateX(-100vw) translateY(100vh) rotate(-45deg);
                 opacity: 0;
             }
         }
         
-        /* ========== 星空背景（黑色主题） ========== */
         #star-container {
             position: fixed;
             top: 0;
@@ -262,6 +211,7 @@
             z-index: 0;
             pointer-events: none;
             display: none;
+            overflow: hidden;
         }
         
         body.dark-mode #star-container {
@@ -270,36 +220,66 @@
         
         .star {
             position: absolute;
-            background: white;
+            background: #fff;
             border-radius: 50%;
             animation: starTwinkle 3s ease-in-out infinite;
         }
         
         @keyframes starTwinkle {
             0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
+            50% { opacity: 1; transform: scale(1.3); }
         }
         
-        /* 星云效果 */
         .nebula {
             position: absolute;
             border-radius: 50%;
-            filter: blur(60px);
-            animation: nebulaFloat 10s ease-in-out infinite;
+            filter: blur(80px);
+            animation: nebulaFloat 15s ease-in-out infinite;
         }
         
         @keyframes nebulaFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(30px, -30px) scale(1.1); }
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+            50% { transform: translate(40px, -40px) scale(1.15); opacity: 0.7; }
         }
         
-        /* ========== 隐藏式导航栏 ========== */
+        #particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--current-accent);
+            border-radius: 50%;
+            animation: particleFloat 12s ease-in-out infinite;
+            opacity: 0.4;
+        }
+        
+        @keyframes particleFloat {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translate(60px, -60px) scale(1.2);
+                opacity: 0.6;
+            }
+        }
+        
         nav {
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
-            padding: 20px 50px;
+            padding: 18px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -307,24 +287,23 @@
             background: transparent;
         }
         
-        nav:hover, nav.scrolled {
+        nav.scrolled {
             background: var(--current-card);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 4px 30px var(--current-shadow);
+            box-shadow: 0 2px 20px var(--current-shadow);
+            border-bottom: 1px solid var(--current-border);
         }
         
-        body.dark-mode nav:hover, body.dark-mode nav.scrolled {
-            box-shadow: 0 4px 30px var(--current-glow);
-        }
-        
-        /* LOGO - 六芒星图标 */
         .nav-logo {
-            width: 50px;
-            height: 50px;
+            width: 46px;
+            height: 46px;
             position: relative;
             cursor: pointer;
             transition: transform 0.3s var(--ease-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .nav-logo:hover {
@@ -334,24 +313,19 @@
         .nav-logo svg {
             width: 100%;
             height: 100%;
-            filter: drop-shadow(0 0 10px var(--current-glow));
+            filter: drop-shadow(0 0 8px var(--current-glow));
             transition: filter 0.3s;
         }
         
         .nav-logo:hover svg {
-            filter: drop-shadow(0 0 20px var(--current-glow));
+            filter: drop-shadow(0 0 15px var(--current-glow));
         }
         
-        /* 导航链接 */
         .nav-links {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             list-style: none;
             align-items: center;
-        }
-        
-        .nav-links li {
-            position: relative;
         }
         
         .nav-links a {
@@ -359,144 +333,116 @@
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             transition: all 0.3s var(--ease-smooth);
-            padding: 10px 18px;
-            border-radius: 25px;
+            padding: 10px 16px;
+            border-radius: 22px;
             display: inline-block;
             position: relative;
-            overflow: hidden;
-        }
-        
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--current-accent);
-            transition: all 0.3s var(--ease-smooth);
-            transform: translateX(-50%);
-        }
-        
-        .nav-links a:hover::before {
-            width: 60%;
         }
         
         .nav-links a:hover {
             color: var(--current-accent);
-            background: rgba(88, 166, 255, 0.08);
+            background: var(--current-accent-soft);
             transform: translateY(-2px);
         }
         
         .nav-links a.active {
-            color: var(--current-accent);
-            background: rgba(88, 166, 255, 0.12);
+            color: #fff;
+            background: var(--current-accent);
+            font-weight: 600;
         }
         
-        /* 主题切换按钮 */
         .theme-toggle {
-            width: 64px;
-            height: 32px;
-            background: rgba(0, 151, 167, 0.15);
-            border-radius: 20px;
+            width: 60px;
+            height: 30px;
+            background: var(--current-accent-soft);
+            border-radius: 15px;
             position: relative;
             cursor: pointer;
-            border: 2px solid var(--current-accent);
+            border: 2px solid var(--current-border);
             transition: all 0.4s var(--ease-smooth);
-            overflow: hidden;
+            margin-left: 10px;
         }
         
         .theme-toggle:hover {
-            background: rgba(0, 151, 167, 0.25);
-            transform: scale(1.05);
-        }
-        
-        body.dark-mode .theme-toggle {
-            background: rgba(88, 166, 255, 0.15);
-        }
-        
-        body.dark-mode .theme-toggle:hover {
-            background: rgba(88, 166, 255, 0.25);
-        }
-        
-        .theme-toggle::before {
-            content: '🌙';
-            position: absolute;
-            left: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-            transition: all 0.4s var(--ease-smooth);
-            opacity: 1;
-        }
-        
-        .theme-toggle::after {
-            content: '☀️';
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-            opacity: 0.4;
-            transition: all 0.4s var(--ease-smooth);
-        }
-        
-        body.dark-mode .theme-toggle::before {
-            opacity: 0.4;
-        }
-        
-        body.dark-mode .theme-toggle::after {
-            opacity: 1;
+            border-color: var(--current-accent);
+            box-shadow: 0 0 15px var(--current-glow);
         }
         
         .theme-toggle-ball {
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, #fff, #f0f0f0);
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #fff 0%, #e8f4ff 100%);
             border-radius: 50%;
             position: absolute;
-            left: 3px;
-            top: 3px;
+            left: 2px;
+            top: 2px;
             transition: all 0.4s var(--ease-bounce);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
         
         body.dark-mode .theme-toggle-ball {
-            left: calc(100% - 27px);
-            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            left: calc(100% - 24px);
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
             box-shadow: 0 2px 8px var(--current-glow);
         }
         
-        /* 移动端菜单按钮 */
+        .theme-toggle-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            transition: opacity 0.3s;
+        }
+        
+        .theme-toggle-icon.sun {
+            right: 6px;
+            opacity: 0.5;
+        }
+        
+        .theme-toggle-icon.moon {
+            left: 6px;
+            opacity: 1;
+        }
+        
+        body.dark-mode .theme-toggle-icon.sun {
+            opacity: 1;
+        }
+        
+        body.dark-mode .theme-toggle-icon.moon {
+            opacity: 0.5;
+        }
+        
         .menu-toggle {
             display: none;
             background: transparent;
-            border: 2px solid var(--current-accent);
+            border: 2px solid var(--current-border);
             color: var(--current-accent);
-            font-size: 20px;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s var(--ease-smooth);
-            position: relative;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
         }
         
         .menu-toggle:hover {
             background: var(--current-accent);
             color: #fff;
-            transform: scale(1.05);
+            border-color: var(--current-accent);
         }
         
         .menu-toggle span {
             display: block;
-            width: 20px;
+            width: 18px;
             height: 2px;
             background: currentColor;
-            margin: 4px auto;
             transition: all 0.3s var(--ease-smooth);
+            border-radius: 1px;
         }
         
         .menu-toggle.active span:nth-child(1) {
@@ -511,7 +457,6 @@
             transform: rotate(-45deg) translate(4px, -4px);
         }
         
-        /* ========== 主要内容区 ========== */
         main {
             position: relative;
             z-index: 1;
@@ -520,21 +465,20 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 100px 20px;
+            padding: 100px 20px 180px;
         }
         
-        /* ========== 六芒星 LOGO ========== */
         .hexagram-container {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             position: relative;
-            margin-bottom: 40px;
-            animation: hexagramFloat 4s ease-in-out infinite;
+            margin-bottom: 35px;
+            animation: hexagramFloat 5s ease-in-out infinite;
         }
         
         @keyframes hexagramFloat {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(180deg); }
+            50% { transform: translateY(-12px) rotate(180deg); }
         }
         
         .hexagram {
@@ -546,12 +490,12 @@
         .hexagram svg {
             width: 100%;
             height: 100%;
-            filter: drop-shadow(0 0 30px var(--current-glow));
+            filter: drop-shadow(0 0 25px var(--current-glow));
             transition: filter 0.3s;
         }
         
         .hexagram:hover svg {
-            filter: drop-shadow(0 0 50px var(--current-glow));
+            filter: drop-shadow(0 0 40px var(--current-glow));
         }
         
         .hexagram-glow {
@@ -559,47 +503,48 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 150%;
-            height: 150%;
+            width: 140%;
+            height: 140%;
             background: radial-gradient(circle, var(--current-glow) 0%, transparent 70%);
-            animation: glowPulse 2s ease-in-out infinite;
+            animation: glowPulse 3s ease-in-out infinite;
             pointer-events: none;
         }
         
         @keyframes glowPulse {
-            0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.15); }
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
         }
         
-        /* ========== 动态标题 ========== */
         .title-section {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         
         .main-title {
             font-family: 'Cinzel', serif;
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 600;
             letter-spacing: 4px;
             color: var(--current-text-sec);
-            margin-bottom: 20px;
-            opacity: 0.85;
+            margin-bottom: 18px;
+            opacity: 0.8;
             text-transform: uppercase;
         }
         
         .typing-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(32px, 6vw, 56px);
+            font-size: clamp(28px, 5.5vw, 52px);
             font-weight: 900;
-            background: linear-gradient(90deg, var(--current-accent), var(--current-text), var(--current-accent));
+            background: linear-gradient(135deg, var(--current-accent) 0%, var(--current-text) 50%, var(--current-accent) 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: textShine 3s linear infinite;
-            min-height: 70px;
-            position: relative;
+            animation: textShine 4s linear infinite;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         @keyframes textShine {
@@ -610,27 +555,26 @@
         .cursor {
             display: inline-block;
             width: 3px;
-            height: 50px;
+            height: 45px;
             background: var(--current-accent);
-            margin-left: 5px;
+            margin-left: 4px;
             animation: cursorBlink 1s infinite;
             vertical-align: middle;
             border-radius: 2px;
         }
         
         @keyframes cursorBlink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+            0%, 45% { opacity: 1; }
+            50%, 100% { opacity: 0; }
         }
         
-        /* 副标题 */
         .subtitle {
             font-family: 'Noto Sans SC', sans-serif;
-            font-size: 18px;
+            font-size: 17px;
             color: var(--current-text-sec);
-            margin-top: 20px;
+            margin-top: 18px;
             font-weight: 400;
-            opacity: 0.85;
+            opacity: 0.9;
             line-height: 1.8;
         }
         
@@ -643,27 +587,27 @@
         .subtitle span::after {
             content: '';
             position: absolute;
-            bottom: -2px;
+            bottom: -1px;
             left: 0;
             width: 100%;
             height: 2px;
             background: var(--current-accent);
-            opacity: 0.5;
+            opacity: 0.4;
+            border-radius: 1px;
         }
         
-        /* ========== 探索按钮 ========== */
         .explore-section {
-            margin-top: 60px;
+            margin-top: 50px;
         }
         
         .explore-btn {
             position: relative;
             display: inline-flex;
             align-items: center;
-            gap: 15px;
-            padding: 18px 45px;
+            gap: 12px;
+            padding: 16px 40px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             text-decoration: none;
             color: var(--current-text);
@@ -673,9 +617,9 @@
             cursor: pointer;
             overflow: hidden;
             transition: all 0.4s var(--ease-smooth);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            box-shadow: 0 4px 20px var(--current-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px var(--current-shadow);
         }
         
         .explore-btn::before {
@@ -685,8 +629,8 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.6s var(--ease-smooth);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transition: left 0.5s var(--ease-smooth);
         }
         
         .explore-btn:hover::before {
@@ -694,57 +638,30 @@
         }
         
         .explore-btn:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 15px 40px var(--current-glow);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px var(--current-glow);
             background: var(--current-accent);
             color: #fff;
             border-color: var(--current-accent);
         }
         
         .explore-btn:active {
-            transform: translateY(-2px) scale(0.98);
+            transform: translateY(-1px);
         }
         
-        /* 按钮提示文字 */
-        .btn-tooltip {
-            position: absolute;
-            bottom: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--current-card);
-            color: var(--current-text);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-family: 'Noto Sans SC', sans-serif;
-            font-weight: 500;
-            opacity: 0;
-            transition: all 0.3s var(--ease-smooth);
-            white-space: nowrap;
-            border: 1px solid var(--current-accent);
-            box-shadow: 0 4px 15px var(--current-shadow);
-        }
-        
-        .explore-btn:hover .btn-tooltip {
-            opacity: 1;
-            bottom: -45px;
-        }
-        
-        /* 按钮图标动画 */
         .btn-icon {
-            font-size: 22px;
+            font-size: 20px;
             transition: transform 0.3s var(--ease-smooth);
         }
         
         .explore-btn:hover .btn-icon {
-            transform: translateX(5px) scale(1.1);
+            transform: translateX(4px) scale(1.1);
         }
         
-        /* ========== 社交链接 ========== */
         .social-section {
             display: flex;
-            gap: 15px;
-            margin-top: 60px;
+            gap: 12px;
+            margin-top: 50px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -753,17 +670,17 @@
             position: relative;
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 14px 28px;
+            gap: 8px;
+            padding: 12px 24px;
             background: transparent;
-            border: 2px solid var(--current-accent);
-            border-radius: 30px;
-            color: var(--current-accent);
+            border: 2px solid var(--current-border);
+            border-radius: 28px;
+            color: var(--current-text-sec);
             text-decoration: none;
             font-family: 'Noto Sans SC', sans-serif;
             font-weight: 600;
-            font-size: 14px;
-            letter-spacing: 0.5px;
+            font-size: 13px;
+            letter-spacing: 0.3px;
             transition: all 0.3s var(--ease-smooth);
             cursor: pointer;
             overflow: hidden;
@@ -787,8 +704,9 @@
         
         .social-btn:hover {
             color: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px var(--current-glow);
+            border-color: var(--current-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--current-glow);
         }
         
         .social-btn svg {
@@ -799,99 +717,106 @@
             transform: scale(1.1);
         }
         
-        /* 社交按钮提示 */
-        .social-tooltip {
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--current-card);
-            color: var(--current-text);
-            padding: 5px 14px;
-            border-radius: 15px;
-            font-size: 11px;
-            opacity: 0;
-            transition: all 0.3s var(--ease-smooth);
-            white-space: nowrap;
-            border: 1px solid rgba(88, 166, 255, 0.2);
-            box-shadow: 0 4px 12px var(--current-shadow);
-        }
-        
-        .social-btn:hover .social-tooltip {
-            opacity: 1;
-            bottom: -40px;
-        }
-        
-        /* ========== 底部名言 ========== */
         .quote-section {
             position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 0;
+            left: 0;
+            width: 100%;
             text-align: center;
-            z-index: 10;
-            width: calc(100% - 40px);
-            max-width: 650px;
+            z-index: 100;
+            padding: 20px;
+            background: linear-gradient(to top, var(--current-card) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.4s var(--ease-smooth);
+            opacity: 1;
+        }
+        
+        .quote-section.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
         }
         
         .quote-box {
+            max-width: 600px;
+            margin: 0 auto;
             background: var(--current-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(88, 166, 255, 0.15);
-            border-radius: 20px;
-            padding: 20px 35px;
-            box-shadow: 0 8px 32px var(--current-shadow);
-            transition: all 0.4s var(--ease-smooth);
+            border: 1px solid var(--current-border);
+            border-radius: 16px;
+            padding: 16px 28px;
+            box-shadow: 0 4px 20px var(--current-shadow);
+            transition: all 0.3s var(--ease-smooth);
         }
         
         .quote-box:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px var(--current-glow);
-            border-color: rgba(88, 166, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--current-glow);
+            border-color: var(--current-accent);
         }
         
         .quote-text {
             font-family: 'Noto Sans SC', sans-serif;
             font-style: italic;
-            font-size: 15px;
+            font-size: 14px;
             color: var(--current-text-sec);
-            line-height: 1.7;
-            margin-bottom: 8px;
+            line-height: 1.6;
+            margin-bottom: 6px;
         }
         
         .quote-author {
             font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--current-accent);
             letter-spacing: 2px;
             opacity: 0.9;
         }
         
-        /* ========== 装饰粒子 ========== */
-        .particle {
+        .back-to-top {
             position: fixed;
-            width: 4px;
-            height: 4px;
-            background: var(--current-accent);
+            bottom: 100px;
+            right: 25px;
+            width: 46px;
+            height: 46px;
+            background: var(--current-card);
+            border: 2px solid var(--current-border);
             border-radius: 50%;
-            pointer-events: none;
-            animation: particleFloat 10s infinite;
-            opacity: 0.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: all 0.4s var(--ease-smooth);
+            z-index: 998;
+            box-shadow: 0 4px 15px var(--current-shadow);
         }
         
-        @keyframes particleFloat {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0.4;
-            }
-            50% {
-                transform: translate(80px, -80px) scale(1.3);
-                opacity: 0.8;
-            }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
         
-        /* ========== 滚动条美化 ========== */
+        .back-to-top:hover {
+            background: var(--current-accent);
+            border-color: var(--current-accent);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--current-glow);
+        }
+        
+        .back-to-top svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--current-accent);
+            transition: stroke 0.3s;
+        }
+        
+        .back-to-top:hover svg {
+            stroke: #fff;
+        }
+        
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -903,21 +828,19 @@
         ::-webkit-scrollbar-thumb {
             background: var(--current-accent);
             border-radius: 4px;
-            transition: background 0.3s;
         }
         
         ::-webkit-scrollbar-thumb:hover {
             background: var(--current-accent-hover);
         }
         
-        /* ========== 响应式设计 ========== */
         @media (max-width: 1024px) {
             nav {
-                padding: 18px 40px;
+                padding: 16px 30px;
             }
             
             .nav-links {
-                gap: 6px;
+                gap: 4px;
             }
             
             .nav-links a {
@@ -928,7 +851,7 @@
         
         @media (max-width: 768px) {
             nav {
-                padding: 15px 20px;
+                padding: 14px 18px;
             }
             
             .nav-links {
@@ -941,10 +864,10 @@
                 backdrop-filter: blur(20px);
                 -webkit-backdrop-filter: blur(20px);
                 flex-direction: column;
-                padding: 20px;
-                gap: 10px;
-                border-top: 1px solid rgba(88, 166, 255, 0.2);
-                box-shadow: 0 10px 40px var(--current-shadow);
+                padding: 15px;
+                gap: 8px;
+                border-top: 1px solid var(--current-border);
+                box-shadow: 0 10px 30px var(--current-shadow);
             }
             
             .nav-links.active {
@@ -954,49 +877,47 @@
             .nav-links a {
                 width: 100%;
                 text-align: center;
-                padding: 12px 20px;
+                padding: 12px 18px;
             }
             
             .menu-toggle {
                 display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
             }
             
             .hexagram-container {
-                width: 150px;
-                height: 150px;
+                width: 140px;
+                height: 140px;
             }
             
             .typing-title {
-                font-size: 28px;
-                min-height: 50px;
+                font-size: 24px;
+                min-height: 45px;
             }
             
             .cursor {
-                height: 35px;
+                height: 32px;
             }
             
             .main-title {
-                font-size: 16px;
+                font-size: 13px;
+                letter-spacing: 3px;
             }
             
             .subtitle {
                 font-size: 14px;
-                padding: 0 20px;
+                padding: 0 15px;
             }
             
             .explore-btn {
-                padding: 14px 35px;
-                font-size: 15px;
+                padding: 14px 32px;
+                font-size: 14px;
             }
             
             .social-section {
                 flex-direction: column;
-                gap: 12px;
+                gap: 10px;
                 width: 100%;
-                max-width: 300px;
+                max-width: 280px;
             }
             
             .social-btn {
@@ -1004,46 +925,39 @@
                 width: 100%;
             }
             
-            .quote-section {
-                bottom: 20px;
-                width: calc(100% - 30px);
-            }
-            
             .quote-box {
-                padding: 15px 20px;
+                padding: 12px 18px;
             }
             
             .quote-text {
-                font-size: 13px;
+                font-size: 12px;
             }
             
             .back-to-top {
-                bottom: 20px;
-                right: 20px;
-                width: 44px;
-                height: 44px;
+                bottom: 90px;
+                right: 15px;
+                width: 42px;
+                height: 42px;
             }
         }
         
         @media (max-width: 480px) {
             .typing-title {
-                font-size: 22px;
+                font-size: 20px;
             }
             
             .explore-btn {
-                padding: 12px 28px;
-                font-size: 14px;
+                padding: 12px 26px;
+                font-size: 13px;
             }
             
             .main-title {
-                font-size: 14px;
-                letter-spacing: 2px;
+                font-size: 12px;
             }
         }
         
-        /* ========== 打印样式 ========== */
         @media print {
-            nav, .quote-section, .back-to-top, .scroll-progress, #meteor-container, #star-container, #particle-container {
+            nav, .quote-section, .back-to-top, .scroll-progress, #meteor-container, #star-container, #particle-container, .page-loader {
                 display: none !important;
             }
             
@@ -1055,36 +969,37 @@
     </style>
 </head>
 <body>
-    <!-- 页面加载动画 -->
     <div class="page-loader" id="pageLoader">
-        <div class="loader-spinner"></div>
+        <div class="loader-content">
+            <div class="loader-logo">
+                <svg viewBox="0 0 100 100">
+                    <polygon points="50,10 61,35 90,35 67,55 78,90 50,70 22,90 33,55 10,35 39,35" 
+                             fill="none" 
+                             stroke="currentColor" 
+                             stroke-width="2"
+                             style="color: var(--current-accent)">
+                    </polygon>
+                </svg>
+            </div>
+            <div class="loader-text">LOADING</div>
+        </div>
     </div>
     
-    <!-- 滚动进度条 -->
     <div class="scroll-progress" id="scrollProgress"></div>
     
-    <!-- 流星雨背景（蓝白主题） -->
     <div id="meteor-container"></div>
-    
-    <!-- 星空背景（黑色主题） -->
     <div id="star-container"></div>
-    
-    <!-- 装饰粒子 -->
     <div id="particle-container"></div>
     
-    <!-- 返回顶部按钮 -->
     <button class="back-to-top" id="backToTop" aria-label="返回顶部" title="返回顶部">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
     </button>
     
-    <!-- 导航栏 -->
-    <nav>
-        <!-- 六芒星LOGO -->
+    <nav id="navbar">
         <div class="nav-logo" title="首页">
             <svg viewBox="0 0 100 100">
-                <!-- 六芒星 -->
                 <polygon points="50,10 61,35 90,35 67,55 78,90 50,70 22,90 33,55 10,35 39,35" 
                          fill="none" 
                          stroke="currentColor" 
@@ -1095,67 +1010,58 @@
             </svg>
         </div>
         
-        <!-- 移动端菜单按钮 -->
         <button class="menu-toggle" id="menuToggle" aria-label="菜单" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
         </button>
         
-        <!-- 导航链接 -->
         <ul class="nav-links" id="navLinks">
-            <li><a href="index.html">首页</a></li>
+            <li><a href="index.html" class="active">首页</a></li>
             <li><a href="resume.html">简历</a></li>
             <li><a href="works.html">作品集</a></li>
             <li><a href="tools.html">工具站</a></li>
             <li><a href="contact.html">联系方式</a></li>
-            
-            <!-- 主题切换 -->
             <li>
                 <div class="theme-toggle" id="themeToggle">
+                    <span class="theme-toggle-icon moon">🌙</span>
+                    <span class="theme-toggle-icon sun">☀️</span>
                     <div class="theme-toggle-ball"></div>
                 </div>
             </li>
         </ul>
     </nav>
     
-    <!-- 主要内容 -->
     <main>
-        <!-- 六芒星 LOGO -->
         <div class="hexagram-container">
             <div class="hexagram-glow"></div>
             <div class="hexagram">
                 <svg viewBox="0 0 200 200">
-                    <!-- 外圈 -->
-                    <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="1" style="color: var(--current-accent); opacity: 0.3">
-                        <animate attributeName="r" values="85;95;85" dur="4s" repeatCount="indefinite"/>
+                    <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" stroke-width="1" style="color: var(--current-accent); opacity: 0.25">
+                        <animate attributeName="r" values="84;92;84" dur="4s" repeatCount="indefinite"/>
                     </circle>
                     
-                    <!-- 六芒星主体 -->
-                    <polygon points="100,20 120,70 180,70 135,105 155,160 100,130 45,160 65,105 20,70 80,70" 
+                    <polygon points="100,22 118,68 172,68 132,100 150,152 100,125 50,152 68,100 28,68 82,68" 
                              fill="none" 
                              stroke="currentColor" 
-                             stroke-width="3"
+                             stroke-width="2.5"
                              style="color: var(--current-accent)">
-                        <animate attributeName="stroke-dasharray" values="0,1000;500,0" dur="3s" fill="freeze"/>
+                        <animate attributeName="stroke-dasharray" values="0,1000;450,0" dur="3s" fill="freeze"/>
                     </polygon>
                     
-                    <!-- 内部小六芒星 -->
-                    <polygon points="100,50 110,75 140,75 118,93 128,120 100,105 72,120 82,93 60,75 90,75" 
+                    <polygon points="100,48 110,72 138,72 118,92 128,118 100,102 72,118 82,92 62,72 90,72" 
                              fill="currentColor" 
-                             style="color: var(--current-accent); opacity: 0.5">
-                        <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2s" repeatCount="indefinite"/>
+                             style="color: var(--current-accent); opacity: 0.4">
+                        <animate attributeName="opacity" values="0.25;0.6;0.25" dur="2.5s" repeatCount="indefinite"/>
                     </polygon>
                     
-                    <!-- 中心点 -->
-                    <circle cx="100" cy="100" r="5" fill="currentColor" style="color: var(--current-accent)">
-                        <animate attributeName="r" values="3;8;3" dur="1.5s" repeatCount="indefinite"/>
+                    <circle cx="100" cy="100" r="4" fill="currentColor" style="color: var(--current-accent)">
+                        <animate attributeName="r" values="3;7;3" dur="1.5s" repeatCount="indefinite"/>
                     </circle>
                 </svg>
             </div>
         </div>
         
-        <!-- 标题区 -->
         <div class="title-section">
             <p class="main-title">WELCOME TO MY WORLD</p>
             <h1 class="typing-title">
@@ -1166,58 +1072,48 @@
             </p>
         </div>
         
-        <!-- 探索按钮 -->
         <div class="explore-section">
             <a href="resume.html" class="explore-btn">
                 <span class="btn-icon">🚀</span>
                 <span>开始探索</span>
-                <span class="btn-tooltip">点击查看我的简历和作品</span>
             </a>
         </div>
         
-        <!-- 社交链接 -->
         <div class="social-section">
             <a href="https://github.com/badhope" target="_blank" class="social-btn">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                 </svg>
                 GitHub
-                <span class="social-tooltip">查看我的开源项目</span>
             </a>
             
             <a href="https://blog.csdn.net/weixin_56622231" target="_blank" class="social-btn">
-                <span style="font-size: 18px;">📝</span>
+                <span style="font-size: 16px;">📝</span>
                 CSDN 博客
-                <span class="social-tooltip">阅读我的技术文章</span>
             </a>
             
             <a href="https://juejin.cn/" target="_blank" class="social-btn">
-                <span style="font-size: 18px;">💎</span>
+                <span style="font-size: 16px;">💎</span>
                 掘金社区
-                <span class="social-tooltip">查看我的技术分享</span>
             </a>
         </div>
     </main>
     
-    <!-- 底部名言 -->
-    <div class="quote-section">
+    <div class="quote-section" id="quoteSection">
         <div class="quote-box">
             <p class="quote-text" id="quoteText">"加载中..."</p>
             <p class="quote-author" id="quoteAuthor">— 加载中</p>
         </div>
     </div>
     
-    <!-- JavaScript -->
     <script>
-        // ========== 0. 页面加载动画 ==========
         window.addEventListener('load', function() {
             const loader = document.getElementById('pageLoader');
             setTimeout(() => {
                 loader.classList.add('hidden');
-            }, 500);
+            }, 400);
         });
         
-        // ========== 1. 主题切换 ==========
         const themeToggle = document.getElementById('themeToggle');
         
         themeToggle.addEventListener('click', function() {
@@ -1225,15 +1121,14 @@
             localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         });
         
-        // 加载保存的主题
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
         }
         
-        // ========== 2. 滚动进度条 ==========
         const scrollProgress = document.getElementById('scrollProgress');
         const backToTop = document.getElementById('backToTop');
-        const navbar = document.querySelector('nav');
+        const navbar = document.getElementById('navbar');
+        const quoteSection = document.getElementById('quoteSection');
         
         function updateScrollProgress() {
             const scrollTop = window.scrollY;
@@ -1241,35 +1136,34 @@
             const scrollPercent = (scrollTop / docHeight) * 100;
             scrollProgress.style.width = scrollPercent + '%';
             
-            // 返回顶部按钮显示/隐藏
-            if (scrollTop > 300) {
+            if (scrollTop > 200) {
                 backToTop.classList.add('visible');
                 navbar.classList.add('scrolled');
             } else {
                 backToTop.classList.remove('visible');
                 navbar.classList.remove('scrolled');
             }
+            
+            if (scrollTop > 50) {
+                quoteSection.classList.add('hidden');
+            } else {
+                quoteSection.classList.remove('hidden');
+            }
         }
         
         window.addEventListener('scroll', updateScrollProgress);
         
-        // 返回顶部功能
         backToTop.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
         
-        // ========== 3. 创建流星雨（蓝白主题） ==========
         function createMeteors() {
             const container = document.getElementById('meteor-container');
-            const meteorCount = 15;
+            if (!container) return;
+            const meteorCount = 12;
             
             for (let i = 0; i < meteorCount; i++) {
-                setTimeout(() => {
-                    createSingleMeteor(container);
-                }, i * 300);
+                setTimeout(() => createSingleMeteor(container), i * 400);
             }
         }
         
@@ -1278,8 +1172,8 @@
             const meteor = document.createElement('div');
             meteor.className = 'meteor';
             meteor.style.left = Math.random() * 100 + '%';
-            meteor.style.top = Math.random() * 50 + '%';
-            meteor.style.animationDuration = (Math.random() * 1 + 1.5) + 's';
+            meteor.style.top = Math.random() * 40 + '%';
+            meteor.style.animationDuration = (Math.random() * 1.5 + 1.8) + 's';
             container.appendChild(meteor);
             
             meteor.addEventListener('animationend', function() {
@@ -1290,32 +1184,28 @@
             });
         }
         
-        // ========== 4. 创建星空（黑色主题） ==========
         function createStars() {
             const container = document.getElementById('star-container');
             if (!container) return;
-            const starCount = 200;
             
-            // 星云
             for (let i = 0; i < 3; i++) {
                 const nebula = document.createElement('div');
                 nebula.className = 'nebula';
-                nebula.style.left = Math.random() * 80 + 10 + '%';
-                nebula.style.top = Math.random() * 80 + 10 + '%';
-                nebula.style.width = Math.random() * 200 + 100 + 'px';
+                nebula.style.left = Math.random() * 70 + 15 + '%';
+                nebula.style.top = Math.random() * 70 + 15 + '%';
+                nebula.style.width = Math.random() * 180 + 80 + 'px';
                 nebula.style.height = nebula.style.width;
-                nebula.style.background = `radial-gradient(circle, rgba(88,166,255,0.08) 0%, transparent 70%)`;
+                nebula.style.background = `radial-gradient(circle, rgba(88,166,255,0.06) 0%, transparent 70%)`;
                 nebula.style.animationDelay = Math.random() * 5 + 's';
                 container.appendChild(nebula);
             }
             
-            // 星星
-            for (let i = 0; i < starCount; i++) {
+            for (let i = 0; i < 180; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                star.style.width = Math.random() * 2.5 + 'px';
+                star.style.width = Math.random() * 2 + 'px';
                 star.style.height = star.style.width;
                 star.style.animationDelay = Math.random() * 3 + 's';
                 star.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
@@ -1323,24 +1213,21 @@
             }
         }
         
-        // ========== 5. 创建装饰粒子 ==========
         function createParticles() {
             const container = document.getElementById('particle-container');
             if (!container) return;
-            const particleCount = 20;
             
-            for (let i = 0; i < particleCount; i++) {
+            for (let i = 0; i < 15; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 10 + 's';
-                particle.style.animationDuration = (Math.random() * 5 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 6 + 10) + 's';
                 container.appendChild(particle);
             }
         }
         
-        // ========== 6. 打字效果 ==========
         const phrases = [
             "AI 时代的探索者",
             "熊泽城",
@@ -1382,10 +1269,9 @@
                 }
             }
             
-            setTimeout(typeEffect, isDeleting ? 50 : 100);
+            setTimeout(typeEffect, isDeleting ? 40 : 100);
         }
         
-        // ========== 7. 名言显示 ==========
         function fetchQuote() {
             const quotes = [
                 { text: "未来的技术定会愈发先进，让我们一起见证这个时代。", author: "熊泽城" },
@@ -1408,7 +1294,6 @@
             }
         }
         
-        // ========== 8. 移动端菜单 ==========
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
         
@@ -1418,7 +1303,6 @@
             menuToggle.setAttribute('aria-expanded', isActive);
         });
         
-        // 点击导航链接后关闭菜单
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
@@ -1427,9 +1311,7 @@
             });
         });
         
-        // ========== 9. 键盘导航支持 ==========
         document.addEventListener('keydown', function(e) {
-            // ESC 关闭移动端菜单
             if (e.key === 'Escape' && navLinks.classList.contains('active')) {
                 navLinks.classList.remove('active');
                 menuToggle.classList.remove('active');
@@ -1437,22 +1319,17 @@
             }
         });
         
-        // ========== 初始化 ==========
         window.addEventListener('load', function() {
             createMeteors();
             createStars();
             createParticles();
             typeEffect();
             fetchQuote();
-            
-            // 每30秒更新名言
             setInterval(fetchQuote, 30000);
         });
         
-        // ========== 性能优化：页面可见性 ==========
         document.addEventListener('visibilitychange', function() {
             const containers = ['meteor-container', 'star-container', 'particle-container'];
-            
             containers.forEach(id => {
                 const container = document.getElementById(id);
                 if (container) {
