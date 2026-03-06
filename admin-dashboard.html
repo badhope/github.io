@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>管理员后台 | 管理系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { padding-top: 80px; }
+        .admin-container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
+        .admin-header { text-align: center; margin-bottom: 50px; }
+        .admin-title { font-family: 'Orbitron', sans-serif; font-size: 36px; font-weight: 900; color: var(--current-text); margin-bottom: 15px; }
+        .admin-subtitle { font-size: 16px; color: var(--current-text-sec); }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .dashboard-card { background: var(--current-card); border: 1px solid var(--current-border); border-radius: 16px; padding: 25px; backdrop-filter: blur(10px); }
+        .card-icon { font-size: 40px; margin-bottom: 15px; }
+        .card-title { font-family: 'Orbitron', sans-serif; font-size: 18px; color: var(--current-text); margin-bottom: 15px; }
+        .stat-number { font-size: 36px; font-weight: 700; color: var(--current-accent); margin-bottom: 5px; }
+        .stat-label { font-size: 14px; color: var(--current-text-sec); }
+        .action-btn { display: inline-block; padding: 10px 20px; background: var(--current-accent); color: #fff; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; margin-top: 15px; cursor: pointer; border: none; transition: all 0.3s; }
+        .action-btn:hover { background: var(--current-accent-hover); transform: translateY(-2px); }
+        .logout-btn { background: #dc3545; }
+        .logout-btn:hover { background: #c82333; }
+        .logs-section { background: var(--current-card); border: 1px solid var(--current-border); border-radius: 16px; padding: 30px; margin-top: 40px; }
+        .logs-title { font-family: 'Orbitron', sans-serif; font-size: 20px; color: var(--current-text); margin-bottom: 20px; }
+        .logs-table { width: 100%; border-collapse: collapse; }
+        .logs-table th { text-align: left; padding: 12px; background: var(--current-accent-soft); color: var(--current-accent); font-weight: 600; font-size: 13px; }
+        .logs-table td { padding: 12px; border-bottom: 1px solid var(--current-border); font-size: 13px; color: var(--current-text-sec); }
+        .logs-table tr:hover { background: var(--current-accent-soft); }
+        .badge { padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .badge-success { background: rgba(40, 167, 69, 0.2); color: #28a745; }
+        .badge-danger { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
+        .badge-warning { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .user-info { display: flex; align-items: center; gap: 15px; padding: 20px; background: var(--current-accent-soft); border-radius: 12px; margin-bottom: 25px; }
+        .user-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--current-accent); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #fff; }
+        .user-details { flex: 1; }
+        .user-name { font-size: 18px; font-weight: 700; color: var(--current-text); }
+        .user-role { font-size: 13px; color: var(--current-text-sec); }
+    </style>
+</head>
+<body>
+    <div id="star-container"></div>
+    
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" stroke="url(#gradient)" stroke-width="2" fill="none"/>
+                <path d="M50 15 L50 50 L70 70" stroke="url(#gradient)" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="50" cy="50" r="5" fill="url(#gradient)"/>
+                <defs><linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:var(--current-accent)"/><stop offset="100%" style="stop-color:var(--current-text)"/></linearGradient></defs>
+            </svg>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">首页</a></li>
+            <li><a href="admin-dashboard.html" class="active">管理后台</a></li>
+        </ul>
+        <div class="theme-toggle"><div class="theme-toggle-ball"></div><span class="theme-toggle-icon sun">☀️</span><span class="theme-toggle-icon moon">🌙</span></div>
+    </nav>
+    
+    <main class="admin-container">
+        <header class="admin-header">
+            <h1 class="admin-title">🛡️ 管理员后台</h1>
+            <p class="admin-subtitle">单一用户安全管理系统</p>
+        </header>
+        
+        <div class="user-info">
+            <div class="user-avatar">👤</div>
+            <div class="user-details">
+                <div class="user-name" id="currentUsername">管理员</div>
+                <div class="user-role">超级管理员 | 会话有效期：<span id="sessionExpiry">--</span></div>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-icon">📊</div>
+                <div class="card-title">登录统计</div>
+                <div class="stat-number" id="totalLogins">0</div>
+                <div class="stat-label">总登录次数</div>
+                <div style="margin-top: 10px; font-size: 13px; color: var(--current-text-sec);">
+                    24 小时内：<strong id="logins24h" style="color: var(--current-accent);">0</strong> 次
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <div class="card-icon">⚠️</div>
+                <div class="card-title">失败尝试</div>
+                <div class="stat-number" id="failedLogins">0</div>
+                <div class="stat-label">总失败次数</div>
+                <div style="margin-top: 10px; font-size: 13px; color: var(--current-text-sec);">
+                    24 小时内：<strong id="failed24h" style="color: #dc3545;">0</strong> 次
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <div class="card-icon">🔒</div>
+                <div class="card-title">账户锁定</div>
+                <div class="stat-number" id="lockouts">0</div>
+                <div class="stat-label">锁定次数</div>
+                <div style="margin-top: 10px; font-size: 13px; color: var(--current-text-sec);">
+                    当前状态：<strong id="lockStatus" style="color: #28a745;">正常</strong>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <div class="card-icon">⏱️</div>
+                <div class="card-title">会话信息</div>
+                <div class="stat-number" id="sessionTime">--</div>
+                <div class="stat-label">已登录时长</div>
+                <div style="margin-top: 10px; font-size: 13px; color: var(--current-text-sec);">
+                    超时时间：<strong id="timeoutTime" style="color: var(--current-accent);">120</strong> 分钟
+                </div>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <button class="action-btn" onclick="refreshStats()">🔄 刷新统计</button>
+            <button class="action-btn" onclick="exportLogs()">📥 导出日志</button>
+            <button class="action-btn logout-btn" onclick="logout()">🚪 退出登录</button>
+        </div>
+        
+        <div class="logs-section">
+            <div class="logs-title">📋 最近安全日志</div>
+            <table class="logs-table">
+                <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>事件类型</th>
+                        <th>用户名</th>
+                        <th>详情</th>
+                    </tr>
+                </thead>
+                <tbody id="logsTableBody">
+                    <!-- 日志数据将由 JavaScript 动态生成 -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+    
+    <script src="config/admin.config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // 页面加载时检查登录状态
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof authService === 'undefined') {
+                alert('认证系统未加载，请刷新页面');
+                window.location.href = 'login-secure.html';
+                return;
+            }
+            
+            const validation = authService.validateSession();
+            if (!validation.valid) {
+                alert('请先登录');
+                window.location.href = 'login-secure.html';
+                return;
+            }
+            
+            // 显示用户信息
+            document.getElementById('currentUsername').textContent = validation.username;
+            
+            // 显示会话信息
+            const session = validation.session;
+            const loginTime = new Date(session.loginTime);
+            const expiresAt = new Date(session.expiresAt);
+            document.getElementById('sessionExpiry').textContent = expiresAt.toLocaleString('zh-CN');
+            
+            // 加载统计信息
+            loadStats();
+            
+            // 加载日志
+            loadLogs();
+            
+            // 更新会话时长
+            setInterval(updateSessionTime, 1000);
+        });
+        
+        // 加载统计数据
+        function loadStats() {
+            const stats = authService.getLoginStats();
+            document.getElementById('totalLogins').textContent = stats.totalLogins;
+            document.getElementById('failedLogins').textContent = stats.failedLogins;
+            document.getElementById('lockouts').textContent = stats.lockouts;
+            document.getElementById('logins24h').textContent = stats.last24Hours.logins;
+            document.getElementById('failed24h').textContent = stats.last24Hours.failed;
+            
+            const isLocked = authService.isLocked();
+            document.getElementById('lockStatus').textContent = isLocked ? '已锁定' : '正常';
+            document.getElementById('lockStatus').style.color = isLocked ? '#dc3545' : '#28a745';
+        }
+        
+        // 加载日志
+        function loadLogs() {
+            const logs = authService.getSecurityLogs(20);
+            const tbody = document.getElementById('logsTableBody');
+            tbody.innerHTML = '';
+            
+            logs.forEach(log => {
+                const tr = document.createElement('tr');
+                const time = new Date(log.datetime).toLocaleString('zh-CN');
+                const badgeClass = getBadgeClass(log.eventType);
+                
+                tr.innerHTML = `
+                    <td>${time}</td>
+                    <td><span class="badge ${badgeClass}">${translateEventType(log.eventType)}</span></td>
+                    <td>${log.username}</td>
+                    <td>${log.attempts > 0 ? '尝试次数：' + log.attempts : '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        // 获取徽章样式
+        function getBadgeClass(eventType) {
+            switch(eventType) {
+                case 'LOGIN_SUCCESS': return 'badge-success';
+                case 'LOGIN_FAILED': return 'badge-danger';
+                case 'ACCOUNT_LOCKED': return 'badge-warning';
+                case 'LOGOUT': return 'badge-success';
+                default: return '';
+            }
+        }
+        
+        // 翻译事件类型
+        function translateEventType(eventType) {
+            const translations = {
+                'LOGIN_SUCCESS': '✅ 登录成功',
+                'LOGIN_FAILED': '❌ 登录失败',
+                'ACCOUNT_LOCKED': '🔒 账户锁定',
+                'LOGOUT': '🚪 退出登录'
+            };
+            return translations[eventType] || eventType;
+        }
+        
+        // 更新会话时长
+        function updateSessionTime() {
+            const sessionData = sessionStorage.getItem('secure_auth_session');
+            if (!sessionData) return;
+            
+            const session = JSON.parse(sessionData);
+            const loginTime = new Date(session.loginTime);
+            const now = new Date();
+            const diff = Math.floor((now - loginTime) / 1000);
+            
+            const hours = Math.floor(diff / 3600);
+            const minutes = Math.floor((diff % 3600) / 60);
+            const seconds = diff % 60;
+            
+            document.getElementById('sessionTime').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // 刷新统计
+        function refreshStats() {
+            loadStats();
+            loadLogs();
+            alert('统计已刷新');
+        }
+        
+        // 导出日志
+        function exportLogs() {
+            const logs = authService.getSecurityLogs(1000);
+            const content = JSON.stringify(logs, null, 2);
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `security_logs_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // 退出登录
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                authService.logout();
+                window.location.href = 'login-secure.html';
+            }
+        }
+    </script>
+</body>
+</html>

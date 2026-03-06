@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客 | 熊泽城 - 技术分享与学习记录</title>
+    <meta name="description" content="分享技术文章、学习心得和项目经验，涵盖前端开发、后端架构、数据分析、人工智能等领域">
+    <meta name="keywords" content="博客，技术文章，前端开发，后端开发，数据分析，AI，机器学习，学习笔记">
+    <meta name="author" content="熊泽城">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="博客 | 熊泽城">
+    <meta property="og:description" content="技术分享与学习记录">
+    <meta property="og:url" content="https://badhope.github.io/blog.html">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+        
+        main {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .blog-hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: var(--current-accent-soft);
+            border: 2px solid var(--current-border);
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--current-accent);
+            margin-bottom: 25px;
+            animation: slideDown 0.6s var(--ease-out-expo);
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .blog-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--current-accent) 0%, var(--current-text) 50%, var(--current-accent) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 4s linear infinite, fadeIn 0.8s var(--ease-out-expo) 0.2s both;
+        }
+        
+        .blog-desc {
+            font-size: 18px;
+            color: var(--current-text-sec);
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s var(--ease-out-expo) 0.4s both;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .blog-filters {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            padding: 10px 22px;
+            background: var(--current-card);
+            border: 2px solid var(--current-border);
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--current-text);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-smooth);
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--current-accent);
+            transform: translateY(-2px);
+        }
+        
+        .filter-btn.active {
+            background: var(--current-accent);
+            border-color: var(--current-accent);
+            color: #fff;
+        }
+        
+        .search-box {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--current-card);
+            border: 2px solid var(--current-border);
+            border-radius: 30px;
+            font-size: 15px;
+            color: var(--current-text);
+            outline: none;
+            transition: all 0.3s var(--ease-smooth);
+        }
+        
+        .search-input:focus {
+            border-color: var(--current-accent);
+            box-shadow: 0 0 0 3px var(--current-accent-soft);
+        }
+        
+        .blog-grid {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 30px;
+        }
+        
+        .blog-card {
+            background: var(--current-card);
+            border: 1px solid var(--current-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s var(--ease-smooth);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            opacity: 0;
+            animation: fadeInUp 0.6s var(--ease-out-expo) forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--current-accent);
+            box-shadow: 0 20px 50px var(--current-glow);
+        }
+        
+        .blog-card-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--current-accent-soft) 0%, var(--current-border) 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+        
+        .blog-card-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 6px 16px;
+            background: var(--current-card);
+            border: 1px solid var(--current-border);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--current-accent);
+            backdrop-filter: blur(10px);
+        }
+        
+        .blog-card-content {
+            padding: 25px;
+        }
+        
+        .blog-card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--current-text);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .blog-card-excerpt {
+            font-size: 14px;
+            color: var(--current-text-sec);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .blog-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--current-border);
+            font-size: 13px;
+            color: var(--current-text-sec);
+        }
+        
+        .blog-card-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .author-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--current-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .blog-card-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .tag {
+            padding: 4px 12px;
+            background: var(--current-accent-soft);
+            border: 1px solid var(--current-border);
+            border-radius: 15px;
+            font-size: 12px;
+            color: var(--current-accent);
+        }
+        
+        .pagination {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .page-btn {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--current-card);
+            border: 2px solid var(--current-border);
+            border-radius: 12px;
+            color: var(--current-text);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-smooth);
+            text-decoration: none;
+        }
+        
+        .page-btn:hover {
+            border-color: var(--current-accent);
+            transform: translateY(-2px);
+        }
+        
+        .page-btn.active {
+            background: var(--current-accent);
+            border-color: var(--current-accent);
+            color: #fff;
+        }
+        
+        .stats-bar {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 25px 30px;
+            background: var(--current-card);
+            border: 1px solid var(--current-border);
+            border-radius: 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--current-accent);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--current-text-sec);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .blog-filters {
+                gap: 8px;
+            }
+            
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="star-container"></div>
+    <div id="meteor-container"></div>
+    <div id="particle-container"></div>
+    
+    <!-- 导航栏 -->
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" stroke="url(#gradient)" stroke-width="2" fill="none"/>
+                <path d="M50 15 L50 50 L70 70" stroke="url(#gradient)" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="50" cy="50" r="5" fill="url(#gradient)"/>
+                <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:var(--current-accent)"/>
+                        <stop offset="100%" style="stop-color:var(--current-text)"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </a>
+        
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">首页</a></li>
+            <li><a href="resume.html">简历</a></li>
+            <li><a href="works.html">作品集</a></li>
+            <li><a href="blog.html" class="active">博客</a></li>
+            <li><a href="tools.html">工具站</a></li>
+            <li><a href="contact.html">联系方式</a></li>
+        </ul>
+        
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="theme-toggle">
+                <div class="theme-toggle-ball"></div>
+                <span class="theme-toggle-icon sun">☀️</span>
+                <span class="theme-toggle-icon moon">🌙</span>
+            </div>
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+    
+    <main>
+        <!-- 英雄区 -->
+        <section class="blog-hero">
+            <div class="hero-badge">
+                <span>📝</span>
+                <span>技术博客</span>
+            </div>
+            <h1 class="blog-title">探索技术的无限可能</h1>
+            <p class="blog-desc">
+                分享我在<span style="color: var(--current-accent); font-weight: 600;">前端开发</span>、
+                <span style="color: var(--current-accent); font-weight: 600;">后端架构</span>、
+                <span style="color: var(--current-accent); font-weight: 600;">数据分析</span>和
+                <span style="color: var(--current-accent); font-weight: 600;">人工智能</span>等领域的学习心得与实战经验
+            </p>
+        </section>
+        
+        <!-- 统计栏 -->
+        <div class="stats-bar fade-in">
+            <div class="stat-item">
+                <div class="stat-number">24</div>
+                <div class="stat-label">文章总数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">8</div>
+                <div class="stat-label">技术分类</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1.2k</div>
+                <div class="stat-label">总阅读量</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">156</div>
+                <div class="stat-label">评论数</div>
+            </div>
+        </div>
+        
+        <!-- 分类筛选 -->
+        <div class="blog-filters">
+            <button class="filter-btn active" data-category="all">全部</button>
+            <button class="filter-btn" data-category="frontend">前端开发</button>
+            <button class="filter-btn" data-category="backend">后端架构</button>
+            <button class="filter-btn" data-category="ai">人工智能</button>
+            <button class="filter-btn" data-category="data">数据分析</button>
+            <button class="filter-btn" data-category="tools">工具教程</button>
+        </div>
+        
+        <!-- 搜索框 -->
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="🔍 搜索文章..." id="searchInput">
+        </div>
+        
+        <!-- 博客列表 -->
+        <div class="blog-grid" id="blogGrid">
+            <!-- 文章卡片将由 JavaScript 动态生成 -->
+        </div>
+        
+        <!-- 分页 -->
+        <div class="pagination">
+            <a href="#" class="page-btn">‹</a>
+            <a href="#" class="page-btn active">1</a>
+            <a href="#" class="page-btn">2</a>
+            <a href="#" class="page-btn">3</a>
+            <a href="#" class="page-btn">›</a>
+        </div>
+    </main>
+    
+    <script>
+        // 模拟博客数据
+        const blogPosts = [
+            {
+                id: 1,
+                title: "React Hooks 深度解析：从入门到精通",
+                excerpt: "全面讲解 React Hooks 的核心概念、使用场景和最佳实践，包括 useState、useEffect、useContext 等常用 Hook 的深度剖析...",
+                category: "frontend",
+                categoryLabel: "前端开发",
+                author: "熊泽城",
+                date: "2026-03-05",
+                readTime: "12 分钟",
+                views: 234,
+                tags: ["React", "Hooks", "JavaScript"],
+                emoji: "⚛️"
+            },
+            {
+                id: 2,
+                title: "Python 数据分析实战：Pandas 核心技巧",
+                excerpt: "通过实际案例演示 Pandas 在数据清洗、数据处理和数据可视化中的应用，掌握高效的数据分析技巧...",
+                category: "data",
+                categoryLabel: "数据分析",
+                author: "熊泽城",
+                date: "2026-03-03",
+                readTime: "15 分钟",
+                views: 189,
+                tags: ["Python", "Pandas", "数据分析"],
+                emoji: "📊"
+            },
+            {
+                id: 3,
+                title: "机器学习入门：神经网络基础原理",
+                excerpt: "从零开始理解神经网络的工作原理，包括感知机、多层网络、反向传播算法等核心概念的通俗讲解...",
+                category: "ai",
+                categoryLabel: "人工智能",
+                author: "熊泽城",
+                date: "2026-03-01",
+                readTime: "18 分钟",
+                views: 312,
+                tags: ["机器学习", "神经网络", "深度学习"],
+                emoji: "🤖"
+            },
+            {
+                id: 4,
+                title: "Node.js 高性能服务器开发指南",
+                excerpt: "深入探讨 Node.js 的异步编程模型、事件循环机制，以及构建高并发服务器的最佳实践和性能优化技巧...",
+                category: "backend",
+                categoryLabel: "后端架构",
+                author: "熊泽城",
+                date: "2026-02-28",
+                readTime: "20 分钟",
+                views: 267,
+                tags: ["Node.js", "后端", "性能优化"],
+                emoji: "🚀"
+            },
+            {
+                id: 5,
+                title: "CSS Grid 布局完全指南",
+                excerpt: "系统讲解 CSS Grid 布局的所有核心概念，通过丰富的实例展示如何创建复杂的响应式网页布局...",
+                category: "frontend",
+                categoryLabel: "前端开发",
+                author: "熊泽城",
+                date: "2026-02-25",
+                readTime: "14 分钟",
+                views: 198,
+                tags: ["CSS", "Grid", "响应式"],
+                emoji: "🎨"
+            },
+            {
+                id: 6,
+                title: "Git 高级技巧与团队协作流程",
+                excerpt: "分享 Git 的高级用法，包括 rebase、cherry-pick、bisect 等命令，以及团队开发中的最佳实践...",
+                category: "tools",
+                categoryLabel: "工具教程",
+                author: "熊泽城",
+                date: "2026-02-22",
+                readTime: "16 分钟",
+                views: 245,
+                tags: ["Git", "版本控制", "团队协作"],
+                emoji: "🔧"
+            },
+            {
+                id: 7,
+                title: "TensorFlow 2.0 快速上手教程",
+                excerpt: "从零开始学习 TensorFlow 2.0，掌握深度学习框架的核心 API，快速构建和训练神经网络模型...",
+                category: "ai",
+                categoryLabel: "人工智能",
+                author: "熊泽城",
+                date: "2026-02-20",
+                readTime: "22 分钟",
+                views: 289,
+                tags: ["TensorFlow", "深度学习", "Python"],
+                emoji: "🧠"
+            },
+            {
+                id: 8,
+                title: "RESTful API 设计规范与最佳实践",
+                excerpt: "详解 RESTful API 的设计原则、命名规范、状态码使用，以及版本控制、认证授权等实际问题的解决方案...",
+                category: "backend",
+                categoryLabel: "后端架构",
+                author: "熊泽城",
+                date: "2026-02-18",
+                readTime: "13 分钟",
+                views: 221,
+                tags: ["API", "RESTful", "后端"],
+                emoji: "🌐"
+            },
+            {
+                id: 9,
+                title: "Vue 3 Composition API 实战指南",
+                excerpt: "深入讲解 Vue 3 Composition API 的使用方法和优势，通过实际项目演示如何重构 Options API 代码...",
+                category: "frontend",
+                categoryLabel: "前端开发",
+                author: "熊泽城",
+                date: "2026-02-15",
+                readTime: "17 分钟",
+                views: 276,
+                tags: ["Vue", "Composition API", "前端框架"],
+                emoji: "💚"
+            }
+        ];
+        
+        // 渲染博客卡片
+        function renderBlogPosts(posts) {
+            const grid = document.getElementById('blogGrid');
+            grid.innerHTML = '';
+            
+            posts.forEach((post, index) => {
+                const card = document.createElement('article');
+                card.className = 'blog-card';
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                card.innerHTML = `
+                    <div class="blog-card-image">
+                        ${post.emoji}
+                        <span class="blog-card-category">${post.categoryLabel}</span>
+                    </div>
+                    <div class="blog-card-content">
+                        <h3 class="blog-card-title">${post.title}</h3>
+                        <p class="blog-card-excerpt">${post.excerpt}</p>
+                        <div class="blog-card-tags">
+                            ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="blog-card-meta">
+                            <div class="blog-card-author">
+                                <div class="author-avatar">👤</div>
+                                <span>${post.author}</span>
+                            </div>
+                            <div style="display: flex; gap: 15px;">
+                                <span>👁 ${post.views}</span>
+                                <span>⏱ ${post.readTime}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', () => {
+                    window.location.href = `blog-post.html?id=${post.id}`;
+                });
+                
+                grid.appendChild(card);
+            });
+        }
+        
+        // 分类筛选
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const category = btn.dataset.category;
+                const filtered = category === 'all' 
+                    ? blogPosts 
+                    : blogPosts.filter(post => post.category === category);
+                renderBlogPosts(filtered);
+            });
+        });
+        
+        // 搜索功能
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = blogPosts.filter(post => 
+                post.title.toLowerCase().includes(query) ||
+                post.excerpt.toLowerCase().includes(query) ||
+                post.tags.some(tag => tag.toLowerCase().includes(query))
+            );
+            renderBlogPosts(filtered);
+        });
+        
+        // 分页（演示）
+        const pageBtns = document.querySelectorAll('.page-btn');
+        pageBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                pageBtns.forEach(b => b.classList.remove('active'));
+                if (!btn.textContent.includes('‹') && !btn.textContent.includes('›')) {
+                    btn.classList.add('active');
+                }
+            });
+        });
+        
+        // 初始化
+        renderBlogPosts(blogPosts);
+    </script>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章详情 | 熊泽城博客</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { padding-top: 80px; }
+        main { position: relative; z-index: 1; }
+        .article-container { max-width: 900px; margin: 60px auto; padding: 0 20px; }
+        .article-header { text-align: center; margin-bottom: 50px; }
+        .article-category { display: inline-block; padding: 8px 20px; background: var(--current-accent-soft); border: 2px solid var(--current-border); border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--current-accent); margin-bottom: 20px; }
+        .article-title { font-family: 'Orbitron', sans-serif; font-size: clamp(28px, 5vw, 42px); font-weight: 900; color: var(--current-text); margin-bottom: 20px; line-height: 1.3; }
+        .article-meta { display: flex; justify-content: center; gap: 25px; color: var(--current-text-sec); font-size: 14px; flex-wrap: wrap; }
+        .article-meta-item { display: flex; align-items: center; gap: 6px; }
+        .article-content { background: var(--current-card); border: 1px solid var(--current-border); border-radius: 20px; padding: 50px; backdrop-filter: blur(10px); line-height: 1.9; }
+        .article-content h2 { font-family: 'Orbitron', sans-serif; font-size: 24px; color: var(--current-text); margin: 40px 0 20px; }
+        .article-content h3 { font-size: 20px; color: var(--current-text); margin: 30px 0 15px; }
+        .article-content p { color: var(--current-text-sec); margin-bottom: 20px; font-size: 16px; }
+        .article-content code { background: var(--current-accent-soft); padding: 3px 8px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 14px; color: var(--current-accent); }
+        .article-content pre { background: var(--bg-dark); padding: 20px; border-radius: 10px; overflow-x: auto; margin: 25px 0; }
+        .article-content pre code { background: none; padding: 0; color: #e6edf3; }
+        .article-content ul, .article-content ol { margin: 20px 0; padding-left: 30px; color: var(--current-text-sec); }
+        .article-content li { margin-bottom: 10px; }
+        .article-content blockquote { border-left: 4px solid var(--current-accent); padding: 20px 30px; margin: 30px 0; background: var(--current-accent-soft); border-radius: 0 10px 10px 0; }
+        .article-content blockquote p { margin: 0; font-style: italic; }
+        .article-tags { margin-top: 50px; padding-top: 30px; border-top: 1px solid var(--current-border); display: flex; gap: 10px; flex-wrap: wrap; }
+        .article-footer { margin-top: 60px; padding: 30px; background: var(--current-card); border: 1px solid var(--current-border); border-radius: 16px; text-align: center; }
+        .back-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 30px; background: var(--current-accent); color: #fff; border: none; border-radius: 25px; font-size: 15px; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.3s; }
+        .back-btn:hover { background: var(--current-accent-hover); transform: translateY(-2px); }
+        @media (max-width: 768px) { .article-content { padding: 30px 20px; } }
+    </style>
+</head>
+<body>
+    <div id="star-container"></div>
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" stroke="url(#gradient)" stroke-width="2" fill="none"/>
+                <path d="M50 15 L50 50 L70 70" stroke="url(#gradient)" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="50" cy="50" r="5" fill="url(#gradient)"/>
+                <defs><linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:var(--current-accent)"/><stop offset="100%" style="stop-color:var(--current-text)"/></linearGradient></defs>
+            </svg>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">首页</a></li>
+            <li><a href="resume.html">简历</a></li>
+            <li><a href="works.html">作品集</a></li>
+            <li><a href="blog.html" class="active">博客</a></li>
+            <li><a href="tools.html">工具站</a></li>
+            <li><a href="contact.html">联系方式</a></li>
+        </ul>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="theme-toggle"><div class="theme-toggle-ball"></div><span class="theme-toggle-icon sun">☀️</span><span class="theme-toggle-icon moon">🌙</span></div>
+            <button class="menu-toggle" id="menuToggle" aria-label="菜单"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+    
+    <main>
+        <article class="article-container">
+            <header class="article-header">
+                <span class="article-category">📝 前端开发</span>
+                <h1 class="article-title">React Hooks 深度解析：从入门到精通</h1>
+                <div class="article-meta">
+                    <div class="article-meta-item"><span>👤</span><span>熊泽城</span></div>
+                    <div class="article-meta-item"><span>📅</span><span>2026-03-05</span></div>
+                    <div class="article-meta-item"><span>👁</span><span>234 阅读</span></div>
+                    <div class="article-meta-item"><span>⏱</span><span>12 分钟</span></div>
+                </div>
+            </header>
+            
+            <div class="article-content">
+                <p>React Hooks 是 React 16.8 引入的全新特性，它让你无需编写 class 组件就可以使用 state 和其他 React 特性。本文将深入讲解 React Hooks 的核心概念和最佳实践。</p>
+                
+                <h2>一、为什么需要 Hooks？</h2>
+                <p>在 Hooks 出现之前，React 组件主要使用 class 来编写。这种方式存在以下问题：</p>
+                <ul>
+                    <li><strong>状态逻辑复用困难</strong>：class 组件之间共享状态逻辑需要使用高阶组件或 render props，导致代码嵌套复杂</li>
+                    <li><strong>生命周期复杂</strong>：相关的逻辑分散在不同的生命周期方法中，难以维护</li>
+                    <li><strong>this 指向问题</strong>：class 中的 this 指向经常让开发者困惑</li>
+                </ul>
+                
+                <h2>二、useState：状态管理</h2>
+                <p>useState 是最基础的 Hook，用于在函数组件中添加状态：</p>
+                <pre><code>import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;你点击了 {count} 次&lt;/p&gt;
+      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;
+        点击我
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                
+                <h2>三、useEffect：副作用处理</h2>
+                <p>useEffect 用于处理函数组件中的副作用，比如数据获取、订阅或手动修改 DOM：</p>
+                <pre><code>import React, { useState, useEffect } from 'react';
+
+function Example() {
+  const [data, setData] = useState(null);
+  
+  useEffect(() => {
+    fetchData().then(result => {
+      setData(result);
+    });
+    
+    return () => {
+      // 清理函数
+    };
+  }, []);
+  
+  return &lt;div&gt;{data}&lt;/div&gt;
+}</code></pre>
+                
+                <blockquote>
+                    <p>💡 提示：useEffect 的第二个参数是依赖数组，控制 effect 何时重新运行。空数组表示只在组件挂载和卸载时运行。</p>
+                </blockquote>
+                
+                <h2>四、自定义 Hooks</h2>
+                <p>你可以创建自己的 Hooks 来复用状态逻辑：</p>
+                <pre><code>function useLocalStorage(key, initialValue) {
+  const [storedValue, setStoredValue] = useState(() => {
+    const item = window.localStorage.getItem(key);
+    return item ? JSON.parse(item) : initialValue;
+  });
+  
+  const setValue = (value) => {
+    setStoredValue(value);
+    window.localStorage.setItem(key, JSON.stringify(value));
+  };
+  
+  return [storedValue, setValue];
+}</code></pre>
+                
+                <h2>五、最佳实践</h2>
+                <h3>1. 只在顶层调用 Hooks</h3>
+                <p>不要在循环、条件或嵌套函数中调用 Hooks，确保它们在每次渲染时以相同的顺序被调用。</p>
+                
+                <h3>2. 使用 ESLint 插件</h3>
+                <p>安装 eslint-plugin-react-hooks，它会自动检查 Hooks 的使用规则。</p>
+                
+                <h3>3. 合理拆分自定义 Hooks</h3>
+                <p>将相关的逻辑封装到自定义 Hook 中，提高代码复用性和可测试性。</p>
+                
+                <div class="article-tags">
+                    <span class="tag">React</span>
+                    <span class="tag">Hooks</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">前端开发</span>
+                </div>
+            </div>
+            
+            <footer class="article-footer">
+                <a href="blog.html" class="back-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    返回博客列表
+                </a>
+            </footer>
+        </article>
+    </main>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>

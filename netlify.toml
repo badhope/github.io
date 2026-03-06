@@ -1,13 +1,18 @@
 [build]
+  # 发布目录（静态网站通常是当前目录或 dist/build 目录）
   publish = "."
-  command = "echo 'No build required'"
+  
+  # 构建命令（纯静态网站不需要构建命令）
+  command = "echo 'Building static site...'"
 
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+  # 将所有 404 请求重定向到 404.html
+  from = "/*"
+  to = "/404.html"
+  status = 404
 
 [[headers]]
+  # 为所有资源设置缓存控制
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
@@ -16,16 +21,49 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
 [[headers]]
-  for = "/*.js"
+  # 为 CSS 文件设置缓存
+  for = "/css/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-  for = "/*.css"
+  # 为 JavaScript 文件设置缓存
+  for = "/js/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-  for = "/*.html"
+  # 为图片文件设置缓存
+  for = "/*.png"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.gif"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# 环境变量配置示例（在 Netlify 控制台配置更安全）
+# [build.environment]
+#   NODE_VERSION = "18"
+#   NPM_VERSION = "9"

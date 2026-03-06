@@ -3,8 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>熊泽城 | AI时代的探索者</title>
-    <meta name="description" content="大数据专业本科生，全栈开发者，活跃的开源贡献者">
+    <title>熊泽城 | AI 时代的探索者 - 全栈开发者 & 数据科学家</title>
+    <meta name="description" content="大数据专业本科生，热衷于 AI 技术与全栈开发。活跃的开源贡献者，专注于机器学习、数据分析和 Web 开发。探索技术与创新的无限可能。">
+    <meta name="keywords" content="熊泽城，AI 开发，全栈开发，大数据，机器学习，Python，JavaScript，数据分析，开源项目">
+    <meta name="author" content="熊泽城">
+    
+    <!-- Open Graph / 社交媒体元数据 -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="熊泽城 | AI 时代的探索者">
+    <meta property="og:description" content="大数据专业本科生，热衷于 AI 技术与全栈开发">
+    <meta property="og:url" content="https://badhope.github.io">
+    <meta name="twitter:card" content="summary_large_image">
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700;900&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
     
@@ -569,16 +578,18 @@
         }
         
         .hexagram-container {
-            width: 180px;
-            height: 180px;
+            width: 200px;
+            height: 200px;
             position: relative;
-            margin-bottom: 35px;
-            animation: hexagramFloat 5s ease-in-out infinite;
+            margin-bottom: 40px;
+            animation: hexagramFloat 6s ease-in-out infinite;
         }
         
         @keyframes hexagramFloat {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-12px) rotate(180deg); }
+            25% { transform: translateY(-8px) rotate(90deg); }
+            50% { transform: translateY(-15px) rotate(180deg); }
+            75% { transform: translateY(-8px) rotate(270deg); }
         }
         
         .hexagram {
@@ -622,29 +633,55 @@
         
         .main-title {
             font-family: 'Cinzel', serif;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             color: var(--current-text-sec);
-            margin-bottom: 18px;
-            opacity: 0.8;
+            margin-bottom: 20px;
+            opacity: 0.85;
             text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .main-title::before,
+        .main-title::after {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--current-accent);
+            font-size: 12px;
+        }
+        
+        .main-title::before {
+            left: -25px;
+        }
+        
+        .main-title::after {
+            right: -25px;
         }
         
         .typing-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(28px, 5.5vw, 52px);
+            font-size: clamp(32px, 6vw, 58px);
             font-weight: 900;
             background: linear-gradient(135deg, var(--current-accent) 0%, var(--current-text) 50%, var(--current-accent) 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: textShine 4s linear infinite;
-            min-height: 60px;
+            animation: textShine 4s linear infinite, titleGlow 3s ease-in-out infinite;
+            min-height: 70px;
             display: flex;
             align-items: center;
             justify-content: center;
+            filter: drop-shadow(0 0 20px var(--current-glow));
+        }
+        
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 15px var(--current-glow)); }
+            50% { filter: drop-shadow(0 0 30px var(--current-glow)); }
         }
         
         @keyframes textShine {
@@ -670,30 +707,39 @@
         
         .subtitle {
             font-family: 'Noto Sans SC', sans-serif;
-            font-size: 17px;
+            font-size: 18px;
             color: var(--current-text-sec);
-            margin-top: 18px;
-            font-weight: 400;
-            opacity: 0.9;
-            line-height: 1.8;
+            margin-top: 25px;
+            font-weight: 300;
+            opacity: 0.95;
+            line-height: 1.9;
+            max-width: 700px;
+            padding: 0 20px;
         }
         
         .subtitle span {
             color: var(--current-accent);
-            font-weight: 700;
+            font-weight: 600;
             position: relative;
+            padding: 0 5px;
         }
         
         .subtitle span::after {
             content: '';
             position: absolute;
-            bottom: -1px;
+            bottom: -2px;
             left: 0;
             width: 100%;
             height: 2px;
-            background: var(--current-accent);
-            opacity: 0.4;
+            background: linear-gradient(90deg, transparent, var(--current-accent), transparent);
             border-radius: 1px;
+        }
+        
+        .subtitle-highlight {
+            background: var(--current-accent-soft);
+            padding: 3px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--current-border);
         }
         
         .explore-section {
@@ -756,6 +802,16 @@
         
         .explore-btn:hover .btn-icon {
             transform: translateX(4px) scale(1.1);
+        }
+        
+        .skill-preview-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--current-accent);
+            box-shadow: 0 15px 40px var(--current-glow);
+        }
+        
+        .skill-preview-card:hover h4 {
+            color: var(--current-accent);
         }
         
         .social-section {
@@ -1171,7 +1227,9 @@
                 <span id="typed-text"></span><span class="cursor"></span>
             </h1>
             <p class="subtitle">
-                与我一起探索 <span>AI 时代的未来</span>，共同创造无限可能
+                我是一名热衷于<span>人工智能</span>与<span>全栈开发</span>的技术探索者。<br>
+                专注于<span class="subtitle-highlight">机器学习</span>、<span class="subtitle-highlight">数据分析</span>和<span class="subtitle-highlight">Web 应用开发</span>，<br>
+                致力于用技术解决现实问题，创造有价值的产品体验。
             </p>
         </div>
         
@@ -1180,6 +1238,35 @@
                 <span class="btn-icon">🚀</span>
                 <span>开始探索</span>
             </a>
+        </div>
+        
+        <!-- 新增：核心技能展示 -->
+        <div class="skills-preview" style="margin-top: 80px; max-width: 900px; width: 100%;">
+            <h3 style="font-family: 'Cinzel', serif; font-size: 18px; color: var(--current-text-sec); text-align: center; margin-bottom: 40px; letter-spacing: 3px;">
+                ✦ 核心技能 ✦
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; padding: 0 20px;">
+                <div class="skill-preview-card" style="text-align: center; padding: 25px; background: var(--current-card); border-radius: 16px; border: 1px solid var(--current-border); transition: all 0.4s var(--ease-smooth); backdrop-filter: blur(10px);">
+                    <div style="font-size: 42px; margin-bottom: 15px;">🤖</div>
+                    <h4 style="font-family: 'Orbitron', sans-serif; font-size: 15px; color: var(--current-text); margin-bottom: 10px;">人工智能</h4>
+                    <p style="font-size: 13px; color: var(--current-text-sec); line-height: 1.6;">机器学习、深度学习、自然语言处理</p>
+                </div>
+                <div class="skill-preview-card" style="text-align: center; padding: 25px; background: var(--current-card); border-radius: 16px; border: 1px solid var(--current-border); transition: all 0.4s var(--ease-smooth); backdrop-filter: blur(10px);">
+                    <div style="font-size: 42px; margin-bottom: 15px;">💻</div>
+                    <h4 style="font-family: 'Orbitron', sans-serif; font-size: 15px; color: var(--current-text); margin-bottom: 10px;">全栈开发</h4>
+                    <p style="font-size: 13px; color: var(--current-text-sec); line-height: 1.6;">React、Vue、Node.js、Python</p>
+                </div>
+                <div class="skill-preview-card" style="text-align: center; padding: 25px; background: var(--current-card); border-radius: 16px; border: 1px solid var(--current-border); transition: all 0.4s var(--ease-smooth); backdrop-filter: blur(10px);">
+                    <div style="font-size: 42px; margin-bottom: 15px;">📊</div>
+                    <h4 style="font-family: 'Orbitron', sans-serif; font-size: 15px; color: var(--current-text); margin-bottom: 10px;">数据分析</h4>
+                    <p style="font-size: 13px; color: var(--current-text-sec); line-height: 1.6;">Pandas、NumPy、数据可视化</p>
+                </div>
+                <div class="skill-preview-card" style="text-align: center; padding: 25px; background: var(--current-card); border-radius: 16px; border: 1px solid var(--current-border); transition: all 0.4s var(--ease-smooth); backdrop-filter: blur(10px);">
+                    <div style="font-size: 42px; margin-bottom: 15px;">☁️</div>
+                    <h4 style="font-family: 'Orbitron', sans-serif; font-size: 15px; color: var(--current-text); margin-bottom: 10px;">云服务</h4>
+                    <p style="font-size: 13px; color: var(--current-text-sec); line-height: 1.6;">Docker、Kubernetes、CI/CD</p>
+                </div>
+            </div>
         </div>
         
         <div class="social-section">
@@ -1357,10 +1444,14 @@
             "熊泽城",
             "积极的开源贡献者",
             "活跃的技术开发者",
-            "大数据专业学生",
+            "大数据专业本科生",
             "全栈开发爱好者",
-            "未来技术追梦人",
-            "创新思维实践者"
+            "机器学习实践者",
+            "数据分析师",
+            "Python 开发者",
+            "JavaScript 爱好者",
+            "技术创新推动者",
+            "未来科技追梦人"
         ];
         
         let phraseIndex = 0;
@@ -1405,7 +1496,11 @@
                 { text: "简单是可靠的先决条件。", author: "Dijkstra" },
                 { text: "先让它工作，再让它快，再让它简单。", author: "Kent Beck" },
                 { text: "最好的代码是没有代码。", author: "Jeff Atwood" },
-                { text: "程序必须是为了给人看而写，给机器执行只是附带任务。", author: "Donald Knuth" }
+                { text: "程序必须是为了给人看而写，给机器执行只是附带任务。", author: "Donald Knuth" },
+                { text: "人工智能不是要取代人类，而是要增强人类的能力。", author: "李开复" },
+                { text: "数据是新的石油，而 AI 是引擎。", author: "吴恩达" },
+                { text: "预测未来的最好方式，就是创造它。", author: "Peter Drucker" },
+                { text: "技术本身没有价值，有价值的是技术能做什么。", author: "Steve Jobs" }
             ];
             
             const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
@@ -1462,5 +1557,7 @@
             });
         });
     </script>
+    
+    <script src="js/main.js"></script>
 </body>
 </html>

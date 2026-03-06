@@ -3,333 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登录 | 熊泽城</title>
-    <meta name="description" content="登录查看完整内容">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700;900&display=swap" rel="stylesheet">
-    
+    <title>登录 | 熊泽城个人网站</title>
+    <meta name="description" content="登录熊泽城个人网站，访问更多精彩内容">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        :root {
-            --bg-light: linear-gradient(135deg, #ffffff 0%, #f0f8ff 50%, #e6f3ff 100%);
-            --text-light-primary: #1a365d;
-            --text-light-secondary: #2c5282;
-            --accent-light: #0078d4;
-            --accent-light-hover: #106ebe;
-            --accent-light-soft: rgba(0, 120, 212, 0.15);
-            --glow-light: rgba(0, 120, 212, 0.4);
-            --card-light: rgba(255, 255, 255, 0.95);
-            --shadow-light: rgba(0, 120, 212, 0.12);
-            --border-light: rgba(0, 120, 212, 0.2);
-            --error-color: #dc3545;
-            --success-color: #28a745;
-            
-            --bg-dark: #0d1117;
-            --text-dark-primary: #e6edf3;
-            --text-dark-secondary: #8b949e;
-            --accent-dark: #58a6ff;
-            --accent-dark-hover: #79c0ff;
-            --accent-dark-soft: rgba(88, 166, 255, 0.15);
-            --glow-dark: rgba(88, 166, 255, 0.35);
-            --card-dark: rgba(22, 27, 34, 0.95);
-            --shadow-dark: rgba(88, 166, 255, 0.1);
-            --border-dark: rgba(88, 166, 255, 0.2);
-            
-            --current-bg: var(--bg-light);
-            --current-text: var(--text-light-primary);
-            --current-text-sec: var(--text-light-secondary);
-            --current-accent: var(--accent-light);
-            --current-accent-hover: var(--accent-light-hover);
-            --current-accent-soft: var(--accent-light-soft);
-            --current-glow: var(--glow-light);
-            --current-card: var(--card-light);
-            --current-shadow: var(--shadow-light);
-            --current-border: var(--border-light);
-            
-            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-            --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        
-        body.dark-mode {
-            --current-bg: var(--bg-dark);
-            --current-text: var(--text-dark-primary);
-            --current-text-sec: var(--text-dark-secondary);
-            --current-accent: var(--accent-dark);
-            --current-accent-hover: var(--accent-dark-hover);
-            --current-accent-soft: var(--accent-dark-soft);
-            --current-glow: var(--glow-dark);
-            --current-card: var(--card-dark);
-            --current-shadow: var(--shadow-dark);
-            --current-border: var(--border-dark);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
-        }
-        
         body {
-            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--current-bg);
-            color: var(--current-text);
+            margin: 0;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            transition: background 0.5s var(--ease-smooth), color 0.5s var(--ease-smooth);
-        }
-        
-        .auth-container {
-            width: 100%;
-            max-width: 420px;
+            background: var(--current-bg);
             position: relative;
+            overflow: hidden;
         }
         
-        .auth-card {
-            background: var(--current-card);
-            border: 1px solid var(--current-border);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 40px var(--current-shadow);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            transition: all 0.4s var(--ease-smooth);
-        }
-        
-        .auth-card:hover {
-            box-shadow: 0 15px 50px var(--current-glow);
-        }
-        
-        .auth-header {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-        
-        .auth-logo {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 20px;
-        }
-        
-        .auth-logo svg {
+        #star-container, #particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            filter: drop-shadow(0 0 15px var(--current-glow));
+            z-index: 0;
+            pointer-events: none;
         }
         
-        .auth-title {
+        .login-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: var(--current-card);
+            border: 1px solid var(--current-border);
+            border-radius: 24px;
+            padding: 50px 40px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px var(--current-shadow);
+            animation: slideUp 0.6s var(--ease-out-expo);
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        .login-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
             color: var(--current-text);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--current-accent), var(--current-text));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
-        .auth-subtitle {
+        .login-subtitle {
             font-size: 14px;
             color: var(--current-text-sec);
-            opacity: 0.8;
-        }
-        
-        .tab-container {
-            display: flex;
-            margin-bottom: 30px;
-            background: var(--current-accent-soft);
-            border-radius: 12px;
-            padding: 4px;
-        }
-        
-        .tab-btn {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            background: transparent;
-            color: var(--current-text-sec);
-            font-family: 'Noto Sans SC', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.3s var(--ease-smooth);
-        }
-        
-        .tab-btn.active {
-            background: var(--current-accent);
-            color: #fff;
-            box-shadow: 0 4px 15px var(--current-glow);
-        }
-        
-        .tab-btn:hover:not(.active) {
-            color: var(--current-accent);
-        }
-        
-        .form-container {
-            position: relative;
-            min-height: 280px;
-        }
-        
-        .auth-form {
-            display: none;
-            animation: fadeIn 0.3s var(--ease-smooth);
-        }
-        
-        .auth-form.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            position: relative;
         }
         
         .form-label {
             display: block;
             font-size: 13px;
             font-weight: 600;
-            color: var(--current-text-sec);
+            color: var(--current-text);
             margin-bottom: 8px;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
         }
         
         .form-input {
             width: 100%;
             padding: 14px 18px;
+            background: var(--current-accent-soft);
             border: 2px solid var(--current-border);
             border-radius: 12px;
-            font-family: 'Noto Sans SC', sans-serif;
             font-size: 15px;
             color: var(--current-text);
-            background: transparent;
             transition: all 0.3s var(--ease-smooth);
-        }
-        
-        .form-input:focus {
             outline: none;
-            border-color: var(--current-accent);
-            box-shadow: 0 0 0 4px var(--current-accent-soft);
+            font-family: 'Noto Sans SC', sans-serif;
         }
         
         .form-input::placeholder {
             color: var(--current-text-sec);
-            opacity: 0.5;
         }
         
-        .form-input.error {
-            border-color: var(--error-color);
+        .form-input:focus {
+            border-color: var(--current-accent);
+            box-shadow: 0 0 0 3px var(--current-accent-soft);
         }
         
-        .error-message {
-            font-size: 12px;
-            color: var(--error-color);
-            margin-top: 6px;
-            display: none;
+        .form-input:hover:not(:focus) {
+            border-color: var(--current-accent);
         }
         
-        .error-message.show {
-            display: block;
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 42px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--current-text-sec);
+            transition: color 0.3s;
         }
         
-        .remember-forgot {
+        .password-toggle:hover {
+            color: var(--current-accent);
+        }
+        
+        .form-options {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             font-size: 13px;
         }
         
-        .remember-me {
+        .checkbox-group {
             display: flex;
             align-items: center;
             gap: 8px;
             cursor: pointer;
-            color: var(--current-text-sec);
         }
         
-        .remember-me input {
+        .checkbox-group input[type="checkbox"] {
             width: 16px;
             height: 16px;
+            cursor: pointer;
             accent-color: var(--current-accent);
         }
         
-        .forgot-link {
+        .forgot-password {
             color: var(--current-accent);
             text-decoration: none;
-            transition: opacity 0.3s;
+            font-weight: 600;
+            transition: all 0.3s;
         }
         
-        .forgot-link:hover {
-            opacity: 0.8;
+        .forgot-password:hover {
+            color: var(--current-accent-hover);
+            text-decoration: underline;
         }
         
         .submit-btn {
             width: 100%;
             padding: 16px;
-            background: var(--current-accent);
+            background: linear-gradient(135deg, var(--current-accent), var(--current-accent-hover));
+            color: #fff;
             border: none;
             border-radius: 12px;
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
             cursor: pointer;
-            transition: all 0.3s var(--ease-smooth);
+            transition: all 0.4s var(--ease-smooth);
             position: relative;
             overflow: hidden;
         }
         
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s var(--ease-smooth);
+        }
+        
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+        
         .submit-btn:hover {
-            background: var(--current-accent-hover);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--current-glow);
+            box-shadow: 0 10px 30px var(--current-glow);
         }
         
         .submit-btn:active {
             transform: translateY(0);
         }
         
-        .submit-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .submit-btn .spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid transparent;
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 10px;
-        }
-        
-        .submit-btn.loading .spinner {
-            display: inline-block;
-        }
-        
-        .submit-btn.loading .btn-text {
-            opacity: 0.7;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
         .divider {
             display: flex;
             align-items: center;
-            margin: 25px 0;
+            margin: 30px 0;
             color: var(--current-text-sec);
             font-size: 13px;
         }
@@ -346,399 +242,292 @@
             padding: 0 15px;
         }
         
-        .demo-info {
+        .social-login {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
             background: var(--current-accent-soft);
-            border: 1px solid var(--current-border);
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 13px;
-            color: var(--current-text-sec);
-            line-height: 1.6;
-        }
-        
-        .demo-info strong {
-            color: var(--current-accent);
-        }
-        
-        .back-link {
-            text-align: center;
-            margin-top: 25px;
-        }
-        
-        .back-link a {
-            color: var(--current-text-sec);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s;
-        }
-        
-        .back-link a:hover {
-            color: var(--current-accent);
-        }
-        
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #fff;
-            transform: translateX(120%);
-            transition: transform 0.4s var(--ease-smooth);
-            z-index: 1000;
-        }
-        
-        .toast.show {
-            transform: translateX(0);
-        }
-        
-        .toast.success {
-            background: var(--success-color);
-        }
-        
-        .toast.error {
-            background: var(--error-color);
-        }
-        
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 50px;
-            height: 26px;
-            background: var(--current-accent-soft);
-            border-radius: 13px;
-            cursor: pointer;
             border: 2px solid var(--current-border);
+            border-radius: 12px;
+            cursor: pointer;
             transition: all 0.3s var(--ease-smooth);
         }
         
-        .theme-toggle:hover {
+        .social-btn:hover {
+            background: var(--current-accent);
             border-color: var(--current-accent);
+            transform: translateY(-2px);
         }
         
-        .theme-toggle-ball {
-            width: 18px;
-            height: 18px;
-            background: linear-gradient(135deg, #fff 0%, #e8f4ff 100%);
-            border-radius: 50%;
+        .social-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: var(--current-text-sec);
+        }
+        
+        .register-link a {
+            color: var(--current-accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .theme-toggle-wrapper {
             position: absolute;
-            left: 2px;
-            top: 2px;
-            transition: all 0.3s var(--ease-bounce);
+            top: 20px;
+            right: 20px;
+            z-index: 10;
         }
         
-        body.dark-mode .theme-toggle-ball {
-            left: calc(100% - 20px);
-            background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: var(--current-card);
+            border: 2px solid var(--current-border);
+            border-radius: 22px;
+            color: var(--current-text);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s var(--ease-smooth);
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-home:hover {
+            background: var(--current-accent);
+            color: #fff;
+            border-color: var(--current-accent);
+            transform: translateX(-5px);
         }
         
         @media (max-width: 480px) {
-            .auth-card {
-                padding: 30px 25px;
+            .login-card {
+                padding: 40px 25px;
             }
             
-            .auth-title {
-                font-size: 20px;
-            }
-            
-            .form-input {
-                padding: 12px 15px;
+            .social-login {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="theme-toggle" id="themeToggle">
-        <div class="theme-toggle-ball"></div>
+    <div id="star-container"></div>
+    <div id="particle-container"></div>
+    
+    <a href="index.html" class="back-home">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回首页
+    </a>
+    
+    <div class="theme-toggle-wrapper">
+        <div class="theme-toggle">
+            <div class="theme-toggle-ball"></div>
+            <span class="theme-toggle-icon sun">☀️</span>
+            <span class="theme-toggle-icon moon">🌙</span>
+        </div>
     </div>
     
-    <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-header">
-                <div class="auth-logo">
-                    <svg viewBox="0 0 100 100">
-                        <polygon points="50,10 61,35 90,35 67,55 78,90 50,70 22,90 33,55 10,35 39,35" 
-                                 fill="none" 
-                                 stroke="currentColor" 
-                                 stroke-width="2"
-                                 style="color: var(--current-accent)">
-                        </polygon>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" stroke="var(--current-accent)" stroke-width="2" fill="none"/>
+                        <path d="M50 15 L50 50 L70 70" stroke="var(--current-accent)" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="50" cy="50" r="5" fill="var(--current-accent)"/>
                     </svg>
                 </div>
-                <h1 class="auth-title">用户认证</h1>
-                <p class="auth-subtitle">登录后查看完整内容</p>
+                <h1 class="login-title">欢迎回来</h1>
+                <p class="login-subtitle">登录以访问您的个人主页</p>
             </div>
             
-            <div class="tab-container">
-                <button class="tab-btn active" data-tab="login">登录</button>
-                <button class="tab-btn" data-tab="register">注册</button>
-            </div>
-            
-            <div class="form-container">
-                <form class="auth-form active" id="loginForm">
-                    <div class="form-group">
-                        <label class="form-label">邮箱地址</label>
-                        <input type="email" class="form-input" id="loginEmail" placeholder="请输入邮箱" required>
-                        <div class="error-message" id="loginEmailError"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">密码</label>
-                        <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" required>
-                        <div class="error-message" id="loginPasswordError"></div>
-                    </div>
-                    
-                    <div class="remember-forgot">
-                        <label class="remember-me">
-                            <input type="checkbox" id="rememberMe">
-                            <span>记住我</span>
-                        </label>
-                        <a href="#" class="forgot-link">忘记密码？</a>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn">
-                        <span class="spinner"></span>
-                        <span class="btn-text">登 录</span>
-                    </button>
-                </form>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="email">电子邮箱</label>
+                    <input type="email" id="email" class="form-input" placeholder="请输入您的邮箱" required>
+                </div>
                 
-                <form class="auth-form" id="registerForm">
-                    <div class="form-group">
-                        <label class="form-label">用户名</label>
-                        <input type="text" class="form-input" id="registerUsername" placeholder="请输入用户名" required>
-                        <div class="error-message" id="registerUsernameError"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">邮箱地址</label>
-                        <input type="email" class="form-input" id="registerEmail" placeholder="请输入邮箱" required>
-                        <div class="error-message" id="registerEmailError"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">密码</label>
-                        <input type="password" class="form-input" id="registerPassword" placeholder="请输入密码（至少6位）" required>
-                        <div class="error-message" id="registerPasswordError"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">确认密码</label>
-                        <input type="password" class="form-input" id="registerConfirmPassword" placeholder="请再次输入密码" required>
-                        <div class="error-message" id="registerConfirmPasswordError"></div>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn">
-                        <span class="spinner"></span>
-                        <span class="btn-text">注 册</span>
+                <div class="form-group">
+                    <label class="form-label" for="password">密码</label>
+                    <input type="password" id="password" class="form-input" placeholder="请输入密码" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
                     </button>
-                </form>
+                </div>
+                
+                <div class="form-options">
+                    <label class="checkbox-group">
+                        <input type="checkbox" id="remember">
+                        <span>记住我</span>
+                    </label>
+                    <a href="#" class="forgot-password">忘记密码？</a>
+                </div>
+                
+                <button type="submit" class="submit-btn">登 录</button>
+            </form>
+            
+            <div class="divider">
+                <span>或使用以下方式登录</span>
             </div>
             
-            <div class="divider"><span>演示账号</span></div>
-            
-            <div class="demo-info">
-                <strong>演示账号：</strong>demo@example.com<br>
-                <strong>演示密码：</strong>demo123<br>
-                <small style="opacity: 0.7;">或注册新账号体验完整功能</small>
+            <div class="social-login">
+                <div class="social-btn" title="GitHub" onclick="socialLogin('github')">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </div>
+                <div class="social-btn" title="微信" onclick="socialLogin('wechat')">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8.5 10.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm4 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-7 2a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm11 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                        <path d="M12 2C6.48 2 2 6.03 2 11c0 2.87 1.51 5.43 3.89 7.13-.13.66-.54 1.64-.89 2.28-.09.17.09.36.26.27 2.03-1.04 4.12-2.44 5.15-3.36.52.09 1.05.14 1.59.14 5.52 0 10-4.03 10-9S17.52 2 12 2zm0 16.5c-4.14 0-7.5-3.36-7.5-7.5S7.86 3.5 12 3.5 19.5 6.86 19.5 11 16.14 18.5 12 18.5z"/>
+                    </svg>
+                </div>
+                <div class="social-btn" title="Google" onclick="socialLogin('google')">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                </div>
             </div>
             
-            <div class="back-link">
-                <a href="index.html">← 返回首页</a>
+            <div class="register-link">
+                还没有账号？<a href="register.html">立即注册</a>
             </div>
         </div>
     </div>
     
-    <div class="toast" id="toast"></div>
-    
-    <script src="js/auth.js"></script>
     <script>
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-        });
+        // 主题切换
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
         
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
         }
         
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
         
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                tabBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
+        // 密码显示/隐藏
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = `
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                `;
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = `
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                `;
+            }
+        }
+        
+        // 社交登录
+        function socialLogin(provider) {
+            alert(`即将使用${provider}账号登录（演示功能）`);
+        }
+        
+        // 登录表单提交
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            // 演示：简单的验证
+            if (email && password) {
+                // 实际项目中应该调用后端 API
+                localStorage.setItem('user', JSON.stringify({
+                    email: email,
+                    name: email.split('@')[0],
+                    avatar: '👤'
+                }));
                 
-                const tab = this.dataset.tab;
-                if (tab === 'login') {
-                    loginForm.classList.add('active');
-                    registerForm.classList.remove('active');
-                } else {
-                    loginForm.classList.remove('active');
-                    registerForm.classList.add('active');
+                if (remember) {
+                    localStorage.setItem('rememberMe', 'true');
                 }
-            });
-        });
-        
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast ' + type + ' show';
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-        
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-        
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
-            
-            let hasError = false;
-            
-            if (!email) {
-                document.getElementById('loginEmailError').textContent = '请输入邮箱';
-                document.getElementById('loginEmailError').classList.add('show');
-                document.getElementById('loginEmail').classList.add('error');
-                hasError = true;
-            } else if (!validateEmail(email)) {
-                document.getElementById('loginEmailError').textContent = '请输入有效的邮箱地址';
-                document.getElementById('loginEmailError').classList.add('show');
-                document.getElementById('loginEmail').classList.add('error');
-                hasError = true;
-            } else {
-                document.getElementById('loginEmailError').classList.remove('show');
-                document.getElementById('loginEmail').classList.remove('error');
-            }
-            
-            if (!password) {
-                document.getElementById('loginPasswordError').textContent = '请输入密码';
-                document.getElementById('loginPasswordError').classList.add('show');
-                document.getElementById('loginPassword').classList.add('error');
-                hasError = true;
-            } else {
-                document.getElementById('loginPasswordError').classList.remove('show');
-                document.getElementById('loginPassword').classList.remove('error');
-            }
-            
-            if (hasError) return;
-            
-            const submitBtn = loginForm.querySelector('.submit-btn');
-            submitBtn.classList.add('loading');
-            submitBtn.disabled = true;
-            
-            await new Promise(resolve => setTimeout(resolve, 800));
-            
-            const result = Auth.login(email, password, rememberMe);
-            
-            submitBtn.classList.remove('loading');
-            submitBtn.disabled = false;
-            
-            if (result.success) {
-                showToast('登录成功！正在跳转...', 'success');
-                setTimeout(() => {
-                    const redirect = new URLSearchParams(window.location.search).get('redirect');
-                    window.location.href = redirect || 'index.html';
-                }, 1000);
-            } else {
-                showToast(result.message, 'error');
+                
+                alert('登录成功！（演示功能）');
+                window.location.href = 'index.html';
             }
         });
         
-        registerForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('registerUsername').value.trim();
-            const email = document.getElementById('registerEmail').value.trim();
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            
-            let hasError = false;
-            
-            if (!username || username.length < 2) {
-                document.getElementById('registerUsernameError').textContent = '用户名至少2个字符';
-                document.getElementById('registerUsernameError').classList.add('show');
-                document.getElementById('registerUsername').classList.add('error');
-                hasError = true;
-            } else {
-                document.getElementById('registerUsernameError').classList.remove('show');
-                document.getElementById('registerUsername').classList.remove('error');
+        // 星空背景
+        function createStars() {
+            const container = document.getElementById('star-container');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                const size = Math.random() * 2 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(star);
             }
-            
-            if (!email) {
-                document.getElementById('registerEmailError').textContent = '请输入邮箱';
-                document.getElementById('registerEmailError').classList.add('show');
-                document.getElementById('registerEmail').classList.add('error');
-                hasError = true;
-            } else if (!validateEmail(email)) {
-                document.getElementById('registerEmailError').textContent = '请输入有效的邮箱地址';
-                document.getElementById('registerEmailError').classList.add('show');
-                document.getElementById('registerEmail').classList.add('error');
-                hasError = true;
-            } else {
-                document.getElementById('registerEmailError').classList.remove('show');
-                document.getElementById('registerEmail').classList.remove('error');
-            }
-            
-            if (!password || password.length < 6) {
-                document.getElementById('registerPasswordError').textContent = '密码至少6个字符';
-                document.getElementById('registerPasswordError').classList.add('show');
-                document.getElementById('registerPassword').classList.add('error');
-                hasError = true;
-            } else {
-                document.getElementById('registerPasswordError').classList.remove('show');
-                document.getElementById('registerPassword').classList.remove('error');
-            }
-            
-            if (password !== confirmPassword) {
-                document.getElementById('registerConfirmPasswordError').textContent = '两次密码不一致';
-                document.getElementById('registerConfirmPasswordError').classList.add('show');
-                document.getElementById('registerConfirmPassword').classList.add('error');
-                hasError = true;
-            } else {
-                document.getElementById('registerConfirmPasswordError').classList.remove('show');
-                document.getElementById('registerConfirmPassword').classList.remove('error');
-            }
-            
-            if (hasError) return;
-            
-            const submitBtn = registerForm.querySelector('.submit-btn');
-            submitBtn.classList.add('loading');
-            submitBtn.disabled = true;
-            
-            await new Promise(resolve => setTimeout(resolve, 800));
-            
-            const result = Auth.register(username, email, password);
-            
-            submitBtn.classList.remove('loading');
-            submitBtn.disabled = false;
-            
-            if (result.success) {
-                showToast('注册成功！请登录', 'success');
-                setTimeout(() => {
-                    tabBtns[0].click();
-                    document.getElementById('loginEmail').value = email;
-                }, 1000);
-            } else {
-                showToast(result.message, 'error');
-            }
-        });
-        
-        if (Auth.isAuthenticated()) {
-            window.location.href = 'index.html';
         }
+        
+        // 粒子效果
+        function createParticles() {
+            const container = document.getElementById('particle-container');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        
+        window.addEventListener('load', () => {
+            createStars();
+            createParticles();
+        });
     </script>
 </body>
 </html>
