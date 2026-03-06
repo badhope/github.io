@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线编辑器 - 文件管理系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .editor-container {
+            display: flex;
+            height: calc(100vh - 60px);
+            margin-top: 60px;
+        }
+
+        .file-sidebar {
+            width: 300px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .file-tree-header {
+            padding: 15px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        .file-tree {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .file-item {
+            padding: 8px 12px;
+            margin: 2px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-item:hover {
+            background: var(--hover-bg);
+        }
+
+        .file-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .file-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .editor-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .editor-toolbar {
+            padding: 10px 15px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toolbar-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .editor-wrapper {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .code-editor {
+            flex: 1;
+            border: none;
+            padding: 15px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: none;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .code-editor:focus {
+            outline: none;
+        }
+
+        .preview-panel {
+            width: 50%;
+            border-left: 1px solid var(--border-color);
+            background: white;
+            display: none;
+        }
+
+        .preview-panel.active {
+            display: block;
+        }
+
+        .preview-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .status-bar {
+            padding: 8px 15px;
+            background: var(--bg-tertiary);
+            border-top: 1px solid var(--border-color);
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+        }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .folder-item {
+            font-weight: 600;
+            background: var(--bg-tertiary);
+        }
+
+        .folder-children {
+            padding-left: 20px;
+        }
+
+        .unsaved-indicator {
+            color: var(--warning-color);
+            margin-left: 5px;
+        }
+
+        .login-prompt {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .login-card {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .login-card h2 {
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .login-card p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录提示 -->
+    <div id="loginPrompt" class="login-prompt">
+        <div class="login-card">
+            <h2>🔐 需要登录</h2>
+            <p>请登录以访问在线编辑器</p>
+            <button class="btn btn-primary" onclick="window.location.href='login-secure.html'">
+                前往登录
+            </button>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">在线编辑器</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">返回首页</a>
+                <a href="#" class="nav-link" id="logoutBtn">退出登录</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 编辑器容器 -->
+    <div class="editor-container" id="editorContainer" style="display: none;">
+        <!-- 文件树侧边栏 -->
+        <div class="file-sidebar">
+            <div class="file-tree-header">
+                📁 文件浏览器
+            </div>
+            <div class="file-tree" id="fileTree">
+                <!-- 文件列表将通过 JS 动态加载 -->
+            </div>
+        </div>
+
+        <!-- 编辑器主区域 -->
+        <div class="editor-main">
+            <!-- 工具栏 -->
+            <div class="editor-toolbar">
+                <div class="file-info">
+                    <span id="currentFile">未选择文件</span>
+                    <span class="unsaved-indicator" id="unsavedIndicator" style="display: none;">●</span>
+                </div>
+                <div class="toolbar-group">
+                    <button class="btn btn-sm" onclick="editor.togglePreview()">
+                        👁 预览
+                    </button>
+                    <button class="btn btn-sm" onclick="editor.formatCode()">
+                        📝 格式化
+                    </button>
+                    <button class="btn btn-sm btn-primary" onclick="editor.saveFile()">
+                        💾 保存
+                    </button>
+                    <button class="btn btn-sm btn-success" onclick="editor.commitToGitHub()">
+                        ☁️ 提交到 GitHub
+                    </button>
+                </div>
+            </div>
+
+            <!-- 编辑器区域 -->
+            <div class="editor-wrapper">
+                <textarea 
+                    class="code-editor" 
+                    id="codeEditor" 
+                    placeholder="请选择一个文件进行编辑..."
+                    spellcheck="false"
+                ></textarea>
+                <iframe class="preview-panel" id="previewPanel"></iframe>
+            </div>
+
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <span id="statusInfo">就绪</span>
+                <span id="cursorPosition">Ln 1, Col 1</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载遮罩 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="config/admin.config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // 在线文件编辑器
+        const editor = {
+            currentFile: null,
+            originalContent: '',
+            isDirty: false,
+            githubToken: '',
+            
+            // 初始化
+            init() {
+                this.checkAuth();
+                this.setupEventListeners();
+                this.loadFileTree();
+            },
+
+            // 检查登录状态
+            checkAuth() {
+                const session = sessionStorage.getItem('admin_session');
+                if (!session) {
+                    document.getElementById('loginPrompt').style.display = 'flex';
+                    document.getElementById('editorContainer').style.display = 'none';
+                    return false;
+                }
+                
+                document.getElementById('loginPrompt').style.display = 'none';
+                document.getElementById('editorContainer').style.display = 'flex';
+                return true;
+            },
+
+            // 设置事件监听
+            setupEventListeners() {
+                const editorEl = document.getElementById('codeEditor');
+                
+                editorEl.addEventListener('input', () => {
+                    this.isDirty = true;
+                    this.updateUI();
+                });
+
+                editorEl.addEventListener('keyup', (e) => {
+                    this.updateCursorPosition();
+                });
+
+                editorEl.addEventListener('click', () => {
+                    this.updateCursorPosition();
+                });
+
+                // 退出登录
+                document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.logout();
+                });
+
+                // 快捷键
+                document.addEventListener('keydown', (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                        e.preventDefault();
+                        this.saveFile();
+                    }
+                });
+            },
+
+            // 加载文件树
+            async loadFileTree() {
+                const fileTree = document.getElementById('fileTree');
+                fileTree.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">加载中...</div>';
+
+                try {
+                    // 获取 GitHub 仓库信息
+                    const repoInfo = await this.getRepoInfo();
+                    
+                    // 从 GitHub API 获取文件列表
+                    const response = await fetch(
+                        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/git/trees/${repoInfo.branch || 'main'}?recursive=1`
+                    );
+                    
+                    if (!response.ok) {
+                        throw new Error('无法获取文件列表');
+                    }
+
+                    const data = await response.json();
+                    const files = data.tree.filter(item => 
+                        item.type === 'blob' && 
+                        (item.path.endsWith('.html') || 
+                         item.path.endsWith('.css') || 
+                         item.path.endsWith('.js') ||
+                         item.path.endsWith('.md'))
+                    );
+
+                    // 按目录分组
+                    const fileStructure = this.groupByDirectory(files);
+                    
+                    // 渲染文件树
+                    fileTree.innerHTML = '';
+                    this.renderFileTree(fileTree, fileStructure);
+
+                } catch (error) {
+                    console.error('加载文件树失败:', error);
+                    fileTree.innerHTML = `<div style="padding: 20px; color: var(--error-color);">加载失败：${error.message}</div>`;
+                }
+            },
+
+            // 按目录分组文件
+            groupByDirectory(files) {
+                const structure = {};
+                
+                files.forEach(file => {
+                    const parts = file.path.split('/');
+                    let current = structure;
+                    
+                    parts.forEach((part, index) => {
+                        if (index === parts.length - 1) {
+                            // 文件
+                            if (!current.files) current.files = [];
+                            current.files.push(file);
+                        } else {
+                            // 目录
+                            if (!current[part]) current[part] = {};
+                            current = current[part];
+                        }
+                    });
+                });
+                
+                return structure;
+            },
+
+            // 渲染文件树
+            renderFileTree(container, structure, path = '') {
+                // 先渲染目录
+                for (const [key, value] of Object.entries(structure)) {
+                    if (typeof value === 'object' && !value.files) {
+                        // 这是一个目录
+                        const folderDiv = document.createElement('div');
+                        folderDiv.className = 'file-item folder-item';
+                        folderDiv.innerHTML = `
+                            <span class="file-icon">📁</span>
+                            <span>${key}</span>
+                        `;
+                        container.appendChild(folderDiv);
+
+                        // 子目录容器
+                        const childrenDiv = document.createElement('div');
+                        childrenDiv.className = 'folder-children';
+                        folderDiv.appendChild(childrenDiv);
+
+                        // 递归渲染
+                        this.renderFileTree(childrenDiv, value, path + key + '/');
+                    }
+                }
+
+                // 渲染文件
+                if (structure.files) {
+                    structure.files.forEach(file => {
+                        const fileDiv = document.createElement('div');
+                        fileDiv.className = 'file-item';
+                        fileDiv.dataset.path = file.path;
+                        fileDiv.innerHTML = `
+                            <span class="file-icon">${this.getFileIcon(file.path)}</span>
+                            <span>${file.path.split('/').pop()}</span>
+                        `;
+                        fileDiv.addEventListener('click', () => this.loadFile(file.path));
+                        container.appendChild(fileDiv);
+                    });
+                }
+            },
+
+            // 获取文件图标
+            getFileIcon(path) {
+                if (path.endsWith('.html')) return '📄';
+                if (path.endsWith('.css')) return '🎨';
+                if (path.endsWith('.js')) return '⚡';
+                if (path.endsWith('.md')) return '📝';
+                return '📄';
+            },
+
+            // 加载文件
+            async loadFile(filePath) {
+                try {
+                    this.showLoading(true);
+                    
+                    const repoInfo = await this.getRepoInfo();
+                    // 使用 GitHub raw 内容 API
+                    const response = await fetch(
+                        `https://raw.githubusercontent.com/${repoInfo.owner}/${repoInfo.repo}/${repoInfo.branch || 'main'}/${filePath}`
+                    );
+                    
+                    if (!response.ok) {
+                        throw new Error('无法加载文件');
+                    }
+
+                    const content = await response.text();
+                    
+                    this.currentFile = filePath;
+                    this.originalContent = content;
+                    this.isDirty = false;
+                    
+                    document.getElementById('codeEditor').value = content;
+                    document.getElementById('currentFile').textContent = filePath;
+                    
+                    // 高亮当前文件
+                    document.querySelectorAll('.file-item').forEach(item => {
+                        item.classList.remove('active');
+                        if (item.dataset.path === filePath) {
+                            item.classList.add('active');
+                        }
+                    });
+
+                    this.updateUI();
+                    this.updateStatus(`已加载：${filePath}`);
+
+                } catch (error) {
+                    console.error('加载文件失败:', error);
+                    this.updateStatus(`加载失败：${error.message}`, true);
+                } finally {
+                    this.showLoading(false);
+                }
+            },
+
+            // 保存文件（本地）
+            saveFile() {
+                if (!this.currentFile) {
+                    alert('请先选择一个文件');
+                    return;
+                }
+
+                const content = document.getElementById('codeEditor').value;
+                localStorage.setItem('editor_' + this.currentFile, content);
+                
+                this.originalContent = content;
+                this.isDirty = false;
+                this.updateUI();
+                this.updateStatus('已保存到本地存储');
+            },
+
+            // 提交到 GitHub
+            async commitToGitHub() {
+                if (!this.currentFile) {
+                    alert('请先选择一个文件');
+                    return;
+                }
+
+                const content = document.getElementById('codeEditor').value;
+                const message = prompt('请输入提交信息:', `更新 ${this.currentFile}`);
+                
+                if (!message) return;
+
+                try {
+                    this.showLoading(true);
+                    this.updateStatus('正在提交到 GitHub...');
+
+                    const repoInfo = await this.getRepoInfo();
+                    
+                    // 检查是否有 token
+                    if (!repoInfo.token) {
+                        alert('请先配置 GitHub Token！\n\n请点击"GitHub 配置"按钮进行设置。');
+                        window.location.href = 'github-config.html';
+                        return;
+                    }
+
+                    // 获取当前文件的 SHA
+                    const shaResponse = await fetch(
+                        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/contents/${this.currentFile}`,
+                        {
+                            headers: {
+                                'Authorization': `token ${repoInfo.token}`
+                            }
+                        }
+                    );
+                    
+                    if (!shaResponse.ok) {
+                        throw new Error('无法获取文件信息，请检查权限设置');
+                    }
+                    
+                    const shaData = await shaResponse.json();
+
+                    // 更新文件
+                    const updateResponse = await fetch(
+                        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/contents/${this.currentFile}`,
+                        {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `token ${repoInfo.token}`,
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                message: message,
+                                content: btoa(unescape(encodeURIComponent(content))),
+                                sha: shaData.sha
+                            })
+                        }
+                    );
+
+                    if (!updateResponse.ok) {
+                        const error = await updateResponse.json();
+                        throw new Error(error.message || '提交失败');
+                    }
+
+                    this.originalContent = content;
+                    this.isDirty = false;
+                    this.updateUI();
+                    this.updateStatus('✓ 已成功提交到 GitHub');
+                    alert('提交成功！文件已更新到 GitHub。');
+
+                } catch (error) {
+                    console.error('提交失败:', error);
+                    this.updateStatus(`提交失败：${error.message}`, true);
+                    alert(`提交失败：${error.message}`);
+                } finally {
+                    this.showLoading(false);
+                }
+            },
+
+            // 切换预览
+            togglePreview() {
+                const preview = document.getElementById('previewPanel');
+                preview.classList.toggle('active');
+                
+                if (preview.classList.contains('active') && this.currentFile) {
+                    this.updatePreview();
+                }
+            },
+
+            // 更新预览
+            updatePreview() {
+                const content = document.getElementById('codeEditor').value;
+                const preview = document.getElementById('previewPanel');
+                const iframe = preview;
+                
+                if (this.currentFile.endsWith('.html')) {
+                    iframe.srcdoc = content;
+                } else if (this.currentFile.endsWith('.css')) {
+                    iframe.srcdoc = `
+                        <style>${content}</style>
+                        <div style="padding: 20px;">
+                            <h1>标题示例</h1>
+                            <p>这是一个段落示例</p>
+                            <button class="btn">按钮示例</button>
+                        </div>
+                    `;
+                }
+            },
+
+            // 格式化代码
+            formatCode() {
+                // 简单的格式化逻辑
+                const editor = document.getElementById('codeEditor');
+                const content = editor.value;
+                
+                // 这里可以集成 Prettier 等格式化库
+                alert('格式化功能即将推出，将集成 Prettier 自动格式化代码');
+            },
+
+            // 更新光标位置
+            updateCursorPosition() {
+                const editor = document.getElementById('codeEditor');
+                const lines = editor.value.substr(0, editor.selectionStart).split('\n');
+                const line = lines.length;
+                const col = lines[lines.length - 1].length + 1;
+                document.getElementById('cursorPosition').textContent = `Ln ${line}, Col ${col}`;
+            },
+
+            // 更新 UI
+            updateUI() {
+                const indicator = document.getElementById('unsavedIndicator');
+                indicator.style.display = this.isDirty ? 'inline' : 'none';
+            },
+
+            // 更新状态栏
+            updateStatus(message, isError = false) {
+                const status = document.getElementById('statusInfo');
+                status.textContent = message;
+                status.style.color = isError ? 'var(--error-color)' : 'var(--text-secondary)';
+            },
+
+            // 显示加载遮罩
+            showLoading(show) {
+                document.getElementById('loadingOverlay').classList.toggle('active', show);
+            },
+
+            // 获取仓库信息
+            async getRepoInfo() {
+                // 从 LocalStorage 读取配置
+                const config = localStorage.getItem('github_config');
+                if (config) {
+                    try {
+                        const parsed = JSON.parse(config);
+                        return {
+                            owner: parsed.repoOwner || 'badhope',
+                            repo: parsed.repoName || 'github.io',
+                            branch: parsed.branch || 'main',
+                            token: parsed.githubToken || ''
+                        };
+                    } catch (e) {
+                        console.error('读取配置失败:', e);
+                    }
+                }
+                
+                // 默认值
+                return {
+                    owner: 'badhope',
+                    repo: 'github.io',
+                    branch: 'main',
+                    token: ''
+                };
+            },
+
+            // 退出登录
+            logout() {
+                sessionStorage.removeItem('admin_session');
+                localStorage.removeItem('admin_remember_me');
+                window.location.href = 'login-secure.html';
+            }
+        };
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            editor.init();
+        });
+    </script>
+</body>
+</html>

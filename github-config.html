@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Token 配置 - 在线编辑器</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .config-container {
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 40px;
+        }
+
+        .config-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .config-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .config-header h1 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .config-header p {
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .token-instructions {
+            background: var(--bg-tertiary);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .token-instructions h3 {
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .token-instructions ol {
+            padding-left: 20px;
+            color: var(--text-secondary);
+        }
+
+        .token-instructions li {
+            margin-bottom: 10px;
+        }
+
+        .token-instructions a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .token-instructions a:hover {
+            text-decoration: underline;
+        }
+
+        .security-notice {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .security-notice strong {
+            color: var(--warning-color);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .status-message.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success-color);
+            display: block;
+        }
+
+        .status-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">配置中心</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">返回首页</a>
+                <a href="admin-dashboard.html" class="nav-link">管理后台</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="config-container">
+        <div class="config-card">
+            <div class="config-header">
+                <h1>🔑 GitHub Token 配置</h1>
+                <p>配置 GitHub API 访问令牌以启用在线编辑功能</p>
+            </div>
+
+            <div class="security-notice">
+                <strong>⚠️ 安全提示：</strong>
+                Token 将仅存储在您的浏览器本地，不会上传到任何服务器。
+                请使用只针对此仓库的有限权限 Token。
+            </div>
+
+            <div class="token-instructions">
+                <h3>如何创建 GitHub Token：</h3>
+                <ol>
+                    <li>访问 <a href="https://github.com/settings/tokens" target="_blank">GitHub Token 设置页面</a></li>
+                    <li>点击 "Generate new token (classic)"</li>
+                    <li>填写备注（例如：My Website Editor）</li>
+                    <li>设置过期时间（建议 30-90 天）</li>
+                    <li>勾选权限：<code>repo</code>（完整控制私有仓库）</li>
+                    <li>点击 "Generate token"</li>
+                    <li>复制生成的 token（只显示一次，请妥善保管）</li>
+                </ol>
+            </div>
+
+            <form id="configForm">
+                <div class="form-group">
+                    <label for="githubToken">GitHub Token</label>
+                    <input 
+                        type="password" 
+                        id="githubToken" 
+                        placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                        autocomplete="off"
+                    >
+                    <small>
+                        💡 Token 格式通常以 "ghp_" 开头
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="repoOwner">仓库所有者</label>
+                    <input 
+                        type="text" 
+                        id="repoOwner" 
+                        placeholder="您的 GitHub 用户名"
+                        value="badhope"
+                    >
+                    <small>
+                        您的 GitHub 用户名或组织名
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="repoName">仓库名称</label>
+                    <input 
+                        type="text" 
+                        id="repoName" 
+                        placeholder="仓库名称"
+                        value="github.io"
+                    >
+                    <small>
+                        包含网站文件的 GitHub 仓库名称
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="branch">分支名称</label>
+                    <input 
+                        type="text" 
+                        id="branch" 
+                        placeholder="main"
+                        value="main"
+                    >
+                    <small>
+                        默认分支名称（通常是 main 或 master）
+                    </small>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">
+                        💾 保存配置
+                    </button>
+                    <button type="button" class="btn" onclick="testConnection()">
+                        🔗 测试连接
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='editor.html'">
+                        📝 进入编辑器
+                    </button>
+                </div>
+
+                <div id="statusMessage" class="status-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="config/admin.config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // 页面加载时检查登录状态
+        window.addEventListener('DOMContentLoaded', () => {
+            const session = sessionStorage.getItem('admin_session');
+            if (!session) {
+                alert('请先登录以访问配置页面');
+                window.location.href = 'login-secure.html';
+                return;
+            }
+
+            // 加载已保存的配置
+            loadConfig();
+        });
+
+        // 保存配置
+        document.getElementById('configForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const config = {
+                githubToken: document.getElementById('githubToken').value,
+                repoOwner: document.getElementById('repoOwner').value,
+                repoName: document.getElementById('repoName').value,
+                branch: document.getElementById('branch').value
+            };
+
+            // 验证必填项
+            if (!config.githubToken) {
+                showStatus('请输入 GitHub Token', 'error');
+                return;
+            }
+
+            if (!config.repoOwner || !config.repoName) {
+                showStatus('请输入仓库信息', 'error');
+                return;
+            }
+
+            // 保存到 LocalStorage
+            localStorage.setItem('github_config', JSON.stringify(config));
+            
+            showStatus('✓ 配置已保存！您现在可以使用在线编辑器了。', 'success');
+            
+            // 3 秒后跳转到编辑器
+            setTimeout(() => {
+                window.location.href = 'editor.html';
+            }, 2000);
+        });
+
+        // 加载配置
+        function loadConfig() {
+            const saved = localStorage.getItem('github_config');
+            if (saved) {
+                try {
+                    const config = JSON.parse(saved);
+                    document.getElementById('githubToken').value = config.githubToken || '';
+                    document.getElementById('repoOwner').value = config.repoOwner || 'badhope';
+                    document.getElementById('repoName').value = config.repoName || 'github.io';
+                    document.getElementById('branch').value = config.branch || 'main';
+                } catch (e) {
+                    console.error('加载配置失败:', e);
+                }
+            }
+        }
+
+        // 测试连接
+        async function testConnection() {
+            const token = document.getElementById('githubToken').value;
+            const owner = document.getElementById('repoOwner').value;
+            const repo = document.getElementById('repoName').value;
+
+            if (!token || !owner || !repo) {
+                showStatus('请先填写所有必填信息', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `https://api.github.com/repos/${owner}/${repo}`,
+                    {
+                        headers: {
+                            'Authorization': `token ${token}`
+                        }
+                    }
+                );
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showStatus(`✓ 连接成功！仓库：${data.full_name}`, 'success');
+                } else {
+                    const error = await response.json();
+                    showStatus(`连接失败：${error.message}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`连接失败：${error.message}`, 'error');
+            }
+        }
+
+        // 显示状态消息
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message ${type}`;
+        }
+    </script>
+</body>
+</html>

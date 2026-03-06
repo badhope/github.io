@@ -20,7 +20,8 @@
 - ♿ **无障碍访问**：支持减少动画偏好
 - 🔍 **SEO 优化**：完善的元数据和结构化数据
 - 📝 **博客系统**：技术文章分享平台
-- 🔐 **登录系统**：用户认证功能（演示）
+- 🔐 **安全登录**：单一管理员认证系统
+- ✏️ **在线编辑**：直接在浏览器中修改网站内容
 
 ## 功能特性
 
@@ -30,11 +31,21 @@
 - 流畅的动画和过渡效果
 - 滚动进度条和返回顶部按钮
 
-### 用户认证系统
-- 用户注册/登录
-- 会话管理（支持"记住我"功能）
-- 安全的密码存储（前端演示）
-- 演示账号：demo@example.com / demo123
+### 🔐 安全认证系统
+- 单一管理员账户登录
+- SHA-256 密码加密
+- 防暴力破解（5 次失败锁定 30 分钟）
+- 会话管理（120 分钟超时）
+- CSRF & XSS 保护
+- 安全日志记录
+
+### ✏️ 在线编辑系统
+- 文件浏览器（树形结构）
+- 代码编辑器（HTML/CSS/JS/MD）
+- 实时预览功能
+- GitHub 直接提交
+- 本地自动保存
+- 快捷键支持（Ctrl+S）
 
 ### 访问控制
 - 未登录用户：仅可查看简历摘要信息
@@ -51,15 +62,29 @@
 ```
 github.io/
 ├── index.html          # 首页
-├── login.html          # 登录/注册页面
+├── login-secure.html   # 安全登录页面
+├── admin-dashboard.html # 管理员后台
+├── editor.html         # 在线编辑器
+├── github-config.html  # GitHub 配置页面
 ├── resume.html         # 简历页面（含访问控制）
 ├── works.html          # 作品集页面
 ├── tools.html          # 工具站页面
 ├── contact.html        # 联系方式页面（含留言功能）
+├── blog.html           # 博客列表页
+├── blog-post.html      # 博客详情页
+├── config/
+│   └── admin.config.js # 管理员配置
 ├── js/
-│   └── auth.js         # 认证和留言系统
+│   ├── auth.js         # 认证系统
+│   └── main.js         # 主脚本
+├── css/
+│   └── style.css       # 统一样式
+├── utils/
+│   └── password-generator.html # 密码工具
 ├── netlify.toml        # Netlify配置
-└── README.md           # 说明文档
+├── README.md           # 说明文档
+├── EDITOR_GUIDE.md     # 编辑器使用指南
+└── ONLINE_EDITOR_QUICKSTART.md # 快速配置指南
 ```
 
 ## 部署到 Netlify
@@ -122,9 +147,21 @@ npx serve .
 - Safari (最新版)
 - Edge (最新版)
 
+## 📚 文档
+
+- [**在线编辑器使用指南**](EDITOR_GUIDE.md) - 详细的编辑器使用说明
+- [**快速配置指南**](ONLINE_EDITOR_QUICKSTART.md) - 5 分钟快速上手
+- [**安全实现说明**](SECURITY_IMPLEMENTATION.md) - 认证系统技术细节
+- [**测试指南**](TESTING.md) - 功能测试步骤
+- [**部署指南**](DEPLOYMENT.md) - Netlify 部署教程
+
 ## 安全说明
 
-⚠️ **注意**: 本项目的认证系统为前端演示版本，用户数据存储在浏览器 localStorage 中。生产环境请使用后端服务和数据库进行用户认证。
+⚠️ **注意**: 
+- 本项目的认证系统为前端演示版本，用户数据存储在浏览器 localStorage 中
+- 生产环境请使用后端服务和数据库进行用户认证
+- GitHub Token 仅存储在浏览器本地，请妥善保管
+- 定期更新 GitHub Token（建议每 30-90 天）
 
 ## 许可证
 
