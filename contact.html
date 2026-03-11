@@ -3,11 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="robots" content="index, follow">
     <title>联系方式 | 熊泽城</title>
     <meta name="description" content="联系熊泽城 - 电话、邮箱、社交媒体">
 
+    <!-- 预连接优化 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700;900&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- 外部样式表 -->
+    <link rel="stylesheet" href="css/style.css">
 
     <style>
         /* ========== 全局变量 ========== */
@@ -465,7 +476,7 @@
                     <div class="contact-icon">📱</div>
                     <div class="contact-info">
                         <h4>电话</h4>
-                        <a href="tel:+8618825407105">+86 18825407105</a>
+                        <a href="#" id="phoneLink" onclick="revealContact('phone'); return false;">点击查看</a>
                     </div>
                 </div>
 
@@ -473,7 +484,7 @@
                     <div class="contact-icon">📧</div>
                     <div class="contact-info">
                         <h4>邮箱 (主)</h4>
-                        <a href="mailto:3383432254@qq.com">3383432254@qq.com</a>
+                        <a href="#" id="email1Link" onclick="revealContact('email1'); return false;">点击查看</a>
                     </div>
                 </div>
 
@@ -481,7 +492,7 @@
                     <div class="contact-icon">📩</div>
                     <div class="contact-info">
                         <h4>邮箱 (辅)</h4>
-                        <a href="mailto:x18825407105@Outlook.com">x18825407105@Outlook.com</a>
+                        <a href="#" id="email2Link" onclick="revealContact('email2'); return false;">点击查看</a>
                     </div>
                 </div>
 
@@ -563,6 +574,25 @@
                 loader.classList.add('hidden');
             }, 500);
         });
+        
+        // ========== 联系方式保护 ==========
+        const contactData = {
+            phone: { display: '+86 188****7105', link: 'tel:+8618825407105', full: '+86 18825407105' },
+            email1: { display: '338****2254@qq.com', link: 'mailto:3383432254@qq.com', full: '3383432254@qq.com' },
+            email2: { display: 'x188****7105@Outlook.com', link: 'mailto:x18825407105@Outlook.com', full: 'x18825407105@Outlook.com' }
+        };
+        
+        function revealContact(type) {
+            const data = contactData[type];
+            if (!data) return;
+            
+            const linkElement = document.getElementById(type === 'phone' ? 'phoneLink' : type === 'email1' ? 'email1Link' : 'email2Link');
+            if (linkElement) {
+                linkElement.href = data.link;
+                linkElement.textContent = data.full;
+                linkElement.onclick = null;
+            }
+        }
         
         // ========== 留言功能 ==========
         function loadComments() {

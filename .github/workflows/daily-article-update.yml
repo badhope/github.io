@@ -2,9 +2,8 @@ name: Daily Article Update
 
 on:
   schedule:
-    # 每天 UTC 时间 0:00 运行 (北京时间 8:00)
     - cron: '0 0 * * *'
-  workflow_dispatch: # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   update-articles:
@@ -12,21 +11,19 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
       
       - name: Update articles
         run: |
-          # 更新日期
           CURRENT_DATE=$(date +%Y-%m-%d)
           
-          # 创建新的文章数据 (这里使用示例数据，实际应该调用 API 获取)
           cat > articles.json << 'EOF'
           {
             "lastUpdated": "CURRENT_DATE",
@@ -105,21 +102,11 @@ jobs:
           }
           EOF
           
-          # 替换日期
           sed -i "s/CURRENT_DATE/$CURRENT_DATE/g" articles.json
           
-          # 配置 Git 用户信息
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # 提交并推送更改
           git add articles.json
           git commit -m "chore: 每日自动更新文章列表 [$CURRENT_DATE]" || echo "No changes to commit"
           git push origin main
-      
-      - name: Create Issue
-        uses: peter-evans/create-issue-from-file@v4
-        with:
-          title: 文章列表已自动更新
-          content-filepath: articles.json
-          labels: automated

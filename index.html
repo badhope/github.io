@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
     <title>熊泽城 | AI 时代的探索者 - 全栈开发者 & 数据科学家</title>
     <meta name="description" content="大数据专业本科生，热衷于 AI 技术与全栈开发。活跃的开源贡献者，专注于机器学习、数据分析和 Web 开发。探索技术与创新的无限可能。">
     <meta name="keywords" content="熊泽城，AI 开发，全栈开发，大数据，机器学习，Python，JavaScript，数据分析，开源项目">
@@ -13,9 +18,18 @@
     <meta property="og:title" content="熊泽城 | AI 时代的探索者">
     <meta property="og:description" content="大数据专业本科生，热衷于 AI 技术与全栈开发">
     <meta property="og:url" content="https://badhope.github.io">
+    <meta property="og:locale" content="zh_CN">
     <meta name="twitter:card" content="summary_large_image">
     
+    <!-- 预连接优化 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700;900&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- 外部样式表 -->
+    <link rel="stylesheet" href="css/style.css">
     
     <style>
         :root {
@@ -362,7 +376,15 @@
             font-weight: 600;
         }
         
-
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: var(--current-accent-soft);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-smooth);
         }
         
         .user-menu:hover {
