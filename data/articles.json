@@ -1,0 +1,390 @@
+{
+  "version": "3.0.0",
+  "lastUpdated": "2026-03-11",
+  "dataSource": {
+    "primary": "local",
+    "external": ["csdn", "github"],
+    "syncInterval": 86400000
+  },
+  "profile": {
+    "csdn": {
+      "username": "weixin_56622231",
+      "url": "https://blog.csdn.net/weixin_56622231",
+      "avatar": "https://avatar.csdn.net/1/1/E/1_weixin_56622231.jpg",
+      "stats": {
+        "articles": 156,
+        "fans": 2847,
+        "likes": 12856,
+        "comments": 3421,
+        "collections": 8934,
+        "views": 892156
+      }
+    },
+    "github": {
+      "username": "badhope",
+      "url": "https://github.com/badhope",
+      "stats": {
+        "repos": 42,
+        "followers": 128,
+        "following": 89,
+        "stars": 356
+      }
+    }
+  },
+  "articles": [
+    {
+      "id": "art_001",
+      "title": "深入理解 JavaScript 闭包与作用域链",
+      "summary": "从底层原理出发，详细解析JavaScript闭包的形成机制、内存模型以及常见应用场景。通过实际案例演示闭包在模块化开发、函数柯里化、私有变量实现等方面的核心作用。",
+      "content": "闭包是JavaScript中最核心的概念之一，理解闭包对于编写高质量代码至关重要...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/128456789",
+      "publishDate": "2025-12-15",
+      "updateDate": "2026-01-20",
+      "category": "前端开发",
+      "tags": ["JavaScript", "闭包", "作用域", "前端基础"],
+      "stats": {
+        "views": 125680,
+        "likes": 1256,
+        "comments": 342,
+        "collections": 892,
+        "shares": 156
+      },
+      "difficulty": "中级",
+      "readTime": 15,
+      "featured": true,
+      "thumbnail": "https://img-blog.csdnimg.cn/js_closure.png"
+    },
+    {
+      "id": "art_002",
+      "title": "Vue 3 Composition API 完全指南",
+      "summary": "全面介绍Vue 3 Composition API的设计理念、核心API使用方法以及最佳实践。包含setup函数、响应式系统、生命周期钩子、依赖注入等核心概念的深入讲解。",
+      "content": "Vue 3的Composition API是对Options API的重大改进，提供了更灵活的代码组织方式...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/128567890",
+      "publishDate": "2025-11-28",
+      "updateDate": "2026-02-05",
+      "category": "前端框架",
+      "tags": ["Vue3", "Composition API", "前端框架", "响应式"],
+      "stats": {
+        "views": 98560,
+        "likes": 987,
+        "comments": 256,
+        "collections": 723,
+        "shares": 134
+      },
+      "difficulty": "中级",
+      "readTime": 20,
+      "featured": true,
+      "thumbnail": "https://img-blog.csdnimg.cn/vue3_composition.png"
+    },
+    {
+      "id": "art_003",
+      "title": "React Hooks 最佳实践与性能优化",
+      "summary": "深入探讨React Hooks的使用技巧和性能优化策略，包括useMemo、useCallback的正确使用、自定义Hooks设计模式、以及避免常见性能陷阱的实用建议。",
+      "content": "React Hooks改变了我们编写React组件的方式，但不当使用可能导致性能问题...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/128678901",
+      "publishDate": "2025-11-15",
+      "updateDate": "2026-01-10",
+      "category": "前端框架",
+      "tags": ["React", "Hooks", "性能优化", "前端框架"],
+      "stats": {
+        "views": 87234,
+        "likes": 876,
+        "comments": 198,
+        "collections": 654,
+        "shares": 112
+      },
+      "difficulty": "高级",
+      "readTime": 25,
+      "featured": false,
+      "thumbnail": "https://img-blog.csdnimg.cn/react_hooks.png"
+    },
+    {
+      "id": "art_004",
+      "title": "TypeScript 高级类型技巧详解",
+      "summary": "系统讲解TypeScript的高级类型系统，包括泛型约束、条件类型、映射类型、模板字面量类型等进阶特性，帮助开发者构建类型安全的代码体系。",
+      "content": "TypeScript的类型系统非常强大，掌握高级类型技巧能让你的代码更加健壮...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/128789012",
+      "publishDate": "2025-10-30",
+      "updateDate": "2026-01-25",
+      "category": "前端开发",
+      "tags": ["TypeScript", "类型系统", "前端工程化"],
+      "stats": {
+        "views": 76589,
+        "likes": 765,
+        "comments": 167,
+        "collections": 589,
+        "shares": 98
+      },
+      "difficulty": "高级",
+      "readTime": 30,
+      "featured": false,
+      "thumbnail": "https://img-blog.csdnimg.cn/typescript_advanced.png"
+    },
+    {
+      "id": "art_005",
+      "title": "Node.js 微服务架构设计实战",
+      "summary": "从零开始构建Node.js微服务架构，涵盖服务拆分策略、API网关设计、服务发现与注册、分布式追踪、容器化部署等核心主题。",
+      "content": "微服务架构是现代后端开发的主流选择，本文将带你深入理解如何使用Node.js构建可扩展的微服务系统...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/128890123",
+      "publishDate": "2025-10-15",
+      "updateDate": "2026-02-01",
+      "category": "后端开发",
+      "tags": ["Node.js", "微服务", "架构设计", "后端"],
+      "stats": {
+        "views": 65432,
+        "likes": 654,
+        "comments": 145,
+        "collections": 478,
+        "shares": 87
+      },
+      "difficulty": "高级",
+      "readTime": 35,
+      "featured": true,
+      "thumbnail": "https://img-blog.csdnimg.cn/nodejs_microservice.png"
+    },
+    {
+      "id": "art_006",
+      "title": "Python 数据分析实战：Pandas 高效技巧",
+      "summary": "深入讲解Pandas库的高级用法，包括数据清洗、转换、聚合、可视化等核心操作，以及大规模数据处理性能优化技巧。",
+      "content": "Pandas是Python数据分析的核心库，掌握其高效使用方法对于数据科学家至关重要...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/128901234",
+      "publishDate": "2025-10-01",
+      "updateDate": "2026-01-15",
+      "category": "数据分析",
+      "tags": ["Python", "Pandas", "数据分析", "数据科学"],
+      "stats": {
+        "views": 58765,
+        "likes": 587,
+        "comments": 123,
+        "collections": 412,
+        "shares": 76
+      },
+      "difficulty": "中级",
+      "readTime": 25,
+      "featured": false,
+      "thumbnail": "https://img-blog.csdnimg.cn/pandas_tips.png"
+    },
+    {
+      "id": "art_007",
+      "title": "机器学习入门：从理论到实践",
+      "summary": "为初学者打造的机器学习入门指南，从基础概念讲起，结合Python和scikit-learn实现经典算法，包括线性回归、决策树、SVM等。",
+      "content": "机器学习是人工智能的核心领域，本文将带你从零开始理解机器学习的基本原理...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/129012345",
+      "publishDate": "2025-09-20",
+      "updateDate": "2026-01-08",
+      "category": "人工智能",
+      "tags": ["机器学习", "Python", "scikit-learn", "AI入门"],
+      "stats": {
+        "views": 52341,
+        "likes": 523,
+        "comments": 98,
+        "collections": 367,
+        "shares": 65
+      },
+      "difficulty": "初级",
+      "readTime": 40,
+      "featured": true,
+      "thumbnail": "https://img-blog.csdnimg.cn/ml_intro.png"
+    },
+    {
+      "id": "art_008",
+      "title": "Git 高级用法与团队协作流程",
+      "summary": "深入Git高级特性，包括交互式变基、cherry-pick、子模块管理、Git Flow工作流等，以及团队协作中的最佳实践。",
+      "content": "Git是现代软件开发的必备工具，掌握其高级用法能极大提升团队协作效率...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/129123456",
+      "publishDate": "2025-09-05",
+      "updateDate": "2025-12-20",
+      "category": "开发工具",
+      "tags": ["Git", "版本控制", "团队协作", "DevOps"],
+      "stats": {
+        "views": 45678,
+        "likes": 456,
+        "comments": 87,
+        "collections": 298,
+        "shares": 54
+      },
+      "difficulty": "中级",
+      "readTime": 20,
+      "featured": false,
+      "thumbnail": "https://img-blog.csdnimg.cn/git_advanced.png"
+    },
+    {
+      "id": "art_009",
+      "title": "Docker 容器化部署最佳实践",
+      "summary": "全面介绍Docker容器技术，从基础概念到高级应用，包括镜像构建优化、多阶段构建、Docker Compose编排、Kubernetes入门等。",
+      "content": "容器化技术改变了软件部署的方式，Docker作为最流行的容器平台值得深入学习...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/129234567",
+      "publishDate": "2025-08-25",
+      "updateDate": "2025-12-15",
+      "category": "DevOps",
+      "tags": ["Docker", "容器化", "DevOps", "部署"],
+      "stats": {
+        "views": 41234,
+        "likes": 412,
+        "comments": 76,
+        "collections": 256,
+        "shares": 43
+      },
+      "difficulty": "中级",
+      "readTime": 30,
+      "featured": false,
+      "thumbnail": "https://img-blog.csdnimg.cn/docker_best.png"
+    },
+    {
+      "id": "art_010",
+      "title": "前端性能优化完全指南",
+      "summary": "系统讲解前端性能优化的各个方面，包括加载优化、渲染优化、代码优化、资源优化等，配合Lighthouse和Chrome DevTools进行性能分析。",
+      "content": "性能优化是前端开发的重要课题，优秀的性能体验能显著提升用户满意度...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/129345678",
+      "publishDate": "2025-08-10",
+      "updateDate": "2025-12-10",
+      "category": "前端开发",
+      "tags": ["性能优化", "前端", "Web性能", "Lighthouse"],
+      "stats": {
+        "views": 38976,
+        "likes": 389,
+        "comments": 65,
+        "collections": 234,
+        "shares": 38
+      },
+      "difficulty": "高级",
+      "readTime": 35,
+      "featured": false,
+      "thumbnail": "https://img-blog.csdnimg.cn/frontend_perf.png"
+    },
+    {
+      "id": "art_011",
+      "title": "CSS Grid 布局完全指南",
+      "summary": "全面介绍CSS Grid布局系统，从基础概念到复杂布局实现，包括网格轨道、区域命名、对齐方式、响应式设计等核心内容。",
+      "content": "CSS Grid是现代网页布局的强大工具，掌握它能让你轻松实现各种复杂布局...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/129456789",
+      "publishDate": "2025-07-28",
+      "updateDate": "2025-12-05",
+      "category": "前端开发",
+      "tags": ["CSS", "Grid布局", "前端基础", "响应式"],
+      "stats": {
+        "views": 35678,
+        "likes": 356,
+        "comments": 54,
+        "collections": 198,
+        "shares": 32
+      },
+      "difficulty": "中级",
+      "readTime": 25,
+      "featured": false,
+      "thumbnail": "https://img-blog.csdnimg.cn/css_grid.png"
+    },
+    {
+      "id": "art_012",
+      "title": "算法面试高频题解析：动态规划篇",
+      "summary": "精选动态规划经典面试题目，详细讲解解题思路和代码实现，包括背包问题、最长公共子序列、编辑距离等高频考点。",
+      "content": "动态规划是算法面试的重点和难点，本文将通过经典题目帮你建立解题思维...",
+      "author": "熊泽城",
+      "platform": "csdn",
+      "url": "https://blog.csdn.net/weixin_56622231/article/details/129567890",
+      "publishDate": "2025-07-15",
+      "updateDate": "2025-11-30",
+      "category": "算法",
+      "tags": ["算法", "动态规划", "面试", "LeetCode"],
+      "stats": {
+        "views": 32456,
+        "likes": 324,
+        "comments": 48,
+        "collections": 176,
+        "shares": 28
+      },
+      "difficulty": "高级",
+      "readTime": 45,
+      "featured": false,
+      "thumbnail": "https://img-blog.csdnimg.cn/dp_algorithm.png"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj_001",
+      "name": "MIBT 专业人格评测系统",
+      "description": "基于MBTI理论的专业人格测评系统，支持多种题型和自动评分逻辑，采用静态页面部署在GitHub Pages。",
+      "url": "https://badhope.github.io/Mibt-Test/",
+      "github": "https://github.com/badhope/Mibt-Test",
+      "tech": ["HTML5", "CSS3", "JavaScript", "心理学测评"],
+      "category": "Web应用",
+      "status": "已完成",
+      "stars": 23,
+      "forks": 5,
+      "lastUpdate": "2025-12-01",
+      "featured": true,
+      "thumbnail": "https://img.shields.io/github/stars/badhope/Mibt-Test"
+    },
+    {
+      "id": "proj_002",
+      "name": "个人技术博客",
+      "description": "基于GitHub Pages搭建的个人技术博客，展示技术文章、项目作品和个人简历，支持深色模式和响应式设计。",
+      "url": "https://badhope.github.io",
+      "github": "https://github.com/badhope/github.io",
+      "tech": ["HTML5", "CSS3", "JavaScript", "GitHub Pages"],
+      "category": "个人网站",
+      "status": "持续更新",
+      "stars": 15,
+      "forks": 3,
+      "lastUpdate": "2026-03-11",
+      "featured": true,
+      "thumbnail": "https://img.shields.io/github/stars/badhope/github.io"
+    },
+    {
+      "id": "proj_003",
+      "name": "数据分析工具集",
+      "description": "Python数据分析常用工具集合，包含数据清洗、可视化、统计分析等功能模块，支持多种数据格式。",
+      "url": "",
+      "github": "https://github.com/badhope/data-tools",
+      "tech": ["Python", "Pandas", "Matplotlib", "NumPy"],
+      "category": "数据分析",
+      "status": "开发中",
+      "stars": 8,
+      "forks": 2,
+      "lastUpdate": "2026-02-15",
+      "featured": false,
+      "thumbnail": "https://img.shields.io/github/stars/badhope/data-tools"
+    }
+  ],
+  "categories": [
+    { "name": "前端开发", "count": 5, "icon": "💻" },
+    { "name": "前端框架", "count": 2, "icon": "⚛️" },
+    { "name": "后端开发", "count": 1, "icon": "🖥️" },
+    { "name": "数据分析", "count": 1, "icon": "📊" },
+    { "name": "人工智能", "count": 1, "icon": "🤖" },
+    { "name": "开发工具", "count": 1, "icon": "🔧" },
+    { "name": "DevOps", "count": 1, "icon": "🚀" },
+    { "name": "算法", "count": 1, "icon": "🧮" }
+  ],
+  "stats": {
+    "totalArticles": 12,
+    "totalViews": 752624,
+    "totalLikes": 7495,
+    "totalComments": 1659,
+    "totalCollections": 5277,
+    "avgReadTime": 28.75,
+    "featuredCount": 4
+  }
+}
