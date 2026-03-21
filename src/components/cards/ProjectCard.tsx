@@ -15,22 +15,21 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (cardRef.current) {
-      VanillaTilt.init(cardRef.current, {
-        max: 15,
-        speed: 400,
-        glare: true,
-        'max-glare': 0.2,
-        scale: 1.02,
-      });
-    }
+    const element = cardRef.current;
+    if (!element) return;
+
+    VanillaTilt.init(element, {
+      max: 15,
+      speed: 400,
+      glare: true,
+      'max-glare': 0.2,
+      scale: 1.02,
+    });
 
     return () => {
-      if (cardRef.current) {
-        const tilt = cardRef.current as HTMLElement & { vanillaTilt?: { destroy: () => void } };
-        if (tilt.vanillaTilt) {
-          tilt.vanillaTilt.destroy();
-        }
+      const tilt = element as HTMLElement & { vanillaTilt?: { destroy: () => void } };
+      if (tilt.vanillaTilt) {
+        tilt.vanillaTilt.destroy();
       }
     };
   }, []);
@@ -49,11 +48,30 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
         <span className={styles.emoji}>{project.emoji}</span>
         <h3 className={styles.title}>{project.title}</h3>
         <p className={styles.description}>{project.description}</p>
-        <div className={`${styles.tags} ${project.gradient}`}>
-          {project.tags.slice(0, 3).map((tag) => (
+        <div className={styles.tags}>
+          {project.tags.map((tag) => (
             <span key={tag} className={styles.tag}>{tag}</span>
           ))}
         </div>
+      </div>
+      <div className={styles.back}>
+        <h3 className={styles.backTitle}>{project.title}</h3>
+        <p className={styles.backDescription}>{project.description}</p>
+        <div className={styles.tags}>
+          {project.tags.map((tag) => (
+            <span key={tag} className={styles.tag}>{tag}</span>
+          ))}
+        </div>
+        {project.link && project.link !== '#' && (
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.link}
+          >
+            View Project →
+          </a>
+        )}
       </div>
     </motion.div>
   );

@@ -15,22 +15,21 @@ export default function ToolCard({ tool, index }: ToolCardProps) {
   const cardRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
-    if (cardRef.current) {
-      VanillaTilt.init(cardRef.current, {
-        max: 10,
-        speed: 300,
-        glare: true,
-        'max-glare': 0.15,
-        scale: 1.02,
-      });
-    }
+    const element = cardRef.current;
+    if (!element) return;
+
+    VanillaTilt.init(element, {
+      max: 10,
+      speed: 300,
+      glare: true,
+      'max-glare': 0.15,
+      scale: 1.02,
+    });
 
     return () => {
-      if (cardRef.current) {
-        const tilt = cardRef.current as HTMLElement & { vanillaTilt?: { destroy: () => void } };
-        if (tilt.vanillaTilt) {
-          tilt.vanillaTilt.destroy();
-        }
+      const tilt = element as HTMLElement & { vanillaTilt?: { destroy: () => void } };
+      if (tilt.vanillaTilt) {
+        tilt.vanillaTilt.destroy();
       }
     };
   }, []);
@@ -53,7 +52,6 @@ export default function ToolCard({ tool, index }: ToolCardProps) {
         <h3 className={styles.name}>{tool.name}</h3>
         <p className={styles.description}>{tool.description}</p>
       </div>
-      <span className={styles.category}>{tool.category}</span>
     </motion.a>
   );
 }
