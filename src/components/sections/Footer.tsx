@@ -1,8 +1,17 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
-import { socialLinks, siteConfig } from '@/data/config';
 import styles from './Footer.module.css';
+
+const socialLinks = [
+  { name: 'GitHub', url: 'https://github.com/badhope', icon: '🐙' },
+  { name: 'CSDN', url: 'https://blog.csdn.net/weixin_56622231', icon: '📚' },
+  { name: '掘金', url: 'https://juejin.cn/user/235011154247', icon: '💎' },
+  { name: 'Bilibili', url: '/contact-unavailable?platform=bilibili', icon: '📺' },
+  { name: 'Twitter', url: '/contact-unavailable?platform=twitter', icon: '🐦' },
+  { name: 'LinkedIn', url: '/contact-unavailable?platform=linkedin', icon: '💼' },
+];
 
 export default function Footer() {
   const { language } = useLanguage();
@@ -11,84 +20,57 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
+        {/* Top section */}
+        <div className={styles.top}>
+          <div className={styles.brand}>
+            <span className={styles.brandLogo}>⭐</span>
+            <div>
+              <h3 className={styles.brandName}>badhope&apos;s Starbase</h3>
+              <p className={styles.brandTagline}>
+                {isZh ? '探索代码与创意的宇宙' : 'Exploring the Universe of Code & Creativity'}
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.social}>
+            {socialLinks.map((link, index) => (
+              <motion.a
+                key={link.name}
+                href={link.url}
+                target={link.url.startsWith('/') ? '_self' : '_blank'}
+                rel="noopener noreferrer"
+                className={styles.socialLink}
+                whileHover={{ scale: 1.2, y: -3 }}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                title={link.name}
+              >
+                <span className={styles.socialIcon}>{link.icon}</span>
+              </motion.a>
+            ))}
+          </div>
+        </div>
+
+        {/* Divider */}
         <div className={styles.divider} />
 
-        {/* Social Links */}
-        <div className={styles.socialRow}>
-          {socialLinks.map((link) => (
-            <a
-              key={link.platform}
-              href={link.active ? link.url : '#contact-placeholder'}
-              className={styles.socialLink}
-              title={link.platform}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => {
-                if (!link.active) {
-                  e.preventDefault();
-                  window.location.href = '/contact';
-                }
-              }}
-            >
-              <span className={styles.socialIcon}>{link.icon}</span>
-              <span className={styles.socialLabel}>{link.platform}</span>
-            </a>
-          ))}
-        </div>
-
-        {/* Info */}
-        <div className={styles.info}>
-          <p className={styles.brand}>
-            <span className={styles.star}>⭐</span>
-            <span className={styles.brandName}>{siteConfig.name}</span>
-          </p>
+        {/* Bottom section */}
+        <div className={styles.bottom}>
           <p className={styles.copyright}>
-            © {new Date().getFullYear()} {siteConfig.author}. {isZh ? '用代码书写星辰' : 'Written in the stars with code'}.
+            &copy; {new Date().getFullYear()} badhope.{' '}
+            {isZh ? '用 ❤️ 和代码构建' : 'Built with ❤️ and code'}
           </p>
-          <p className={styles.builtWith}>
-            {isZh ? '使用 ' : 'Built with '}
-            <span className={styles.tech}>Next.js</span>
-            <span className={styles.dot}>·</span>
-            <span className={styles.tech}>TypeScript</span>
-            <span className={styles.dot}>·</span>
-            <span className={styles.tech}>Three.js</span>
-            <span className={styles.dot}>·</span>
-            <span className={styles.tech}>Framer Motion</span>
+          <p className={styles.terminal}>
+            <span className={styles.terminalPrompt}>{'>'}</span>
+            <span className={styles.terminalText}>
+              {isZh ? '启明星空间站系统运行正常' : 'Starbase systems operational'}
+            </span>
+            <span className={styles.terminalCursor}>_</span>
           </p>
-        </div>
-
-        {/* Visitor Counter */}
-        <div className={styles.visitor}>
-          <span className={styles.visitorIcon}>👁</span>
-          <span className={styles.visitorText}>
-            {isZh ? '星际访客 #' : 'Star Visitor #'}
-          </span>
-          <VisitorCounter />
         </div>
       </div>
     </footer>
   );
 }
-
-function VisitorCounter() {
-  const [count, setCount] = useState('---');
-
-  useEffect(() => {
-    const fetchCount = async () => {
-      try {
-        const res = await fetch('https://api.counterapi.dev/v1/badhope-starbase/visits/up');
-        if (res.ok) {
-          const data = await res.json();
-          setCount(data.count?.toString() || '---');
-        }
-      } catch {
-        setCount('∞');
-      }
-    };
-    fetchCount();
-  }, []);
-
-  return <span className={styles.count}>{count}</span>;
-}
-
-import { useState, useEffect } from 'react';

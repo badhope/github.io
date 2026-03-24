@@ -2,8 +2,11 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ['main']
-  workflow_dispatch:
+    branches: [main]
+  schedule:
+    # 每天北京时间凌晨3点（UTC 19:00）自动重建，更新博客和项目数据
+    - cron: '0 19 * * *'
+  workflow_dispatch: # 允许手动触发
 
 permissions:
   contents: read
@@ -11,7 +14,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: 'pages'
+  group: "pages"
   cancel-in-progress: false
 
 jobs:
@@ -21,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'

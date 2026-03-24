@@ -1,232 +1,241 @@
-.navToggle {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: rgba(10, 17, 40, 0.8);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
-}
-
-.navToggle:hover {
-  background: rgba(212, 175, 55, 0.1);
-  border-color: rgba(212, 175, 55, 0.5);
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
-}
-
-.starIcon {
-  font-size: 24px;
-  display: inline-block;
-  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.5));
-}
-
-.settingsToggle {
-  position: fixed;
-  top: 20px;
-  right: 80px;
-  z-index: 1000;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(10, 17, 40, 0.8);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  transition: all 0.3s;
-}
-
-.settingsToggle:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.langToggle {
-  position: fixed;
-  top: 20px;
-  right: 28px;
-  z-index: 1000;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(10, 17, 40, 0.8);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #d4af37;
-  transition: all 0.3s;
-}
-
-.langToggle:hover {
-  background: rgba(212, 175, 55, 0.1);
-  border-color: rgba(212, 175, 55, 0.3);
-}
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 999;
-  backdrop-filter: blur(4px);
-}
-
-.navPanel {
+.nav {
   position: fixed;
   top: 0;
   left: 0;
-  width: 300px;
-  max-width: 85vw;
-  height: 100vh;
-  background: rgba(5, 10, 26, 0.95);
-  backdrop-filter: blur(24px);
-  border-right: 1px solid rgba(212, 175, 55, 0.15);
+  right: 0;
+  z-index: 1000;
+  padding: 16px 24px;
+  transition: all 0.3s ease;
+}
+
+.nav.scrolled {
+  background: rgba(2, 5, 16, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Logo button */
+.logoBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logoBtn:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+}
+
+.logoStar {
+  font-size: 20px;
+  display: block;
+}
+
+/* Language button */
+.langBtn {
+  padding: 6px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #a0a0b8;
+  background: rgba(10, 14, 39, 0.6);
+  border: 1px solid rgba(107, 107, 128, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 1px;
+}
+
+.langBtn:hover {
+  color: #d4af37;
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+/* Settings button */
+.settingsBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(10, 14, 39, 0.6);
+  border: 1px solid rgba(107, 107, 128, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.settingsBtn:hover {
+  border-color: rgba(212, 175, 55, 0.3);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 5, 16, 0.6);
+  backdrop-filter: blur(4px);
   z-index: 1001;
+}
+
+/* Side panel */
+.panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 300px;
+  background: rgba(5, 8, 24, 0.95);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(212, 175, 55, 0.1);
+  z-index: 1002;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
 }
 
-.navHeader {
+/* Panel header */
+.panelHeader {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 24px;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
 }
 
-.navLogo {
+.panelLogo {
   font-size: 28px;
-  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+  animation: star-pulse 3s ease-in-out infinite;
 }
 
-.navTitle {
+.panelTitle {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  background: linear-gradient(135deg, #d4af37, #ffd700);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 0.1em;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #d4af37;
+  letter-spacing: 2px;
 }
 
-.navGroups {
-  flex: 1;
-  padding: 16px 0;
+.panelSubtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: #6b6b80;
+  letter-spacing: 1px;
 }
 
+/* Nav group */
 .navGroup {
-  margin-bottom: 24px;
+  padding: 16px 12px;
 }
 
 .groupLabel {
   display: block;
-  padding: 8px 24px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: rgba(212, 175, 55, 0.5);
-  letter-spacing: 0.15em;
+  font-size: 0.65rem;
+  color: #6b6b80;
+  letter-spacing: 2px;
   text-transform: uppercase;
+  padding: 8px 12px;
+  margin-bottom: 4px;
 }
 
-.navItem {
+/* Nav link */
+.navLink {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 24px;
-  color: rgba(255, 255, 255, 0.6);
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #a0a0b8;
   text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   position: relative;
-  border-left: 2px solid transparent;
+  overflow: hidden;
 }
 
-.navItem:hover {
+.navLink:hover {
+  background: rgba(212, 175, 55, 0.06);
   color: #e8e8f0;
-  background: rgba(255, 255, 255, 0.03);
-  border-left-color: rgba(212, 175, 55, 0.3);
 }
 
-.navItem.active {
-  color: #ffd700;
-  background: rgba(212, 175, 55, 0.05);
-  border-left-color: #d4af37;
+.navLink.active {
+  color: #d4af37;
+  background: rgba(212, 175, 55, 0.08);
 }
 
 .navIcon {
-  font-size: 18px;
+  font-size: 1.1rem;
   width: 24px;
   text-align: center;
 }
 
 .navLabel {
   font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
   font-weight: 500;
 }
 
 .activeIndicator {
   position: absolute;
-  right: 0;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
   width: 3px;
-  height: 20px;
+  height: 60%;
   background: #d4af37;
-  border-radius: 2px;
+  border-radius: 0 2px 2px 0;
 }
 
-.navFooter {
-  padding: 16px 24px;
-  border-top: 1px solid rgba(212, 175, 55, 0.1);
-}
-
-.statusLine {
+/* Panel footer */
+.panelFooter {
+  margin-top: auto;
+  padding: 20px 24px;
+  border-top: 1px solid rgba(212, 175, 55, 0.08);
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
 }
 
-.statusDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.statusText {
-  font-family: 'JetBrains Mono', monospace;
+.footerText {
+  font-family: 'Share Tech Mono', monospace;
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.4);
-  letter-spacing: 0.1em;
+  color: #6b6b80;
 }
 
+.footerVersion {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: #6b6b80;
+  padding: 2px 8px;
+  border: 1px solid rgba(107, 107, 128, 0.15);
+  border-radius: 4px;
+}
+
+/* Mobile */
 @media (max-width: 768px) {
-  .navPanel {
-    width: 100vw;
+  .panel {
+    width: 280px;
+  }
+
+  .nav {
+    padding: 12px 16px;
   }
 }

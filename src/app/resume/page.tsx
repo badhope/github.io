@@ -3,151 +3,199 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import StarNavigation from '@/components/ui/StarNavigation';
-import styles from './resume.module.css';
+import styles from './page.module.css';
 
-const skills = {
-  zh: {
-    frontend: ['React', 'Next.js', 'Vue.js', 'TypeScript', 'JavaScript', 'HTML5/CSS3', 'Tailwind CSS', 'Sass'],
-    backend: ['Node.js', 'Python', 'Java', 'Go', 'Express', 'FastAPI', 'Spring Boot'],
-    ai: ['PyTorch', 'TensorFlow', 'LangChain', 'OpenAI API', 'Hugging Face', 'Scikit-learn'],
-    bigdata: ['Spark', 'Hadoop', 'Kafka', 'Elasticsearch', 'Flink', 'ClickHouse'],
-    devops: ['Docker', 'Kubernetes', 'GitHub Actions', 'AWS', 'Nginx', 'Linux'],
-    database: ['PostgreSQL', 'MongoDB', 'MySQL', 'Redis', 'ClickHouse'],
+const experience = [
+  {
+    periodZh: '2024 - 至今',
+    periodEn: '2024 - Present',
+    titleZh: '全栈开发者 & AI 探索者',
+    titleEn: 'Full-Stack Developer & AI Explorer',
+    descZh: '持续学习全栈开发和AI技术，构建实际项目，探索前沿技术领域',
+    descEn: 'Continuously learning full-stack development and AI, building real projects, exploring cutting-edge tech',
+    tags: ['React', 'Next.js', 'Python', 'AI/ML', 'Big Data'],
   },
-  en: {
-    frontend: ['React', 'Next.js', 'Vue.js', 'TypeScript', 'JavaScript', 'HTML5/CSS3', 'Tailwind CSS', 'Sass'],
-    backend: ['Node.js', 'Python', 'Java', 'Go', 'Express', 'FastAPI', 'Spring Boot'],
-    ai: ['PyTorch', 'TensorFlow', 'LangChain', 'OpenAI API', 'Hugging Face', 'Scikit-learn'],
-    bigdata: ['Spark', 'Hadoop', 'Kafka', 'Elasticsearch', 'Flink', 'ClickHouse'],
-    devops: ['Docker', 'Kubernetes', 'GitHub Actions', 'AWS', 'Nginx', 'Linux'],
-    database: ['PostgreSQL', 'MongoDB', 'MySQL', 'Redis', 'ClickHouse'],
-  },
-};
+];
 
-const skillCategories = [
-  { key: 'frontend' as const, labelZh: '前端开发', labelEn: 'Frontend', icon: '🎨' },
-  { key: 'backend' as const, labelZh: '后端开发', labelEn: 'Backend', icon: '⚙️' },
-  { key: 'ai' as const, labelZh: 'AI / 机器学习', labelEn: 'AI / ML', icon: '🤖' },
-  { key: 'bigdata' as const, labelZh: '大数据', labelEn: 'Big Data', icon: '📊' },
-  { key: 'devops' as const, labelZh: 'DevOps', labelEn: 'DevOps', icon: '🔧' },
-  { key: 'database' as const, labelZh: '数据库', labelEn: 'Database', icon: '🗄️' },
+const education = [
+  {
+    periodZh: '持续学习中',
+    periodEn: 'Always Learning',
+    titleZh: '计算机科学与技术',
+    titleEn: 'Computer Science & Technology',
+    descZh: '数据科学 → 全栈开发 → AI + 全栈深入，持续探索技术边界',
+    descEn: 'Data Science → Full-Stack → AI + Full-Stack, continuously pushing technical boundaries',
+  },
+];
+
+const certifications = [
+  { name: 'Full-Stack Web Development', issuer: 'Self-taught & Practice' },
+  { name: 'Data Science Fundamentals', issuer: 'Self-taught & Practice' },
+  { name: 'AI & Machine Learning', issuer: 'Self-taught & Practice' },
 ];
 
 export default function ResumePage() {
   const { language } = useLanguage();
   const isZh = language === 'zh';
-  const currentSkills = isZh ? skills.zh : skills.en;
 
   return (
     <div className={styles.page}>
       <StarNavigation />
-
-      <main className={styles.main}>
+      <div className={styles.container}>
+        {/* Header */}
         <motion.div
           className={styles.header}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          <span className={styles.tag}>{isZh ? '// 简历' : '// Resume'}</span>
-          <h1 className={styles.title}>{isZh ? '星际档案' : 'Stellar Profile'}</h1>
-          <p className={styles.subtitle}>badhope</p>
+          <span className={styles.headerTag}>
+            {'// ' + (isZh ? '简历' : 'Resume')}
+          </span>
+          <h1 className={styles.headerTitle}>badhope</h1>
+          <p className={styles.headerSubtitle}>
+            {isZh ? '全栈开发者 | AI 探索者 | 代码创造者' : 'Full-Stack Developer | AI Explorer | Code Creator'}
+          </p>
+          <div className={styles.headerLinks}>
+            <a href="mailto:x18825407105@outlook.com">📧 x18825407105@outlook.com</a>
+            <a href="https://github.com/badhope" target="_blank" rel="noopener noreferrer">🐙 GitHub</a>
+          </div>
         </motion.div>
 
-        {/* Profile Summary */}
-        <motion.div
-          className={styles.profileCard}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+        {/* Experience */}
+        <motion.section
+          className={styles.section}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
         >
-          <div className={styles.profileHeader}>
-            <span className={styles.profileIcon}>⭐</span>
-            <div>
-              <h2 className={styles.profileName}>badhope</h2>
-              <p className={styles.profileTitle}>
-                {isZh ? '全栈开发者 · AI 探索者 · 代码创造者' : 'Full-Stack Developer · AI Explorer · Code Creator'}
-              </p>
-            </div>
-          </div>
-          <p className={styles.profileBio}>
-            {isZh
-              ? '在职开发者，专注于全栈开发和人工智能领域。拥有从前端到后端、从数据科学到机器学习的完整技术栈经验。热衷于探索前沿技术，用代码构建创新解决方案。'
-              : 'Developer focused on full-stack development and AI. Experienced with the complete tech stack from frontend to backend, data science to machine learning. Passionate about exploring cutting-edge technology and building innovative solutions with code.'}
-          </p>
-        </motion.div>
+          <h2 className={styles.sectionTitle}>
+            {isZh ? '💼 经历' : '💼 Experience'}
+          </h2>
+          {experience.map((exp, index) => (
+            <motion.div
+              key={index}
+              className={styles.timelineItem}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <span className={styles.period}>{isZh ? exp.periodZh : exp.periodEn}</span>
+              <h3 className={styles.itemTitle}>{isZh ? exp.titleZh : exp.titleEn}</h3>
+              <p className={styles.itemDesc}>{isZh ? exp.descZh : exp.descEn}</p>
+              <div className={styles.tags}>
+                {exp.tags.map((tag) => (
+                  <span key={tag} className={styles.tag}>{tag}</span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </motion.section>
+
+        {/* Education */}
+        <motion.section
+          className={styles.section}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className={styles.sectionTitle}>
+            {isZh ? '📚 学习历程' : '📚 Learning Journey'}
+          </h2>
+          {education.map((edu, index) => (
+            <motion.div
+              key={index}
+              className={styles.timelineItem}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <span className={styles.period}>{isZh ? edu.periodZh : edu.periodEn}</span>
+              <h3 className={styles.itemTitle}>{isZh ? edu.titleZh : edu.titleEn}</h3>
+              <p className={styles.itemDesc}>{isZh ? edu.descZh : edu.descEn}</p>
+            </motion.div>
+          ))}
+        </motion.section>
 
         {/* Skills */}
-        <motion.div
-          className={styles.skillsSection}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+        <motion.section
+          className={styles.section}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
         >
           <h2 className={styles.sectionTitle}>
-            {isZh ? '🛠️ 技术装备' : '🛠️ Tech Arsenal'}
+            {isZh ? '⚡ 技能' : '⚡ Skills'}
           </h2>
-          <div className={styles.skillsGrid}>
-            {skillCategories.map((cat, index) => (
-              <motion.div
-                key={cat.key}
-                className={styles.skillCard}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * index }}
-                whileHover={{ y: -4, borderColor: 'rgba(212, 175, 55, 0.3)' }}
-              >
-                <div className={styles.skillCardHeader}>
-                  <span className={styles.skillIcon}>{cat.icon}</span>
-                  <h3>{isZh ? cat.labelZh : cat.labelEn}</h3>
-                </div>
-                <div className={styles.skillTags}>
-                  {currentSkills[cat.key].map(skill => (
-                    <span key={skill} className={styles.skillTag}>{skill}</span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
+          <div className={styles.skillCategories}>
+            <div className={styles.skillCategory}>
+              <h3 className={styles.skillCatTitle}>{isZh ? '前端' : 'Frontend'}</h3>
+              <div className={styles.skillList}>
+                {['React', 'Next.js', 'Vue.js', 'TypeScript', 'Tailwind CSS', 'Three.js', 'Framer Motion'].map((s) => (
+                  <span key={s} className={styles.skillItem}>{s}</span>
+                ))}
+              </div>
+            </div>
+            <div className={styles.skillCategory}>
+              <h3 className={styles.skillCatTitle}>{isZh ? '后端' : 'Backend'}</h3>
+              <div className={styles.skillList}>
+                {['Node.js', 'Python', 'Java', 'Spring Boot', 'Express', 'FastAPI'].map((s) => (
+                  <span key={s} className={styles.skillItem}>{s}</span>
+                ))}
+              </div>
+            </div>
+            <div className={styles.skillCategory}>
+              <h3 className={styles.skillCatTitle}>{isZh ? '大数据' : 'Big Data'}</h3>
+              <div className={styles.skillList}>
+                {['Spark', 'Hadoop', 'Hive', 'Kafka', 'Flink', 'HDFS'].map((s) => (
+                  <span key={s} className={styles.skillItem}>{s}</span>
+                ))}
+              </div>
+            </div>
+            <div className={styles.skillCategory}>
+              <h3 className={styles.skillCatTitle}>AI / ML</h3>
+              <div className={styles.skillList}>
+                {['TensorFlow', 'PyTorch', 'LangChain', 'NLP', 'LLM', 'RAG'].map((s) => (
+                  <span key={s} className={styles.skillItem}>{s}</span>
+                ))}
+              </div>
+            </div>
+            <div className={styles.skillCategory}>
+              <h3 className={styles.skillCatTitle}>DevOps</h3>
+              <div className={styles.skillList}>
+                {['Docker', 'Kubernetes', 'GitHub Actions', 'Nginx', 'Linux', 'Git'].map((s) => (
+                  <span key={s} className={styles.skillItem}>{s}</span>
+                ))}
+              </div>
+            </div>
+            <div className={styles.skillCategory}>
+              <h3 className={styles.skillCatTitle}>{isZh ? '数据库' : 'Database'}</h3>
+              <div className={styles.skillList}>
+                {['PostgreSQL', 'MongoDB', 'Redis', 'MySQL', 'Elasticsearch'].map((s) => (
+                  <span key={s} className={styles.skillItem}>{s}</span>
+                ))}
+              </div>
+            </div>
           </div>
-        </motion.div>
+        </motion.section>
 
-        {/* Timeline */}
+        {/* Download */}
         <motion.div
-          className={styles.timelineSection}
+          className={styles.download}
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
         >
-          <h2 className={styles.sectionTitle}>
-            {isZh ? '📅 航行日志' : '📅 Voyage Log'}
-          </h2>
-          <div className={styles.timeline}>
-            <div className={styles.timelineItem}>
-              <div className={styles.timelineDot} />
-              <div className={styles.timelineContent}>
-                <span className={styles.timelineYear}>2024</span>
-                <h3>{isZh ? '数据科学启航' : 'Data Science Journey'}</h3>
-                <p>{isZh ? '系统学习数据科学与大数据技术' : 'Systematically studied data science and big data'}</p>
-              </div>
-            </div>
-            <div className={styles.timelineItem}>
-              <div className={styles.timelineDot} />
-              <div className={styles.timelineContent}>
-                <span className={styles.timelineYear}>2025</span>
-                <h3>{isZh ? '全栈开发' : 'Full-Stack Development'}</h3>
-                <p>{isZh ? '掌握完整技术栈，构建真实项目' : 'Mastered full tech stack, built real projects'}</p>
-              </div>
-            </div>
-            <div className={styles.timelineItem}>
-              <div className={`${styles.timelineDot} ${styles.dotActive}`} />
-              <div className={styles.timelineContent}>
-                <span className={styles.timelineYear}>2026</span>
-                <h3>{isZh ? 'AI + 全栈深入' : 'AI + Full-Stack Deep Dive'}</h3>
-                <p>{isZh ? '深入AI与全栈融合，持续学习成长' : 'Deep diving into AI + full-stack, continuously learning'}</p>
-              </div>
-            </div>
-          </div>
+          <p className={styles.downloadText}>
+            {isZh ? '💡 提示：简历内容持续更新中' : '💡 Resume content is continuously updated'}
+          </p>
         </motion.div>
-      </main>
+      </div>
     </div>
   );
 }

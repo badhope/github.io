@@ -1,0 +1,343 @@
+.page {
+  min-height: 100vh;
+  padding: 100px 20px;
+  background: #020510;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.headerTag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: #d4af37;
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.headerTitle {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #d4af37 0%, #f0d060 50%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+}
+
+.headerDesc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  color: #a0a0b8;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tab {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  color: #a0a0b8;
+  padding: 10px 20px;
+  background: rgba(10, 14, 39, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  border-color: rgba(212, 175, 55, 0.3);
+  color: #e8e8f0;
+}
+
+.tabActive {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.4);
+  color: #d4af37;
+}
+
+/* Content */
+.content {
+  min-height: 400px;
+}
+
+/* Rankings */
+.rankings {
+  background: rgba(10, 14, 39, 0.4);
+  border: 1px solid rgba(212, 175, 55, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.rankHeader {
+  display: grid;
+  grid-template-columns: 50px 1fr 120px 80px;
+  padding: 12px 20px;
+  background: rgba(212, 175, 55, 0.05);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: #6b6b80;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.rankRow {
+  display: grid;
+  grid-template-columns: 50px 1fr 120px 80px;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.04);
+  transition: all 0.2s ease;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  color: #e8e8f0;
+  cursor: default;
+}
+
+.rankCol1 {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.rankCol2 {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.rankCol3 {
+  display: flex;
+  align-items: center;
+  color: #a0a0b8;
+  font-size: 0.8rem;
+}
+
+.rankCol4 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.score {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #d4af37;
+}
+
+.dataSource {
+  padding: 16px 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: #6b6b80;
+  text-align: center;
+}
+
+/* News list */
+.newsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.newsSection {
+  padding: 24px;
+  background: rgba(10, 14, 39, 0.4);
+  border: 1px solid rgba(212, 175, 55, 0.08);
+  border-radius: 12px;
+}
+
+.newsSectionTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e8e8f0;
+  margin-bottom: 12px;
+}
+
+.newsLink {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  color: #d4af37;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.newsLink:hover {
+  color: #f0d060;
+}
+
+/* Trending */
+.trendingList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trendingItem {
+  display: block;
+  padding: 20px;
+  background: rgba(10, 14, 39, 0.4);
+  border: 1px solid rgba(212, 175, 55, 0.08);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.trendingHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.trendingIcon {
+  font-size: 1.1rem;
+}
+
+.trendingName {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #d4af37;
+  flex: 1;
+}
+
+.trendingStars {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #a0a0b8;
+}
+
+.trendingDesc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  color: #a0a0b8;
+  line-height: 1.5;
+}
+
+.viewAll {
+  display: block;
+  text-align: center;
+  padding: 16px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  color: #d4af37;
+  text-decoration: none;
+  margin-top: 16px;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px;
+}
+
+.loadingText {
+  font-family: 'Share Tech Mono', monospace;
+  color: #6b6b80;
+}
+
+/* Calendar */
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.calendarCard {
+  padding: 24px;
+  background: rgba(10, 14, 39, 0.4);
+  border: 1px solid rgba(212, 175, 55, 0.08);
+  border-radius: 12px;
+}
+
+.calendarTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e8e8f0;
+  margin-bottom: 16px;
+}
+
+.calendarDate {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  color: #d4af37;
+  margin-bottom: 16px;
+}
+
+.calendarEvents {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.event {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.eventYear {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #d4af37;
+  min-width: 50px;
+}
+
+.eventText {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  color: #a0a0b8;
+}
+
+.calendarNote {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: #6b6b80;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 80px 16px;
+  }
+
+  .headerTitle {
+    font-size: 1.8rem;
+  }
+
+  .rankHeader,
+  .rankRow {
+    grid-template-columns: 40px 1fr 80px 60px;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+
+  .tabs {
+    gap: 6px;
+  }
+
+  .tab {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+}

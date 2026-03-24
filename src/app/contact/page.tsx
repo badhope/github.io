@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import StarNavigation from '@/components/ui/StarNavigation';
-import { socialLinks, siteConfig, contactForm } from '@/data/config';
-import styles from './contact.module.css';
+import { SOCIAL_LINKS } from '@/config/social';
+import styles from './page.module.css';
 
 export default function ContactPage() {
   const { language } = useLanguage();
@@ -13,13 +13,14 @@ export default function ContactPage() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
+
     try {
-      const res = await fetch(contactForm.endpoint, {
+      const res = await fetch('https://formsubmit.co/ajax/x18825407105@outlook.com', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
@@ -41,61 +42,76 @@ export default function ContactPage() {
   return (
     <div className={styles.page}>
       <StarNavigation />
-
-      <main className={styles.main}>
+      <div className={styles.container}>
+        {/* Header */}
         <motion.div
           className={styles.header}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          <span className={styles.tag}>{isZh ? '// 联系我' : '// Contact'}</span>
-          <h1 className={styles.title}>{isZh ? '星际通讯' : 'Stellar Comm'}</h1>
-          <p className={styles.subtitle}>
-            {isZh ? '无论你想聊技术、合作还是随便聊聊，都欢迎联系我' : 'Whether you want to chat about tech, collaborate, or just say hi'}
+          <span className={styles.headerTag}>
+            {'// ' + (isZh ? '联系我' : 'Contact')}
+          </span>
+          <h1 className={styles.headerTitle}>
+            {isZh ? '建立连接' : 'Get in Touch'}
+          </h1>
+          <p className={styles.headerDesc}>
+            {isZh
+              ? '无论是技术交流、项目合作还是随便聊聊，都欢迎联系我'
+              : 'Whether it\'s tech discussion, project collaboration, or just a chat, feel free to reach out'}
           </p>
         </motion.div>
 
-        <div className={styles.grid}>
-          {/* Contact Form */}
+        <div className={styles.content}>
+          {/* Contact form */}
           <motion.div
-            className={styles.formCard}
+            className={styles.formSection}
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h2 className={styles.cardTitle}>{isZh ? '发送消息' : 'Send Message'}</h2>
+            <h2 className={styles.sectionTitle}>
+              {isZh ? '发送消息' : 'Send Message'}
+            </h2>
             <form onSubmit={handleSubmit} className={styles.form}>
               <div className={styles.field}>
-                <label className={styles.label}>{isZh ? '名字' : 'Name'}</label>
+                <label className={styles.label}>
+                  {isZh ? '名字' : 'Name'} <span className={styles.required}>*</span>
+                </label>
                 <input
                   type="text"
                   className={styles.input}
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
                   placeholder={isZh ? '你的名字' : 'Your name'}
+                  required
                 />
               </div>
               <div className={styles.field}>
-                <label className={styles.label}>{isZh ? '邮箱' : 'Email'}</label>
+                <label className={styles.label}>
+                  {isZh ? '邮箱' : 'Email'} <span className={styles.required}>*</span>
+                </label>
                 <input
                   type="email"
                   className={styles.input}
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
                   placeholder={isZh ? '你的邮箱' : 'Your email'}
+                  required
                 />
               </div>
               <div className={styles.field}>
-                <label className={styles.label}>{isZh ? '消息' : 'Message'}</label>
+                <label className={styles.label}>
+                  {isZh ? '消息' : 'Message'} <span className={styles.required}>*</span>
+                </label>
                 <textarea
                   className={styles.textarea}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  required
-                  rows={5}
                   placeholder={isZh ? '你想说什么...' : 'What do you want to say...'}
+                  rows={5}
+                  required
                 />
               </div>
               <button
@@ -105,7 +121,7 @@ export default function ContactPage() {
               >
                 {status === 'sending'
                   ? (isZh ? '发送中...' : 'Sending...')
-                  : (isZh ? '🚀 发送消息' : '🚀 Send Message')}
+                  : (isZh ? '发送消息' : 'Send Message')}
               </button>
               {status === 'success' && (
                 <motion.p
@@ -113,7 +129,7 @@ export default function ContactPage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  ✅ {isZh ? '消息已发送！' : 'Message sent!'}
+                  ✅ {isZh ? '消息已发送！感谢你的来信。' : 'Message sent! Thank you for reaching out.'}
                 </motion.p>
               )}
               {status === 'error' && (
@@ -122,59 +138,57 @@ export default function ContactPage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  ❌ {isZh ? '发送失败，请稍后重试' : 'Failed to send, please try again'}
+                  ❌ {isZh ? '发送失败，请稍后重试或直接发送邮件。' : 'Failed to send. Please try again or email directly.'}
                 </motion.p>
               )}
             </form>
           </motion.div>
 
-          {/* Social Links */}
+          {/* Social links */}
           <motion.div
-            className={styles.socialCard}
+            className={styles.socialSection}
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.4 }}
           >
-            <h2 className={styles.cardTitle}>{isZh ? '社交平台' : 'Social Platforms'}</h2>
-            <div className={styles.socialList}>
-              {socialLinks.map((link) => (
-                <a
-                  key={link.platform}
-                  href={link.active ? link.url : undefined}
-                  className={`${styles.socialItem} ${!link.active ? styles.inactive : ''}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => {
-                    if (!link.active) {
-                      e.preventDefault();
-                    }
-                  }}
+            <h2 className={styles.sectionTitle}>
+              {isZh ? '社交平台' : 'Social Links'}
+            </h2>
+            <div className={styles.socialGrid}>
+              {SOCIAL_LINKS.map((link, index) => (
+                <motion.a
+                  key={link.name}
+                  href={link.url}
+                  target={link.external ? '_blank' : '_self'}
+                  rel={link.external ? 'noopener noreferrer' : undefined}
+                  className={styles.socialCard}
+                  whileHover={{ y: -4, borderColor: 'rgba(212, 175, 55, 0.3)' }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 + index * 0.05 }}
                 >
                   <span className={styles.socialIcon}>{link.icon}</span>
                   <div className={styles.socialInfo}>
-                    <span className={styles.socialName}>{link.platform}</span>
-                    <span className={styles.socialStatus}>
-                      {link.active
-                        ? (isZh ? '已连接' : 'Connected')
-                        : (isZh ? '请联系获取' : 'Contact for access')}
-                    </span>
+                    <span className={styles.socialName}>{link.name}</span>
+                    <span className={styles.socialNameZh}>{link.nameZh}</span>
                   </div>
-                  {!link.active && <span className={styles.lockIcon}>🔒</span>}
-                  {link.active && <span className={styles.arrowIcon}>→</span>}
-                </a>
+                  <span className={styles.socialArrow}>→</span>
+                </motion.a>
               ))}
             </div>
 
             {/* Email */}
             <div className={styles.emailSection}>
-              <h3 className={styles.emailTitle}>📧 Email</h3>
-              <a href={`mailto:${siteConfig.email}`} className={styles.emailLink}>
-                {siteConfig.email}
+              <h3 className={styles.emailLabel}>
+                {isZh ? '直接发送邮件' : 'Send Email Directly'}
+              </h3>
+              <a href="mailto:x18825407105@outlook.com" className={styles.emailLink}>
+                📧 x18825407105@outlook.com
               </a>
             </div>
           </motion.div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

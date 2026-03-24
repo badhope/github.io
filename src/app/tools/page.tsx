@@ -4,54 +4,51 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import StarNavigation from '@/components/ui/StarNavigation';
-import { categories, tools, Tool, ToolCategory } from '@/data/tools';
-import styles from './tools.module.css';
+import { TOOL_CATEGORIES, searchTools } from '@/config/tools';
+import styles from './page.module.css';
 
 export default function ToolsPage() {
   const { language } = useLanguage();
   const isZh = language === 'zh';
-  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedTool, setExpandedTool] = useState<string | null>(null);
 
   const filteredTools = useMemo(() => {
-    return tools.filter(tool => {
-      const matchCategory = activeCategory === 'all' || tool.categoryId === activeCategory;
-      const matchSearch = searchQuery === '' || 
-        tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        tool.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        tool.descriptionZh.includes(searchQuery) ||
-        tool.tags.some(t => t.includes(searchQuery.toLowerCase()));
-      return matchCategory && matchSearch;
-    });
-  }, [activeCategory, searchQuery]);
+    if (searchQuery) {
+      return searchTools(searchQuery);
+    }
+    if (activeCategory) {
+      const cat = TOOL_CATEGORIES.find((c) => c.id === activeCategory);
+      return cat ? cat.tools.map((t) => ({ ...t, categoryId: cat.id, categoryName: cat.nameEn })) : [];
+    }
+    return null;
+  }, [searchQuery, activeCategory]);
 
-  const getCategoryName = (cat: ToolCategory) => isZh ? cat.nameZh : cat.name;
-  const getCategoryDesc = (cat: ToolCategory) => isZh ? cat.descriptionZh : cat.description;
+  const totalTools = TOOL_CATEGORIES.reduce((sum, cat) => sum + cat.tools.length, 0);
 
   return (
     <div className={styles.page}>
       <StarNavigation />
-
-      <main className={styles.main}>
+      <div className={styles.container}>
         {/* Header */}
         <motion.div
           className={styles.header}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          <span className={styles.tag}>{isZh ? '// 工具集' : '// Tools'}</span>
-          <h1 className={styles.title}>{isZh ? '星际工具箱' : 'Stellar Toolbox'}</h1>
-          <p className={styles.subtitle}>
-            {isZh ? '精心收集的开发者工具和资源' : 'Curated developer tools and resources'}
+          <span className={styles.headerTag}>
+            {'// ' + (isZh ? '工具集' : 'Tools')}
+          </span>
+          <h1 className={styles.headerTitle}>
+            {isZh ? '开发者工具箱' : 'Developer Toolbox'}
+          </h1>
+          <p className={styles.headerDesc}>
+            {isZh
+              ? `精选 ${totalTools}+ 专业开发工具，覆盖 ${TOOL_CATEGORIES.length} 个分类`
+              : `${totalTools}+ curated developer tools across ${TOOL_CATEGORIES.length} categories`}
           </p>
-          <div className={styles.stats}>
-            <span className={styles.statValue}>{tools.length}</span>
-            <span className={styles.statLabel}>{isZh ? '个工具' : 'Tools'}</span>
-            <span className={styles.statDivider}>·</span>
-            <span className={styles.statValue}>{categories.length}</span>
-            <span className={styles.statLabel}>{isZh ? '个分类' : 'Categories'}</span>
-          </div>
         </motion.div>
 
         {/* Search */}
@@ -67,131 +64,135 @@ export default function ToolsPage() {
             className={styles.searchInput}
             placeholder={isZh ? '搜索工具...' : 'Search tools...'}
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setActiveCategory(null);
+            }}
           />
           {searchQuery && (
-            <button className={styles.clearBtn} onClick={() => setSearchQuery('')}>✕</button>
+            <button className={styles.searchClear} onClick={() => setSearchQuery('')}>
+              ✕
+            </button>
           )}
         </motion.div>
 
-        {/* Category Tabs */}
-        <motion.div
-          className={styles.categories}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
+        {/* Category tabs */}
+        <div className={styles.categories}>
           <button
-            className={`${styles.catBtn} ${activeCategory === 'all' ? styles.catActive : ''}`}
-            onClick={() => setActiveCategory('all')}
+            className={`${styles.catBtn} ${!activeCategory && !searchQuery ? styles.catActive : ''}`}
+            onClick={() => { setActiveCategory(null); setSearchQuery(''); }}
           >
-            <span>{isZh ? '🌟 全部' : '🌟 All'}</span>
-            <span className={styles.catCount}>{tools.length}</span>
+            {isZh ? '🌟 全部' : '🌟 All'}
           </button>
-          {categories.map(cat => {
-            const count = tools.filter(t => t.categoryId === cat.id).length;
-            return (
-              <button
-                key={cat.id}
-                className={`${styles.catBtn} ${activeCategory === cat.id ? styles.catActive : ''}`}
-                onClick={() => setActiveCategory(cat.id)}
-              >
-                <span>{cat.icon} {getCategoryName(cat)}</span>
-                <span className={styles.catCount}>{count}</span>
-              </button>
-            );
-          })}
-        </motion.div>
-
-        {/* Tools Grid */}
-        <div className={styles.grid}>
-          <AnimatePresence mode="popLayout">
-            {filteredTools.map((tool, index) => (
-              <motion.div
-                key={tool.id}
-                className={styles.card}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ delay: index * 0.02 }}
-                whileHover={{ y: -4 }}
-              >
-                <div className={styles.cardHeader}>
-                  <span className={styles.toolIcon}>{tool.icon}</span>
-                  <div className={styles.cardTitleArea}>
-                    <h3 className={styles.toolName}>{tool.name}</h3>
-                    <span className={styles.toolCategory}>
-                      {categories.find(c => c.id === tool.categoryId)?.icon}{' '}
-                      {getCategoryName(categories.find(c => c.id === tool.categoryId)!)}
-                    </span>
-                  </div>
-                </div>
-
-                <p className={styles.toolDesc}>
-                  {isZh ? tool.descriptionZh : tool.description}
-                </p>
-
-                <div className={styles.tags}>
-                  {tool.tags.slice(0, 3).map(tag => (
-                    <span key={tag} className={styles.tag}>#{tag}</span>
-                  ))}
-                </div>
-
-                <div className={styles.cardActions}>
-                  <a
-                    href={tool.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.visitBtn}
-                  >
-                    {isZh ? '访问 →' : 'Visit →'}
-                  </a>
-                  <button
-                    className={styles.expandBtn}
-                    onClick={() => setExpandedTool(expandedTool === tool.id ? null : tool.id)}
-                  >
-                    {expandedTool === tool.id ? '▲' : '▼'}
-                  </button>
-                </div>
-
-                <AnimatePresence>
-                  {expandedTool === tool.id && (
-                    <motion.div
-                      className={styles.expanded}
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                    >
-                      <div className={styles.expandedContent}>
-                        <p className={styles.fullDesc}>
-                          {isZh ? tool.descriptionZh : tool.description}
-                        </p>
-                        <div className={styles.allTags}>
-                          {tool.tags.map(tag => (
-                            <span key={tag} className={styles.tag}>#{tag}</span>
-                          ))}
-                        </div>
-                        <div className={styles.urlRow}>
-                          <span className={styles.urlLabel}>URL:</span>
-                          <code className={styles.urlCode}>{tool.url}</code>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+          {TOOL_CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              className={`${styles.catBtn} ${activeCategory === cat.id ? styles.catActive : ''}`}
+              onClick={() => { setActiveCategory(cat.id); setSearchQuery(''); }}
+            >
+              {cat.icon} {isZh ? cat.nameZh : cat.nameEn}
+            </button>
+          ))}
         </div>
 
-        {filteredTools.length === 0 && (
-          <div className={styles.empty}>
-            <span className={styles.emptyIcon}>🔭</span>
-            <p>{isZh ? '未找到匹配的工具' : 'No matching tools found'}</p>
-          </div>
-        )}
-      </main>
+        {/* Tools grid */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            className={styles.toolsGrid}
+            key={activeCategory || searchQuery || 'all'}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {(filteredTools
+              ? filteredTools.map((tool) => (
+                  <ToolCard
+                    key={tool.name}
+                    tool={tool}
+                    isZh={isZh}
+                    isExpanded={expandedTool === tool.name}
+                    onToggle={() => setExpandedTool(expandedTool === tool.name ? null : tool.name)}
+                  />
+                ))
+              : TOOL_CATEGORIES.flatMap((cat) =>
+                  cat.tools.map((tool) => (
+                    <ToolCard
+                      key={tool.name}
+                      tool={{ ...tool, categoryId: cat.id, categoryName: cat.nameEn }}
+                      isZh={isZh}
+                      isExpanded={expandedTool === tool.name}
+                      onToggle={() => setExpandedTool(expandedTool === tool.name ? null : tool.name)}
+                    />
+                  ))
+                )
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
+  );
+}
+
+function ToolCard({
+  tool,
+  isZh,
+  isExpanded,
+  onToggle,
+}: {
+  tool: { name: string; descriptionZh: string; descriptionEn: string; url: string; icon: string; tags: string[] };
+  isZh: boolean;
+  isExpanded: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <motion.div
+      className={styles.toolCard}
+      whileHover={{ y: -4, borderColor: 'rgba(212, 175, 55, 0.3)' }}
+      layout
+    >
+      <div className={styles.toolHeader} onClick={onToggle}>
+        <span className={styles.toolIcon}>{tool.icon}</span>
+        <div className={styles.toolInfo}>
+          <h3 className={styles.toolName}>{tool.name}</h3>
+          <p className={styles.toolDesc}>
+            {isZh ? tool.descriptionZh : tool.descriptionEn}
+          </p>
+        </div>
+        <motion.span
+          className={styles.expandIcon}
+          animate={{ rotate: isExpanded ? 180 : 0 }}
+        >
+          ▼
+        </motion.span>
+      </div>
+
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            className={styles.toolExpanded}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className={styles.toolTags}>
+              {tool.tags.map((tag) => (
+                <span key={tag} className={styles.toolTag}>{tag}</span>
+              ))}
+            </div>
+            <a
+              href={tool.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.toolLink}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {isZh ? '访问工具' : 'Visit Tool'} →
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }

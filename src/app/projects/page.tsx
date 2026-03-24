@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import StarNavigation from '@/components/ui/StarNavigation';
-import styles from './projects.module.css';
+import styles from './page.module.css';
 
 interface GitHubRepo {
   id: number;
@@ -18,7 +18,6 @@ interface GitHubRepo {
   updated_at: string;
   topics: string[];
   fork: boolean;
-  size: number;
 }
 
 const languageColors: Record<string, string> = {
@@ -28,15 +27,12 @@ const languageColors: Record<string, string> = {
   Java: '#b07219',
   Go: '#00ADD8',
   Rust: '#dea584',
-  'C++': '#f34b7d',
-  C: '#555555',
   HTML: '#e34c26',
   CSS: '#563d7c',
   Shell: '#89e051',
   Vue: '#41b883',
-  Dart: '#00B4AB',
-  Kotlin: '#A97BFF',
-  Swift: '#F05138',
+  'C++': '#f34b7d',
+  C: '#555555',
 };
 
 export default function ProjectsPage() {
@@ -44,194 +40,188 @@ export default function ProjectsPage() {
   const isZh = language === 'zh';
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [expandedRepo, setExpandedRepo] = useState<number | null>(null);
-  const [filter, setFilter] = useState('all');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const res = await fetch('https://api.github.com/users/badhope/repos?sort=updated&per_page=100&type=owner');
-        if (res.ok) {
-          const data: GitHubRepo[] = await res.json();
-          // Filter out forks and empty repos
-          const filtered = data.filter(r => !r.fork && (r.description || r.language));
-          setRepos(filtered);
-        }
-      } catch {
-        // Fallback repos
-        setRepos([]);
+        const res = await fetch('https://api.github.com/users/badhope/repos?sort=updated&per_page=100', {
+          signal: AbortSignal.timeout(10000),
+        });
+        if (!res.ok) throw new Error('Failed to fetch repos');
+        const data: GitHubRepo[] = await res.json();
+        // Filter out forks and empty repos
+        const filtered = data
+          .filter((r) => !r.fork && (r.description || r.language))
+          .sort((a, b) => b.stargazers_count - a.stargazers_count);
+        setRepos(filtered);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchRepos();
   }, []);
 
-  const languages = ['all', ...Array.from(new Set(repos.map(r => r.language).filter(Boolean) as string[]))];
-  const filteredRepos = filter === 'all' ? repos : repos.filter(r => r.language === filter);
-
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString(isZh ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-  };
-
   return (
     <div className={styles.page}>
       <StarNavigation />
-
-      <main className={styles.main}>
+      <div className={styles.container}>
+        {/* Header */}
         <motion.div
           className={styles.header}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          <span className={styles.tag}>{isZh ? '// 作品集' : '// Projects'}</span>
-          <h1 className={styles.title}>{isZh ? '星际项目库' : 'Stellar Projects'}</h1>
-          <p className={styles.subtitle}>
-            {isZh ? '从 GitHub 自动同步的项目仓库' : 'Auto-synced repositories from GitHub'}
+          <span className={styles.headerTag}>
+            {'// ' + (isZh ? '作品集' : 'Projects')}
+          </span>
+          <h1 className={styles.headerTitle}>
+            {isZh ? '开源作品集' : 'Open Source Portfolio'}
+          </h1>
+          <p className={styles.headerDesc}>
+            {isZh
+              ? '自动同步 GitHub 仓库，展示最新项目'
+              : 'Auto-synced from GitHub, showcasing latest projects'}
           </p>
-          <div className={styles.stats}>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{repos.length}</span>
-              <span className={styles.statLabel}>{isZh ? '个项目' : 'Projects'}</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{repos.reduce((a, r) => a + r.stargazers_count, 0)}</span>
-              <span className={styles.statLabel}>⭐</span>
-            </div>
+        </motion.div>
+
+        {/* Stats */}
+        <motion.div
+          className={styles.stats}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className={styles.stat}>
+            <span className={styles.statNumber}>{repos.length}</span>
+            <span className={styles.statLabel}>{isZh ? '仓库' : 'Repos'}</span>
+          </div>
+          <div className={styles.statDivider} />
+          <div className={styles.stat}>
+            <span className={styles.statNumber}>
+              {repos.reduce((sum, r) => sum + r.stargazers_count, 0)}
+            </span>
+            <span className={styles.statLabel}>⭐ Stars</span>
+          </div>
+          <div className={styles.statDivider} />
+          <div className={styles.stat}>
+            <span className={styles.statNumber}>
+              {new Set(repos.map((r) => r.language).filter(Boolean)).size}
+            </span>
+            <span className={styles.statLabel}>{isZh ? '语言' : 'Languages'}</span>
           </div>
         </motion.div>
 
-        {/* Language Filter */}
-        {languages.length > 2 && (
-          <motion.div
-            className={styles.filters}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            {languages.map(lang => (
-              <button
-                key={lang}
-                className={`${styles.filterBtn} ${filter === lang ? styles.filterActive : ''}`}
-                onClick={() => setFilter(lang)}
-              >
-                {lang === 'all' ? (isZh ? '全部' : 'All') : lang}
-                {lang !== 'all' && (
-                  <span
-                    className={styles.langDot}
-                    style={{ background: languageColors[lang] || '#888' }}
-                  />
-                )}
-              </button>
-            ))}
-          </motion.div>
-        )}
-
-        {/* Projects Grid */}
+        {/* Repos grid */}
         {loading ? (
           <div className={styles.loading}>
-            {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className={styles.skeleton} />
-            ))}
+            <div className={styles.loadingSpinner} />
+            <span className={styles.loadingText}>
+              {isZh ? '正在从 GitHub 同步...' : 'Syncing from GitHub...'}
+            </span>
           </div>
-        ) : filteredRepos.length === 0 ? (
+        ) : error ? (
+          <div className={styles.error}>
+            <span className={styles.errorIcon}>⚠️</span>
+            <p className={styles.errorText}>
+              {isZh ? '无法加载项目数据' : 'Unable to load project data'}
+            </p>
+            <a href="https://github.com/badhope?tab=repositories" target="_blank" rel="noopener noreferrer" className={styles.errorLink}>
+              {isZh ? '在 GitHub 查看 →' : 'View on GitHub →'}
+            </a>
+          </div>
+        ) : repos.length === 0 ? (
           <div className={styles.empty}>
-            <span className={styles.emptyIcon}>🌌</span>
-            <p>{isZh ? '暂无项目数据' : 'No projects found'}</p>
+            <span className={styles.emptyIcon}>📭</span>
+            <p className={styles.emptyText}>
+              {isZh ? '暂无公开仓库' : 'No public repositories yet'}
+            </p>
           </div>
         ) : (
-          <div className={styles.grid}>
-            <AnimatePresence>
-              {filteredRepos.map((repo, index) => (
-                <motion.div
-                  key={repo.id}
-                  className={styles.card}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ delay: index * 0.05 }}
-                  whileHover={{ y: -4 }}
-                  onClick={() => setExpandedRepo(expandedRepo === repo.id ? null : repo.id)}
-                >
-                  <div className={styles.cardHeader}>
-                    <h3 className={styles.repoName}>{repo.name}</h3>
-                    {repo.stargazers_count > 0 && (
-                      <span className={styles.stars}>⭐ {repo.stargazers_count}</span>
-                    )}
-                  </div>
+          <div className={styles.reposGrid}>
+            {repos.map((repo, index) => (
+              <motion.a
+                key={repo.id}
+                href={repo.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.repoCard}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                whileHover={{ y: -6, borderColor: 'rgba(212, 175, 55, 0.3)', boxShadow: '0 12px 40px rgba(0,0,0,0.4)' }}
+              >
+                <div className={styles.repoHeader}>
+                  <span className={styles.repoIcon}>📦</span>
+                  <h3 className={styles.repoName}>{repo.name}</h3>
+                </div>
 
-                  <p className={styles.repoDesc}>
-                    {repo.description || (isZh ? '暂无描述' : 'No description')}
-                  </p>
+                <p className={styles.repoDesc}>
+                  {repo.description || (isZh ? '暂无描述' : 'No description')}
+                </p>
 
-                  <div className={styles.cardMeta}>
-                    {repo.language && (
-                      <span className={styles.lang}>
-                        <span
-                          className={styles.langDot}
-                          style={{ background: languageColors[repo.language] || '#888' }}
-                        />
-                        {repo.language}
-                      </span>
-                    )}
-                    <span className={styles.date}>{formatDate(repo.updated_at)}</span>
-                  </div>
-
-                  {repo.topics.length > 0 && (
-                    <div className={styles.topics}>
-                      {repo.topics.slice(0, 4).map(topic => (
-                        <span key={topic} className={styles.topic}>{topic}</span>
-                      ))}
-                    </div>
+                <div className={styles.repoMeta}>
+                  {repo.language && (
+                    <span className={styles.repoLang}>
+                      <span
+                        className={styles.langDot}
+                        style={{ background: languageColors[repo.language] || '#8b8b8b' }}
+                      />
+                      {repo.language}
+                    </span>
                   )}
+                  {repo.stargazers_count > 0 && (
+                    <span className={styles.repoStat}>⭐ {repo.stargazers_count}</span>
+                  )}
+                  {repo.forks_count > 0 && (
+                    <span className={styles.repoStat}>🍴 {repo.forks_count}</span>
+                  )}
+                </div>
 
-                  {/* Expanded Content */}
-                  <AnimatePresence>
-                    {expandedRepo === repo.id && (
-                      <motion.div
-                        className={styles.expanded}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div className={styles.expandedContent}>
-                          <div className={styles.expandedStats}>
-                            <span>🍴 {repo.forks_count} {isZh ? 'forks' : 'forks'}</span>
-                            <span>📦 {(repo.size / 1024).toFixed(1)} MB</span>
-                          </div>
-                          <div className={styles.expandedLinks}>
-                            <a
-                              href={repo.html_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className={styles.link}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              {isZh ? '查看源码' : 'Source Code'} →
-                            </a>
-                            {repo.homepage && (
-                              <a
-                                href={repo.homepage}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={styles.link}
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                {isZh ? '在线预览' : 'Live Demo'} →
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                {repo.topics && repo.topics.length > 0 && (
+                  <div className={styles.repoTopics}>
+                    {repo.topics.slice(0, 5).map((topic) => (
+                      <span key={topic} className={styles.repoTopic}>{topic}</span>
+                    ))}
+                  </div>
+                )}
+
+                <div className={styles.repoFooter}>
+                  <span className={styles.repoDate}>
+                    {isZh ? '更新于' : 'Updated'} {new Date(repo.updated_at).toLocaleDateString()}
+                  </span>
+                  {repo.homepage && (
+                    <a
+                      href={repo.homepage}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.repoDemo}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {isZh ? '在线演示' : 'Live Demo'} →
+                    </a>
+                  )}
+                </div>
+              </motion.a>
+            ))}
           </div>
         )}
-      </main>
+
+        {/* View all link */}
+        <motion.div
+          className={styles.viewAll}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <a href="https://github.com/badhope?tab=repositories" target="_blank" rel="noopener noreferrer" className={styles.viewAllLink}>
+            {isZh ? '在 GitHub 查看全部仓库 →' : 'View all repositories on GitHub →'}
+          </a>
+        </motion.div>
+      </div>
     </div>
   );
 }

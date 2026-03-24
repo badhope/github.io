@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLanguage } from '@/lib/i18n/LanguageContext';
-import { useSettings } from '@/lib/settings/SettingsContext';
 import styles from './WarpLoader.module.css';
 
 interface WarpLoaderProps {
@@ -20,52 +18,51 @@ interface Star {
 }
 
 export default function WarpLoader({ onComplete }: WarpLoaderProps) {
-  const { language } = useLanguage();
-  const { settings } = useSettings();
-  const isZh = language === 'zh';
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>(0);
-  const starsRef = useRef<Star[]>([]);
   const [phase, setPhase] = useState<'idle' | 'warp' | 'transition'>('idle');
   const [progress, setProgress] = useState(0);
-  const [showSkip, setShowSkip] = useState(false);
+  const [showButton, setShowButton] = useState(true);
+  const [stars, setStars] = useState<Star[]>([]);
+  const [meteors, setMeteors] = useState<{id: number; x: number; y: number; delay: number; duration: number}[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animFrameRef = useRef<number>(0);
+  const starsRef = useRef<Star[]>([]);
+  const speedRef = useRef(0);
+  const targetSpeedRef = useRef(0);
 
-  const STAR_COUNT = 800;
-  const WARP_SPEED = 15;
-  const MAX_DEPTH = 1500;
-
-  const starColors = [
-    '#ffffff', '#ffd700', '#87ceeb', '#ff6b6b', '#98fb98',
-    '#dda0dd', '#f0e68c', '#add8e6', '#ffa07a', '#b0c4de',
-  ];
-
-  const initStars = useCallback(() => {
-    const stars: Star[] = [];
-    for (let i = 0; i < STAR_COUNT; i++) {
-      stars.push({
+  // Initialize stars
+  useEffect(() => {
+    const newStars: Star[] = [];
+    const colors = ['#ffffff', '#d4af37', '#1a73e8', '#7c3aed', '#06b6d4', '#f0d060'];
+    for (let i = 0; i < 800; i++) {
+      newStars.push({
         x: (Math.random() - 0.5) * 2000,
         y: (Math.random() - 0.5) * 2000,
-        z: Math.random() * MAX_DEPTH,
+        z: Math.random() * 1500 + 500,
         prevZ: 0,
         size: Math.random() * 2 + 0.5,
-        color: starColors[Math.floor(Math.random() * starColors.length)],
+        color: colors[Math.floor(Math.random() * colors.length)],
       });
     }
-    starsRef.current = stars;
+    starsRef.current = newStars;
+    setStars(newStars);
+
+    // Initialize meteors
+    const newMeteors = Array.from({ length: 5 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 50,
+      delay: Math.random() * 5,
+      duration: 1 + Math.random() * 2,
+    }));
+    setMeteors(newMeteors);
   }, []);
 
+  // Canvas animation loop
   useEffect(() => {
-    if (!settings.animationsEnabled) {
-      onComplete();
-      return;
-    }
-
-    initStars();
-    const timer = setTimeout(() => setShowSkip(true), 2000);
-
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -74,201 +71,289 @@ export default function WarpLoader({ onComplete }: WarpLoaderProps) {
     resize();
     window.addEventListener('resize', resize);
 
-    let speed = 2;
-    let targetSpeed = 2;
-    let frameCount = 0;
+    const centerX = () => canvas.width / 2;
+    const centerY = () => canvas.height / 2;
 
     const animate = () => {
-      if (!ctx || !canvas) return;
-      ctx.fillStyle = 'rgba(2, 5, 16, 0.2)';
+      ctx.fillStyle = 'rgba(2, 5, 16, 0.15)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
-
       // Smooth speed transition
-      speed += (targetSpeed - speed) * 0.02;
+      speedRef.current += (targetSpeedRef.current - speedRef.current) * 0.02;
+
+      const cx = centerX();
+      const cy = centerY();
 
       starsRef.current.forEach((star) => {
         star.prevZ = star.z;
-        star.z -= speed;
+        star.z -= speedRef.current;
 
         if (star.z <= 0) {
           star.x = (Math.random() - 0.5) * 2000;
           star.y = (Math.random() - 0.5) * 2000;
-          star.z = MAX_DEPTH;
-          star.prevZ = MAX_DEPTH;
+          star.z = 1500;
+          star.prevZ = 1500;
         }
 
-        const sx = (star.x / star.z) * 400 + cx;
-        const sy = (star.y / star.z) * 400 + cy;
-        const px = (star.x / star.prevZ) * 400 + cx;
-        const py = (star.y / star.prevZ) * 400 + cy;
+        // Project to 2D
+        const sx = (star.x / star.z) * 300 + cx;
+        const sy = (star.y / star.z) * 300 + cy;
+        const px = (star.x / star.prevZ) * 300 + cx;
+        const py = (star.y / star.prevZ) * 300 + cy;
 
-        const size = Math.max(0.1, (1 - star.z / MAX_DEPTH) * 3);
-        const opacity = Math.max(0.1, 1 - star.z / MAX_DEPTH);
+        const size = Math.max(0.1, (1 - star.z / 1500) * star.size * 3);
+        const alpha = Math.max(0, Math.min(1, 1 - star.z / 1500));
 
-        // Draw star trail
-        if (speed > 5) {
+        // Draw star trail during warp
+        if (speedRef.current > 5) {
+          const trailLength = Math.min(speedRef.current * 0.5, 50);
           ctx.beginPath();
           ctx.moveTo(px, py);
           ctx.lineTo(sx, sy);
-          ctx.strokeStyle = star.color + Math.floor(opacity * 80).toString(16).padStart(2, '0');
-          ctx.lineWidth = size * 0.8;
+          ctx.strokeStyle = star.color;
+          ctx.globalAlpha = alpha * 0.6;
+          ctx.lineWidth = size * 0.5;
           ctx.stroke();
         }
 
-        // Draw star
+        // Draw star point
         ctx.beginPath();
         ctx.arc(sx, sy, size, 0, Math.PI * 2);
-        ctx.fillStyle = star.color + Math.floor(opacity * 255).toString(16).padStart(2, '0');
+        ctx.fillStyle = star.color;
+        ctx.globalAlpha = alpha;
         ctx.fill();
 
-        // Glow effect for close stars
-        if (star.z < 200 && speed > 3) {
+        // Glow effect for bright stars
+        if (size > 1.5) {
           ctx.beginPath();
           ctx.arc(sx, sy, size * 3, 0, Math.PI * 2);
-          ctx.fillStyle = star.color + '15';
+          const gradient = ctx.createRadialGradient(sx, sy, 0, sx, sy, size * 3);
+          gradient.addColorStop(0, star.color);
+          gradient.addColorStop(1, 'transparent');
+          ctx.fillStyle = gradient;
+          ctx.globalAlpha = alpha * 0.3;
           ctx.fill();
         }
       });
 
-      // Central glow during warp
-      if (speed > 8) {
-        const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, 200);
-        gradient.addColorStop(0, `rgba(212, 175, 55, ${Math.min(0.15, (speed - 8) * 0.02)})`);
-        gradient.addColorStop(0.5, `rgba(26, 115, 232, ${Math.min(0.08, (speed - 8) * 0.01)})`);
-        gradient.addColorStop(1, 'transparent');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
+      ctx.globalAlpha = 1;
 
-      frameCount++;
-
-      // Phase transitions
-      if (phase === 'idle' && frameCount > 60) {
-        targetSpeed = WARP_SPEED;
-        setPhase('warp');
-      }
-
-      if (phase === 'warp') {
-        const newProgress = Math.min(100, progress + 0.5);
-        setProgress(newProgress);
-        if (newProgress >= 100) {
-          setPhase('transition');
-        }
-      }
-
-      if (phase === 'transition') {
-        targetSpeed = 30;
-        if (frameCount > 350) {
-          // Flash white then complete
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+      // Draw nebula clouds during warp
+      if (speedRef.current > 10) {
+        const time = Date.now() * 0.001;
+        for (let i = 0; i < 3; i++) {
+          const nx = cx + Math.sin(time + i * 2) * 200;
+          const ny = cy + Math.cos(time + i * 1.5) * 150;
+          const gradient = ctx.createRadialGradient(nx, ny, 0, nx, ny, 200);
+          const colors = ['rgba(26,115,232,0.03)', 'rgba(124,58,237,0.03)', 'rgba(212,175,55,0.02)'];
+          gradient.addColorStop(0, colors[i]);
+          gradient.addColorStop(1, 'transparent');
+          ctx.fillStyle = gradient;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-          setTimeout(() => onComplete(), 300);
-          return;
         }
       }
 
-      animationRef.current = requestAnimationFrame(animate);
+      animFrameRef.current = requestAnimationFrame(animate);
     };
 
-    animationRef.current = requestAnimationFrame(animate);
+    animate();
 
     return () => {
-      clearTimeout(timer);
-      cancelAnimationFrame(animationRef.current);
+      cancelAnimationFrame(animFrameRef.current);
       window.removeEventListener('resize', resize);
     };
-  }, [settings.animationsEnabled, onComplete, initStars, phase, progress]);
+  }, []);
 
-  const handleSkip = () => {
-    cancelAnimationFrame(animationRef.current);
+  // Progress simulation
+  useEffect(() => {
+    if (phase !== 'warp') return;
+    const interval = setInterval(() => {
+      setProgress((p) => {
+        if (p >= 100) {
+          clearInterval(interval);
+          setPhase('transition');
+          return 100;
+        }
+        return p + Math.random() * 3 + 1;
+      });
+    }, 50);
+    return () => clearInterval(interval);
+  }, [phase]);
+
+  // Handle transition complete
+  useEffect(() => {
+    if (phase === 'transition') {
+      const timer = setTimeout(() => {
+        onComplete();
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, onComplete]);
+
+  const handleEnter = useCallback(() => {
+    setShowButton(false);
+    setPhase('warp');
+    targetSpeedRef.current = 50;
+  }, []);
+
+  const handleSkip = useCallback(() => {
+    cancelAnimationFrame(animFrameRef.current);
     onComplete();
-  };
+  }, [onComplete]);
 
   return (
-    <AnimatePresence>
-      <motion.div
-        className={styles.container}
-        initial={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <canvas ref={canvasRef} className={styles.canvas} />
+    <div className={styles.loader}>
+      <canvas ref={canvasRef} className={styles.canvas} />
 
-        {/* Central Content */}
-        <div className={styles.content}>
+      {/* Nebula background effects */}
+      <div className={styles.nebula1} />
+      <div className={styles.nebula2} />
+      <div className={styles.nebula3} />
+
+      {/* Meteors */}
+      {meteors.map((meteor) => (
+        <div
+          key={meteor.id}
+          className={styles.meteor}
+          style={{
+            left: `${meteor.x}%`,
+            top: `${meteor.y}%`,
+            animationDelay: `${meteor.delay}s`,
+            animationDuration: `${meteor.duration}s`,
+          }}
+        />
+      ))}
+
+      {/* Central content */}
+      <AnimatePresence mode="wait">
+        {phase === 'idle' && showButton && (
           <motion.div
-            className={styles.logo}
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.5, type: 'spring', stiffness: 100 }}
+            className={styles.content}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.2, filter: 'blur(20px)' }}
+            transition={{ duration: 0.8 }}
           >
-            <div className={styles.starIcon}>⭐</div>
-          </motion.div>
+            {/* Star Logo */}
+            <motion.div
+              className={styles.logoContainer}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+            >
+              <div className={styles.logoStar}>⭐</div>
+              <div className={styles.logoGlow} />
+            </motion.div>
 
-          <motion.h1
-            className={styles.title}
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.8 }}
-          >
-            <span className={styles.titleGold}>badhope&apos;s</span>
-            <span className={styles.titleWhite}> Starbase</span>
-          </motion.h1>
-
-          <motion.p
-            className={styles.subtitle}
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 1.2 }}
-          >
-            {isZh ? '穿越星际，探索无限可能' : 'Warping through the cosmos'}
-          </motion.p>
-
-          {/* Progress Bar */}
-          <motion.div
-            className={styles.progressContainer}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5 }}
-          >
-            <div className={styles.progressTrack}>
-              <motion.div
-                className={styles.progressFill}
-                initial={{ width: '0%' }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.1 }}
-              />
-            </div>
-            <span className={styles.progressText}>
-              {isZh ? '正在穿越星域...' : 'Warping through starfield...'} {Math.floor(progress)}%
-            </span>
-          </motion.div>
-        </div>
-
-        {/* Skip Button */}
-        <AnimatePresence>
-          {showSkip && (
-            <motion.button
-              className={styles.skipBtn}
+            <motion.h1
+              className={styles.title}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              onClick={handleSkip}
+              transition={{ delay: 0.3, duration: 0.8 }}
             >
-              {isZh ? '跳过 →' : 'Skip →'}
-            </motion.button>
-          )}
-        </AnimatePresence>
+              <span className={styles.titleLine1}>badhope&apos;s</span>
+              <span className={styles.titleLine2}>Starbase</span>
+            </motion.h1>
 
-        {/* Corner decorations */}
-        <div className={styles.cornerTL} />
-        <div className={styles.cornerTR} />
-        <div className={styles.cornerBL} />
-        <div className={styles.cornerBR} />
-      </motion.div>
-    </AnimatePresence>
+            <motion.p
+              className={styles.subtitle}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+            >
+              Exploring the Universe of Code
+            </motion.p>
+
+            <motion.div
+              className={styles.enterBtnContainer}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9, duration: 0.8 }}
+            >
+              <button className={styles.enterBtn} onClick={handleEnter}>
+                <span className={styles.enterBtnText}>ENTER</span>
+                <span className={styles.enterBtnSub}>进入空间站</span>
+                <div className={styles.enterBtnGlow} />
+              </button>
+            </motion.div>
+
+            <motion.div
+              className={styles.hint}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              transition={{ delay: 1.5, duration: 1 }}
+            >
+              <span className={styles.hintText}>// Initializing starbase systems...</span>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {phase === 'warp' && (
+          <motion.div
+            className={styles.warpContent}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className={styles.warpText}>
+              <motion.span
+                className={styles.warpLabel}
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                WARP DRIVE ENGAGED
+              </motion.span>
+            </div>
+
+            {/* Progress bar */}
+            <div className={styles.progressContainer}>
+              <div className={styles.progressTrack}>
+                <motion.div
+                  className={styles.progressFill}
+                  style={{ width: `${Math.min(progress, 100)}%` }}
+                />
+              </div>
+              <span className={styles.progressText}>
+                {Math.min(Math.floor(progress), 100)}%
+              </span>
+            </div>
+
+            {/* Warp speed indicator */}
+            <div className={styles.speedIndicator}>
+              <span className={styles.speedLabel}>WARP</span>
+              <motion.span
+                className={styles.speedValue}
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 0.5, repeat: Infinity }}
+              >
+                {Math.floor(speedRef.current * 2.4)}
+              </motion.span>
+            </div>
+
+            <button className={styles.skipBtn} onClick={handleSkip}>
+              Skip →
+            </button>
+          </motion.div>
+        )}
+
+        {phase === 'transition' && (
+          <motion.div
+            className={styles.transitionOverlay}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.2 }}
+          >
+            <div className={styles.transitionFlash} />
+            <motion.div
+              className={styles.transitionText}
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.6 }}
+            >
+              ⭐ Welcome to Starbase
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

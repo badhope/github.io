@@ -1,85 +1,73 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-export interface SiteSettings {
-  animationsEnabled: boolean;
-  soundEnabled: boolean;
-  soundVolume: number;
-  reducedMotion: boolean;
+interface Settings {
+  showAnimations: boolean;
   showParticles: boolean;
-  transitionStyle: 'warp' | 'fade' | 'none';
+  volume: number;
+  reducedMotion: boolean;
+  highContrast: boolean;
 }
 
 interface SettingsContextType {
-  settings: SiteSettings;
-  updateSettings: (updates: Partial<SiteSettings>) => void;
-  resetSettings: () => void;
+  settings: Settings;
+  updateSettings: (updates: Partial<Settings>) => void;
 }
 
-const defaultSettings: SiteSettings = {
-  animationsEnabled: true,
-  soundEnabled: false,
-  soundVolume: 0.5,
-  reducedMotion: false,
+const defaultSettings: Settings = {
+  showAnimations: true,
   showParticles: true,
-  transitionStyle: 'warp',
+  volume: 50,
+  reducedMotion: false,
+  highContrast: false,
 };
 
-const SettingsContext = createContext<SettingsContextType | null>(null);
+const SettingsContext = createContext<SettingsContextType>({
+  settings: defaultSettings,
+  updateSettings: () => {},
+});
 
-const STORAGE_KEY = 'starbase-settings';
+export function SettingsProvider({ children }: { children: React.ReactNode }) {
+  const [settings, setSettings] = useState<Settings>(defaultSettings);
 
-export function SettingsProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
-  const [mounted, setMounted] = useState(false);
-
+  // Load settings from localStorage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem('starbase-settings');
       if (saved) {
-        const parsed = JSON.parse(saved);
-        setSettings({ ...defaultSettings, ...parsed });
+        setSettings({ ...defaultSettings, ...JSON.parse(saved) });
       }
     } catch {
-      // ignore parse errors
+      // Use defaults
     }
-    setMounted(true);
+
+    // Check system preference for reduced motion
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setSettings((prev) => ({ ...prev, reducedMotion: true, showAnimations: false }));
+    }
   }, []);
 
-  useEffect(() => {
-    if (mounted) {
+  // Save settings to localStorage
+  const updateSettings = useCallback((updates: Partial<Settings>) => {
+    setSettings((prev) => {
+      const newSettings = { ...prev, ...updates };
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+        localStorage.setItem('starbase-settings', JSON.stringify(newSettings));
       } catch {
-        // ignore storage errors
+        // Storage full or unavailable
       }
-    }
-  }, [settings, mounted]);
-
-  const updateSettings = (updates: Partial<SiteSettings>) => {
-    setSettings(prev => ({ ...prev, ...updates }));
-  };
-
-  const resetSettings = () => {
-    setSettings(defaultSettings);
-  };
+      return newSettings;
+    });
+  }, []);
 
   return (
-    <SettingsContext.Provider value={{ settings, updateSettings, resetSettings }}>
+    <SettingsContext.Provider value={{ settings, updateSettings }}>
       {children}
     </SettingsContext.Provider>
   );
 }
 
 export function useSettings() {
-  const context = useContext(SettingsContext);
-  if (!context) {
-    return {
-      settings: defaultSettings,
-      updateSettings: () => {},
-      resetSettings: () => {},
-    };
-  }
-  return context;
+  return useContext(SettingsContext);
 }

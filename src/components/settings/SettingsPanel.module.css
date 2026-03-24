@@ -1,99 +1,114 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 5, 16, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1001;
+}
+
 .panel {
   position: fixed;
   top: 0;
   right: 0;
+  bottom: 0;
   width: 320px;
-  max-width: 90vw;
-  height: 100vh;
-  background: rgba(8, 10, 22, 0.95);
+  background: rgba(5, .js 8, 24, 0.95);
   backdrop-filter: blur(20px);
-  border-left: 1px solid rgba(212, 175, 55, 0.2);
-  z-index: 10000;
+  border-left: 1px solid rgba(212, 175, 55, 0.1);
+  z-index: 1002;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
-  color: #e0e0e0;
-}
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 24px;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
 }
 
-.header h2 {
-  margin: 0;
-  font-size: 1.2rem;
-  font-family: 'JetBrains Mono', monospace;
-  background: linear-gradient(135deg, #d4af37, #ffd700);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #d4af37;
+  letter-spacing: 2px;
 }
 
 .closeBtn {
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #e0e0e0;
   width: 32px;
   height: 32px;
   border-radius: 8px;
+  matrix background: rgba(107, 107, 128, 0.1);
+  border: 1px solid rgba(107, 107, 128, 0.2);
+  color: #a0a0b8;
+  font-size: 0.9rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .closeBtn:hover {
-  background: rgba(212, 175, 55, 0.2);
-  border-color: rgba(212, 175, 55, 0.5);
+  background: rgba(107, 107, 128, 0.2);
+  color: #e8e8f0;
 }
 
 .content {
-  padding: 16px 24px;
+  padding: 16px;
+  flex: 1;
 }
 
-.section {
-  margin-bottom: 28px;
+.settingGroup {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.05);
 }
 
-.section h3 {
-  font-size: 0.9rem;
-  margin-bottom: 16px;
-  font-family: 'JetBrains Mono', monospace;
-  color: #d4af37;
-}
-
-.toggleRow {
+.settingRow {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  font-size: 0.85rem;
+  justify-content: space-between;
+  gap: 16px;
 }
 
+.settingInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settingLabel {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  color: #e8e8f0;
+  font-weight: 500;
+}
+
+.settingDesc {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: #6b6b80;
+}
+
+/* Toggle switch */
 .toggle {
+  position: relative;
   width: 44px;
   height: 24px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(107, 107, 128, 0.2);
+  border: 1px solid rgba(107, 107, 128, 0.3);
   cursor: pointer;
-  position: relative;
-  transition: all 0.3s;
-  padding: 0;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
-.toggle.active {
-  background: rgba(212, 175, 55, 0.3);
-  border-color: #d4af37;
+.toggleOn {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: rgba(212, 175, 55, 0.5);
 }
 
 .toggleThumb {
@@ -103,117 +118,85 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #e0e0e0;
-  transition: all 0.3s;
+  background: #6b6b80;
+  transition: all 0.3s ease;
 }
 
-.toggle.active .toggleThumb {
+.toggleOn .toggleThumb {
   left: 22px;
   background: #d4af37;
-  box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
 }
 
-.selectRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  font-size: 0.85rem;
-}
-
-.select {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #e0e0e0;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.select:focus {
-  outline: none;
-  border-color: #d4af37;
-}
-
-.sliderRow {
+/* Volume control */
+.volumeControl {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-  font-size: 0.85rem;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
-.slider {
-  flex: 1;
+.volumeIcon {
+  font-size: 0.9rem;
+}
+
+.volumeSlider {
+  width: 80px;
   height: 4px;
   -webkit-appearance: none;
   appearance: none;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(107, 107, 128, 0.2);
   border-radius: 2px;
   outline: none;
 }
 
-.slider::-webkit-slider-thumb {
+.volumeSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
+  appearance: none;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: #d4af37;
   cursor: pointer;
-  box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
 }
 
 .volumeValue {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  color: #d4af37;
-  min-width: 36px;
+  font: 0.7rem;
+  color: #a0a0b8;
+  min-width: 30px;
   text-align: right;
 }
 
+/* Placeholder */
 .placeholder {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px dashed rgba(212, 175, 55, 0.3);
-  border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-}
-
-.placeholder p {
-  margin: 0 0 8px;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.code {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.7rem;
-  color: #d4af37;
-  background: rgba(212, 175, 55, 0.1);
-  padding: 4px 8px;
+  color: #6b6b80;
+  padding: 4px 10px;
+  border: 1px dashed rgba(107, 107, 128, 0.3);
   border-radius: 4px;
 }
 
-.resetBtn {
-  width: 100%;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #e0e0e0;
+/* Info */
+.info {
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(212, 175, 55, 0.04);
   border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: all 0.2s;
+  bank border: 1px solid rgba(212, 175, 55, 0.08);
 }
 
-.resetBtn:hover {
-  background: rgba(212, 175, 55, 0.1);
-  border-color: rgba(212, 175, 55, 0.3);
+.infoText {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: #6b6b80;
+  line-height: 1.6;
 }
 
 @media (max-width: 768px) {
   .panel {
-    width: 100vw;
+    width: 280px;
   }
 }

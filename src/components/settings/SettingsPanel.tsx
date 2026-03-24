@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSettings, SiteSettings } from '@/lib/settings/SettingsContext';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useSettings } from '@/lib/settings/SettingsContext';
 import styles from './SettingsPanel.module.css';
 
 interface SettingsPanelProps {
@@ -12,8 +11,8 @@ interface SettingsPanelProps {
 }
 
 export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
-  const { settings, updateSettings, resetSettings } = useSettings();
   const { language } = useLanguage();
+  const { settings, updateSettings } = useSettings();
   const isZh = language === 'zh';
 
   return (
@@ -29,98 +28,113 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
           />
           <motion.div
             className={styles.panel}
-            initial={{ x: 300, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: 300, opacity: 0 }}
+            initial={{ x: 320 }}
+            animate={{ x: 0 }}
+            exit={{ x: 320 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           >
             <div className={styles.header}>
-              <h2>{isZh ? '⚙️ 设置' : '⚙️ Settings'}</h2>
+              <h2 className={styles.title}>
+                {isZh ? '设置' : 'Settings'}
+              </h2>
               <button className={styles.closeBtn} onClick={onClose}>✕</button>
             </div>
 
             <div className={styles.content}>
-              {/* Animations */}
-              <section className={styles.section}>
-                <h3>{isZh ? '🎬 动画效果' : '🎬 Animations'}</h3>
-                <div className={styles.toggleRow}>
-                  <span>{isZh ? '启用动画' : 'Enable Animations'}</span>
+              {/* Animation toggle */}
+              <div className={styles.settingGroup}>
+                <div className={styles.settingRow}>
+                  <div className={styles.settingInfo}>
+                    <span className={styles.settingLabel}>
+                      {isZh ? '动画效果' : 'Animations'}
+                    </span>
+                    <span className={styles.settingDesc}>
+                      {isZh ? '开启/关闭页面动画' : 'Enable/disable page animations'}
+                    </span>
+                  </div>
                   <button
-                    className={`${styles.toggle} ${settings.animationsEnabled ? styles.active : ''}`}
-                    onClick={() => updateSettings({ animationsEnabled: !settings.animationsEnabled })}
+                    className={`${styles.toggle} ${settings.showAnimations ? styles.toggleOn : ''}`}
+                    onClick={() => updateSettings({ showAnimations: !settings.showAnimations })}
+                    aria-label="Toggle animations"
                   >
-                    <span className={styles.toggleThumb} />
+                    <div className={styles.toggleThumb} />
                   </button>
                 </div>
-                <div className={styles.toggleRow}>
-                  <span>{isZh ? '粒子效果' : 'Particle Effects'}</span>
-                  <button
-                    className={`${styles.toggle} ${settings.showParticles ? styles.active : ''}`}
-                    onClick={() => updateSettings({ showParticles: !settings.showParticles })}
-                  >
-                    <span className={styles.toggleThumb} />
-                  </button>
-                </div>
-                <div className={styles.selectRow}>
-                  <span>{isZh ? '过渡风格' : 'Transition Style'}</span>
-                  <select
-                    className={styles.select}
-                    value={settings.transitionStyle}
-                    onChange={(e) => updateSettings({ transitionStyle: e.target.value as SiteSettings['transitionStyle'] })}
-                  >
-                    <option value="warp">{isZh ? '星际穿越' : 'Warp Speed'}</option>
-                    <option value="fade">{isZh ? '淡入淡出' : 'Fade'}</option>
-                    <option value="none">{isZh ? '无动画' : 'None'}</option>
-                  </select>
-                </div>
-              </section>
+              </div>
 
-              {/* Sound */}
-              <section className={styles.section}>
-                <h3>{isZh ? '🔊 声音' : '🔊 Sound'}</h3>
-                <div className={styles.toggleRow}>
-                  <span>{isZh ? '启用声音' : 'Enable Sound'}</span>
+              {/* Particles toggle */}
+              <div className={styles.settingGroup}>
+                <div className={styles.settingRow}>
+                  <div className={styles.settingInfo}>
+                    <span className={styles.settingLabel}>
+                      {isZh ? '粒子效果' : 'Particles'}
+                    </span>
+                    <span className={styles.settingDesc}>
+                      {isZh ? '开启/关闭背景粒子' : 'Enable/disable background particles'}
+                    </span>
+                  </div>
                   <button
-                    className={`${styles.toggle} ${settings.soundEnabled ? styles.active : ''}`}
-                    onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
+                    className={`${styles.toggle} ${settings.showParticles ? styles.toggleOn : ''}`}
+                    onClick={() => updateSettings({ showParticles: !settings.showParticles })}
+                    aria-label="Toggle particles"
                   >
-                    <span className={styles.toggleThumb} />
+                    <div className={styles.toggleThumb} />
                   </button>
                 </div>
-                {settings.soundEnabled && (
-                  <div className={styles.sliderRow}>
-                    <span>{isZh ? '音量' : 'Volume'}</span>
+              </div>
+
+              {/* Sound control */}
+              <div className={styles.settingGroup}>
+                <div className={styles.settingRow}>
+                  <div className={styles.settingInfo}>
+                    <span className={styles.settingLabel}>
+                      {isZh ? '音量' : 'Volume'}
+                    </span>
+                    <span className={styles.settingDesc}>
+                      {isZh ? '调整背景音乐音量' : 'Adjust background music volume'}
+                    </span>
+                  </div>
+                  <div className={styles.volumeControl}>
+                    <span className={styles.volumeIcon}>🔊</span>
                     <input
                       type="range"
                       min="0"
-                      max="1"
-                      step="0.1"
-                      value={settings.soundVolume}
-                      onChange={(e) => updateSettings({ soundVolume: parseFloat(e.target.value) })}
-                      className={styles.slider}
+                      max="100"
+                      value={settings.volume ?? 50}
+                      onChange={(e) => updateSettings({ volume: parseInt(e.target.value) })}
+                      className={styles.volumeSlider}
+                      aria-label="Volume"
                     />
-                    <span className={styles.volumeValue}>{Math.round(settings.soundVolume * 100)}%</span>
+                    <span className={styles.volumeValue}>{settings.volume ?? 50}%</span>
                   </div>
-                )}
-              </section>
-
-              {/* Background Music Placeholder */}
-              <section className={styles.section}>
-                <h3>{isZh ? '🎵 背景音乐' : '🎵 Background Music'}</h3>
-                <div className={styles.placeholder}>
-                  <p>{isZh ? '音乐文件占位 - 请配置音频链接' : 'Music placeholder - Configure audio URL'}</p>
-                  <code className={styles.code}>
-                    {isZh ? '在 src/data/config.ts 中设置 bgMusicUrl' : 'Set bgMusicUrl in src/data/config.ts'}
-                  </code>
                 </div>
-              </section>
+              </div>
 
-              {/* Reset */}
-              <section className={styles.section}>
-                <button className={styles.resetBtn} onClick={resetSettings}>
-                  {isZh ? '🔄 恢复默认设置' : '🔄 Reset to Defaults'}
-                </button>
-              </section>
+              {/* Background music placeholder */}
+              <div className={styles.settingGroup}>
+                <div className={styles.settingRow}>
+                  <div className={styles.settingInfo}>
+                    <span className={styles.settingLabel}>
+                      {isZh ? '背景音乐' : 'Background Music'}
+                    </span>
+                    <span className={styles.settingDesc}>
+                      {isZh ? '在 src/config/music.ts 中配置音乐URL' : 'Configure music URL in src/config/music.ts'}
+                    </span>
+                  </div>
+                  <span className={styles.placeholder}>
+                    {isZh ? '待配置' : 'Configure'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Info */}
+              <div className={styles.info}>
+                <p className={styles.infoText}>
+                  {isZh
+                    ? '💡 提示：关闭动画可提升低性能设备的体验'
+                    : '💡 Tip: Disabling animations improves experience on low-performance devices'}
+                </p>
+              </div>
             </div>
           </motion.div>
         </>

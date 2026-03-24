@@ -1,307 +1,169 @@
-# badhope 个人作品集
+<div align="center">
 
-> 一个现代化、视觉效果出众的个人作品集网站，展示全栈开发者的专业历程，具备3D特效、AI集成和无缝国际化（中英文）支持。
+# ⭐ badhope's Starbase（启明星空间站）
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-badhope.github.io-blue)](https://badhope.github.io)
-[![Next.js](https://img.shields.io/badge/Next.js-15.1-black)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+**探索代码与创意的宇宙**
+
+[![部署状态](https://github.com/badhope/badhope.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/badhope/badhope.github.io/actions/workflows/deploy.yml)
+[![网站](https://img.shields.io/website?url=https%3A%2F%2Fbadhope.github.io)](https://badhope.github.io)
+[![许可证](https://img.shields.io/github/license/badhope/badhope.github.io)](LICENSE)
+
+[🌐 在线访问](https://badhope.github.io) · [📖 English](README.md) · [🐛 报告问题](https://github.com/badhope/badhope.github.io/issues)
+
+</div>
 
 ---
 
 ## ✨ 功能特性
 
-### 🌐 国际化 (i18n)
+- 🚀 **曲速引导动画** - 第一人称穿越星空效果
+- ⭐ **3D 变形启明星 Logo** - 球体⇄星星形态变换 + 粒子特效
+- 🤖 **AI 助手 (Star)** - 双模式：本地题库 + 真实 AI API
+- 📡 **资讯中心** - AI 排行榜、技术热文、GitHub Trending
+- 🛠️ **开发者工具箱** - 80+ 精选工具，覆盖 15 个分类
+- 💼 **自动同步作品集** - 从 GitHub 仓库自动获取
+- 📝 **博客聚合** - CSDN & 掘金文章自动同步
+- 🌐 **国际化** - 中英文双语支持
+- 🎨 **宇宙主题** - 深蓝 + 金色渐变设计
+- 🎮 **20+ 隐藏彩蛋** - 各种有趣的互动惊喜
+- ⚙️ **设置面板** - 动画开关、音量控制
+- 📱 **响应式设计** - 桌面端优先，移动端优化
+- ♿ **无障碍** - ARIA 标签、键盘导航、减少动画支持
 
-| 功能 | 描述 |
+## 🛠️ 技术栈
+
+| 分类 | 技术 |
 |------|------|
-| **双语言支持** | 英语（主要）和中文（次要） |
-| **语言切换器** | 导航栏快速切换（EN/中文） |
-| **持久化偏好** | 语言选择保存至 localStorage |
-| **自动检测** | 自动检测浏览器语言偏好 |
-| **完整覆盖** | 所有UI元素、标签和内容均已翻译 |
-
-### 🎨 视觉设计
-
-- **3D特效**：基于 Three.js 的粒子网格和传送门过渡效果
-- **暗色主题**：现代霓虹风格暗色配色方案（#0a0a0f 基底）
-- **响应式设计**：针对所有屏幕尺寸优化（移动端、平板、桌面）
-- **微交互**：通过 Framer Motion 实现流畅动画
-- **字体排版**：高级字体栈（Inter、JetBrains Mono、Space Grotesk）
-
-### 🤖 AI 集成
-
-- **AI聊天助手**：带知识库的交互式AI聊天界面
-- **技能书可视化**：技术技能的视觉展示
-- **降级系统**：AI服务不可用时的优雅降级
-
-### ⚡ 性能
-
-- **SSR/SSG**：基于 Next.js 15 App Router 的服务端渲染
-- **代码分割**：自动代码分割优化加载时间
-- **动态导入**：重型组件（Three.js等）按需加载
-- **静态生成**：所有页面预渲染实现快速首屏加载
-
----
+| 框架 | [Next.js 15](https://nextjs.org) + [TypeScript](https://typescriptlang.org) |
+| 样式 | [Tailwind CSS](https://tailwindcss.com) + CSS Modules |
+| 动画 | [Framer Motion](https://www.framer.com/motion/) + Canvas API |
+| 3D | [Three.js](https://threejs.org) + [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) |
+| 部署 | [GitHub Pages](https://pages.github.com) + [GitHub Actions](https://github.com/features/actions) |
 
 ## 🚀 快速开始
 
 ### 环境要求
 
-| 要求 | 版本 |
-|------|------|
-| Node.js | 18+ |
-| npm | 9+ |
-| Git | 2.0+ |
+- Node.js 18+
+- npm 或 yarn
 
 ### 安装
 
 ```bash
 # 克隆仓库
 git clone https://github.com/badhope/badhope.github.io.git
-
-# 进入项目目录
 cd badhope.github.io
 
-# 安装依赖（使用 legacy-peer-deps 兼容 Next.js 15）
-npm install --legacy-peer-deps
+# 安装依赖
+npm install
 
 # 启动开发服务器
 npm run dev
 
-# 打开 http://localhost:3000
-```
-
-### 生产构建
-
-```bash
-# 构建项目
+# 构建生产版本
 npm run build
-
-# 本地预览生产构建
-npx serve@latest out -p 3000
 ```
 
-### 部署
-
-项目已配置 GitHub Actions 自动部署至 GitHub Pages。
-
-```bash
-# 推送到 main 分支触发自动部署
-git push origin main
-```
-
----
-
-## 🌏 语言选择
-
-### 如何切换语言
-
-1. **导航栏**：点击右上角的语言切换按钮（EN/中文）
-2. **自动检测**：首次访问时自动检测浏览器语言
-3. **持久存储**：偏好设置保存在 localStorage
-
-### 支持的语言
-
-| 语言 | 代码 | 状态 |
-|------|------|------|
-| English | `en` | ✅ 主要语言 |
-| 中文 | `zh` | ✅ 次要语言 |
-
-### 翻译覆盖
-
-| 区块 | EN | ZH |
-|------|----|----|
-| 导航 | ✅ | ✅ |
-| Hero区域 | ✅ | ✅ |
-| 关于区域 | ✅ | ✅ |
-| 技能分类 | ✅ | ✅ |
-| 项目展示 | ✅ | ✅ |
-| 页脚 | ✅ | ✅ |
-| AI聊天 | ✅ | ✅ |
-| 错误状态 | ✅ | ✅ |
-| 网络状态 | ✅ | ✅ |
-| 评论区 | ✅ | ✅ |
-
----
-
-## 📂 项目结构
+### 项目结构
 
 ```
-badhope.github.io/
-├── .github/
-│   └── workflows/
-│       └── deploy.yml         # GitHub Pages 部署配置
-├── src/
-│   ├── app/                   # Next.js App Router
-│   │   ├── ai/               # AI助手页面
-│   │   ├── blog/             # 博客页面
-│   │   ├── contact/          # 联系页面
-│   │   ├── home/             # 首页（主页面）
-│   │   ├── projects/         # 项目展示页面
-│   │   ├── resume/           # 简历页面
-│   │   ├── tools/            # 工具页面
-│   │   ├── layout.tsx        # 根布局与Providers
-│   │   ├── page.tsx          # 重定向至 /home
-│   │   ├── globals.css       # 全局样式
-│   │   ├── loading.tsx       # 加载状态
-│   │   └── error.tsx         # 错误边界
-│   ├── components/
-│   │   ├── 3d/              # Three.js 3D组件
-│   │   │   └── ThreeScene.tsx
-│   │   ├── ai/              # AI组件
-│   │   │   ├── AIChat.tsx
-│   │   │   ├── AISettings.tsx
-│   │   │   └── SkillBook.tsx
-│   │   ├── animations/       # 动画组件
-│   │   │   ├── DoorOpen.tsx
-│   │   │   ├── LabelCarousel.tsx
-│   │   │   ├── Loader.tsx
-│   │   │   ├── PageTransition.tsx
-│   │   │   ├── ParticleBackground.tsx
-│   │   │   ├── ParticlePortal.tsx
-│   │   │   └── Typewriter.tsx
-│   │   ├── cards/            # 卡片组件
-│   │   │   ├── ProjectCard.tsx
-│   │   │   └── ToolCard.tsx
-│   │   ├── effects/          # 视觉效果
-│   │   │   └── ParticleRain.tsx
-│   │   ├── sections/         # 页面区块
-│   │   │   ├── About.tsx
-│   │   │   ├── Footer.tsx
-│   │   │   ├── Hero.tsx
-│   │   │   ├── Projects.tsx
-│   │   │   └── Skills.tsx
-│   │   └── ui/               # UI组件
-│   │       ├── BackToTop.tsx
-│   │       ├── Button.tsx
-│   │       ├── Comments.tsx
-│   │       ├── InteractiveButton.tsx
-│   │       ├── LanguageSwitcher.tsx
-│   │       ├── Navigation.tsx
-│   │       └── NetworkStatus.tsx
-│   ├── hooks/                 # 自定义React Hooks
-│   │   └── useInteractions.ts
-│   ├── lib/                   # 库与工具函数
-│   │   ├── i18n/             # 国际化
-│   │   │   ├── translations.ts
-│   │   │   └── LanguageContext.tsx
-│   │   ├── ai-api.ts        # AI API集成
-│   │   ├── knowledge-base.ts # AI聊天知识库
-│   │   └── utils.ts          # 工具函数
-│   └── types/                # TypeScript类型定义
-│       └── index.ts
-├── CONTRIBUTING.md           # 贡献指南
-├── PROTOCOL.md               # 技术文档
-├── README.md                 # 英文版说明
-├── README_CN.md              # 中文版说明（本文件）
-├── package.json
-├── tailwind.config.js
-├── tsconfig.json
-└── next.config.js
+src/
+├── app/                    # Next.js App Router 页面
+│   ├── page.tsx           # 首页（根路径）
+│   ├── not-found.tsx      # 自定义 404 页面
+│   ├── projects/          # 作品集（GitHub 自动同步）
+│   ├── tools/             # 开发者工具箱
+│   ├── news/              # 资讯中心 & 排行榜
+│   ├── blog/              # 博客聚合
+│   ├── ai/                # AI 助手
+│   ├── resume/            # 简历
+│   ├── contact/           # 联系表单
+│   └── contact-unavailable/ # 社交链接占位页
+├── components/
+│   ├── 3d/                # 3D 组件（启明星 Logo）
+│   ├── animations/        # 曲速加载器、粒子效果
+│   ├── sections/          # 页面区块（Hero、About 等）
+│   ├── settings/          # 设置面板
+│   └── ui/                # 导航、共享 UI 组件
+├── config/                # ⚙️ 配置文件（重要！）
+│   ├── ai.ts             # AI 模型 API 密钥
+│   ├── social.ts         # 社交媒体链接
+│   ├── music.ts          # 背景音乐
+│   ├── tools.ts          # 工具集合
+│   └── knowledge-base.ts # AI 聊天题库
+└── lib/
+    ├── ai/               # AI 回答引擎
+    ├── i18n/             # 国际化
+    └── settings/         # 设置上下文
 ```
 
----
+## ⚙️ 配置指南
 
-## 🛠️ 技术栈
+### AI 助手
 
-| 类别 | 技术 | 版本 | 用途 |
-|------|------|------|------|
-| **框架** | Next.js | 15.1 | App Router SSR/SSG |
-| **语言** | TypeScript | 5.7 | 类型安全 |
-| **样式** | Tailwind CSS | 3.4 | 原子化CSS |
-| **动画** | Framer Motion | 11.x | 页面过渡与微交互 |
-| **3D图形** | Three.js | latest | 3D粒子场景 |
-| **状态** | React Context | - | 语言与应用状态 |
-| **部署** | GitHub Pages | - | 静态托管 |
+编辑 `src/config/ai.ts` 配置 AI 模型 API 密钥：
 
----
-
-## 🎨 设计系统
-
-### 色彩方案
-
-```css
-:root {
-  /* 背景色 */
-  --color-dark-bg: #0a0a0f;       /* 主背景 */
-  --color-dark-card: #12121a;     /* 卡片背景 */
-  --color-dark-border: #1f1f2e;   /* 边框 */
-
-  /* 霓虹强调色 */
-  --color-neon-blue: #00d4ff;     /* 主强调色 */
-  --color-neon-purple: #bf5af2;   /* 次强调色 */
-  --color-neon-pink: #ff375f;     /* 第三强调色 */
-  --color-neon-green: #30d158;    /* 成功色 */
-
-  /* 文字色 */
-  --text-primary: #ffffff;        /* 主文字 */
-  --text-secondary: #888888;      /* 次文字 */
-  --text-muted: #555555;          /* 弱化文字 */
+```typescript
+// 将 enabled 设为 true 并填入 API 密钥即可启用
+{
+  name: 'OpenAI',
+  apiKey: '你的API密钥', // ← 在此填入
+  enabled: true,
 }
 ```
 
-### 字体排版
+支持的模型：OpenAI、DeepSeek、智谱AI、通义千问、文心一言、Moonshot、SiliconFlow
 
-| 字体 | 字体族 | 用途 |
-|------|--------|------|
-| **展示字体** | Space Grotesk | 标题、大字 |
-| **正文字体** | Inter | 段落、UI文字 |
-| **代码字体** | JetBrains Mono | 代码片段、标签 |
+### 社交链接
 
-### 间距
+编辑 `src/config/social.ts` 更新社交媒体链接：
 
-使用4px基准网格系统（Tailwind默认）。
+```typescript
+{
+  name: 'Twitter',
+  url: 'https://twitter.com/你的用户名', // ← 替换为真实链接
+}
+```
 
----
+### AI 题库
 
-## 📖 文档
+编辑 `src/config/knowledge-base.ts` 添加/修改 AI 聊天回答。
 
-| 文档 | 描述 |
-|------|------|
-| [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献指南、PR流程、代码审查标准 |
-| [PROTOCOL.md](PROTOCOL.md) | 技术文档、API规范、组件架构 |
-| [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) | 部署指南、GitHub Pages配置 |
+### 工具集合
 
----
+编辑 `src/config/tools.ts` 添加/删除开发者工具。
+
+### 背景音乐
+
+编辑 `src/config/music.ts` 配置背景音乐。
+
+## 🎮 彩蛋
+
+本站包含 20+ 个隐藏彩蛋，你能找到全部吗？
+
+> 💡 提示：试试键盘快捷键、点击特定元素、在不同时间访问。
+
+## 📄 文档
+
+- [ARCHITECTURE.md](ARCHITECTURE.md) - 系统架构说明
+- [AI_CHAT_SYSTEM.md](AI_CHAT_SYSTEM.md) - AI 聊天系统设计
+- [CONTENT_GUIDE.md](CONTENT_GUIDE.md) - 内容管理指南
+- [EASTER_EGGS.md](EASTER_EGGS.md) - 彩蛋指南
+- [API_INTEGRATION.md](API_INTEGRATION.md) - API 接入指南
+- [DEPLOYMENT.md](DEPLOYMENT.md) - 部署指南
 
 ## 🤝 贡献
 
-欢迎贡献！请阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 了解：
-
-- 🔀 代码提交流程
-- 📝 Pull Request 要求
-- 👀 代码审查标准
-- 💬 提交信息规范
-- 🏆 贡献致谢
-
----
+欢迎贡献！请随时提交 Pull Request。
 
 ## 📜 许可证
 
-本项目采用 **MIT 许可证** 授权。
+本项目基于 [MIT 许可证](LICENSE) 开源。
 
 ---
 
-## 🔗 联系方式
+<div align="center">
 
-| 平台 | 链接 |
-|------|------|
-| **GitHub** | [badhope](https://github.com/badhope) |
-| **CSDN** | [blog.csdn.net/weixin_56622231](https://blog.csdn.net/weixin_56622231) |
-| **掘金** | [juejin.cn/user/2350111542479753](https://juejin.cn/user/2350111542479753) |
-| **邮箱** | x18825407105@outlook.com |
+**由 [badhope](https://github.com/badhope) 用 ⭐ 构建**
 
----
-
-## 🙏 致谢
-
-- [Next.js](https://nextjs.org/) - React框架
-- [Framer Motion](https://www.framer.com/motion/) - 动画库
-- [Three.js](https://threejs.org/) - 3D图形
-- [Tailwind CSS](https://tailwindcss.com/) - 原子化CSS框架
-- [Giscus](https://giscus.app/) - 评论系统
-
----
-
-由 **badhope** 用 ❤️ 构建 · 2024至今
+</div>

@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
-import { useSettings } from '@/lib/settings/SettingsContext';
+import SettingsPanel from '@/components/settings/SettingsPanel';
 import styles from './StarNavigation.module.css';
 
 interface NavItem {
@@ -29,80 +29,89 @@ const navItems: NavItem[] = [
 
 export default function StarNavigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage } = useLanguage();
-  const { settings } = useSettings();
+  const navRef = useRef<HTMLDivElement>(null);
   const isZh = language === 'zh';
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Close nav on route change
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
 
-  // Keyboard shortcut
+  // Close nav on click outside
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
         setIsOpen(false);
-        setIsSettingsOpen(false);
       }
     };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const mainItems = navItems.filter(i => i.group === 'main');
-  const moreItems = navItems.filter(i => i.group === 'more');
+  const mainItems = navItems.filter((item) => item.group === 'main');
+  const moreItems = navItems.filter((item) => item.group === 'more');
 
   return (
     <>
-      {/* Navigation Toggle - Top Left Star */}
-      <motion.button
-        className={styles.navToggle}
-        onClick={() => setIsOpen(!isOpen)}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5 }}
+      {/* Top bar */}
+      <motion.nav
+        className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
       >
-        <motion.span
-          className={styles.starIcon}
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          ⭐
-        </motion.span>
-      </motion.button>
+        <div className={styles.navInner}>
+          {/* Logo button */}
+          <button
+            className={styles.logoBtn}
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle navigation"
+          >
+            <motion.span
+              className={styles.logoStar}
+              animate={isOpen ? { rotate: 180 } : { rotate: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              ⭐
+            </motion.span>
+          </button>
 
-      {/* Settings Toggle - Top Right */}
-      <motion.button
-        className={styles.settingsToggle}
-        onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.6 }}
-      >
-        ⚙️
-      </motion.button>
+          {/* Language toggle */}
+          <button
+            className={styles.langBtn}
+            onClick={() => setLanguage(language === 'zh' ? 'en' : 'zh')}
+            aria-label="Toggle language"
+          >
+            {language === 'zh' ? 'EN' : '中'}
+          </button>
 
-      {/* Language Toggle */}
-      <motion.button
-        className={styles.langToggle}
-        onClick={() => setLanguage(language === 'zh' ? 'en' : 'zh')}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.7 }}
-      >
-        {isZh ? 'EN' : '中'}
-      </motion.button>
+          {/* Settings button */}
+          <button
+            className={styles.settingsBtn}
+            onClick={() => setSettingsOpen(true)}
+            aria-label="Settings"
+          >
+            ⚙️
+          </button>
+        </div>
+      </motion.nav>
 
-      {/* Side Navigation Panel */}
+      {/* Settings panel */}
+      <SettingsPanel isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+
+      {/* Side navigation panel */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -113,105 +122,100 @@ export default function StarNavigation() {
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
             />
-            <motion.nav
-              className={styles.navPanel}
-              initial={{ x: -320, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -320, opacity: 0 }}
+            <motion.div
+              ref={navRef}
+              className={styles.panel}
+              initial={{ x: -320 }}
+              animate={{ x: 0 }}
+              exit={{ x: -320 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             >
-              <div className={styles.navHeader}>
-                <span className={styles.navLogo}>⭐</span>
-                <span className={styles.navTitle}>
-                  {isZh ? '星际导航' : 'Star Navigation'}
+              {/* Panel header */}
+              <div className={styles.panelHeader}>
+                <div className={styles.panelLogo}>⭐</div>
+                <div>
+                  <h2 className={styles.panelTitle}>Starbase</h2>
+                  <p className={styles.panelSubtitle}>
+                    {isZh ? '导航系统' : 'Navigation'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Main navigation */}
+              <div className={styles.navGroup}>
+                <span className={styles.groupLabel}>
+                  {isZh ? '主导航' : 'Main'}
                 </span>
-              </div>
-
-              <div className={styles.navGroups}>
-                {/* Main Navigation */}
-                <div className={styles.navGroup}>
-                  <span className={styles.groupLabel}>
-                    {isZh ? '▸ 主导航' : '▸ Main'}
-                  </span>
-                  {mainItems.map((item, index) => (
-                    <motion.div
-                      key={item.path}
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.1 + index * 0.05 }}
+                {mainItems.map((item, index) => (
+                  <motion.div
+                    key={item.path}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <Link
+                      href={item.path}
+                      className={`${styles.navLink} ${pathname === item.path ? styles.active : ''}`}
                     >
-                      <Link
-                        href={item.path}
-                        className={`${styles.navItem} ${pathname === item.path ? styles.active : ''}`}
-                      >
-                        <span className={styles.navIcon}>{item.icon}</span>
-                        <span className={styles.navLabel}>
-                          {isZh ? item.labelZh : item.labelEn}
-                        </span>
-                        {pathname === item.path && (
-                          <motion.div
-                            className={styles.activeIndicator}
-                            layoutId="activeNav"
-                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                          />
-                        )}
-                      </Link>
-                    </motion.div>
-                  ))}
-                </div>
+                      <span className={styles.navIcon}>{item.icon}</span>
+                      <span className={styles.navLabel}>
+                        {isZh ? item.labelZh : item.labelEn}
+                      </span>
+                      {pathname === item.path && (
+                        <motion.div
+                          className={styles.activeIndicator}
+                          layoutId="activeNav"
+                          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                        />
+                      )}
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
 
-                {/* More Navigation */}
-                <div className={styles.navGroup}>
-                  <span className={styles.groupLabel}>
-                    {isZh ? '▸ 更多' : '▸ More'}
-                  </span>
-                  {moreItems.map((item, index) => (
-                    <motion.div
-                      key={item.path}
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.3 + index * 0.05 }}
+              {/* More navigation */}
+              <div className={styles.navGroup}>
+                <span className={styles.groupLabel}>
+                  {isZh ? '更多' : 'More'}
+                </span>
+                {moreItems.map((item, index) => (
+                  <motion.div
+                    key={item.path}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: (mainItems.length + index) * 0.05 }}
+                  >
+                    <Link
+                      href={item.path}
+                      className={`${styles.navLink} ${pathname === item.path ? styles.active : ''}`}
                     >
-                      <Link
-                        href={item.path}
-                        className={`${styles.navItem} ${pathname === item.path ? styles.active : ''}`}
-                      >
-                        <span className={styles.navIcon}>{item.icon}</span>
-                        <span className={styles.navLabel}>
-                          {isZh ? item.labelZh : item.labelEn}
-                        </span>
-                        {pathname === item.path && (
-                          <motion.div
-                            className={styles.activeIndicator}
-                            layoutId="activeNav2"
-                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                          />
-                        )}
-                      </Link>
-                    </motion.div>
-                  ))}
-                </div>
+                      <span className={styles.navIcon}>{item.icon}</span>
+                      <span className={styles.navLabel}>
+                        {isZh ? item.labelZh : item.labelEn}
+                      </span>
+                      {pathname === item.path && (
+                        <motion.div
+                          className={styles.activeIndicator}
+                          layoutId="activeNav"
+                          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                        />
+                      )}
+                    </Link>
+                  </motion.div>
+                ))}
               </div>
 
-              <div className={styles.navFooter}>
-                <div className={styles.statusLine}>
-                  <span className={styles.statusDot} />
-                  <span className={styles.statusText}>
-                    {isZh ? '系统在线' : 'Systems Online'}
-                  </span>
-                </div>
+              {/* Panel footer */}
+              <div className={styles.panelFooter}>
+                <span className={styles.footerText}>
+                  {isZh ? 'badhope\'s Starbase' : 'badhope\'s Starbase'}
+                </span>
+                <span className={styles.footerVersion}>v2.0</span>
               </div>
-            </motion.nav>
+            </motion.div>
           </>
         )}
       </AnimatePresence>
-
-      {/* Settings Panel */}
-      {isSettingsOpen && (
-        <div onClick={() => setIsSettingsOpen(false)}>
-          {/* Placeholder - will be replaced by SettingsPanel component */}
-        </div>
-      )}
     </>
   );
 }

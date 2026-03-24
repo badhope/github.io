@@ -1,273 +1,191 @@
 .page {
   min-height: 100vh;
-  background: #0a0a0f;
-}
-
-.main {
-  padding-top: 100px;
+  padding: 100px 20px;
+  background: #020510;
 }
 
 .container {
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 0 2rem;
 }
 
-.hero {
+/* Header */
+.header {
   text-align: center;
-  padding: 4rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
+  margin-bottom: 80px;
 }
 
-.label {
+.headerTag {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem;
-  color: #bf5af2;
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
+  font-size: 0.85rem;
+  color: #d4af37;
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 16px;
 }
 
-.title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(3rem, 8vw, 5rem);
+.headerTitle {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #00d4ff, #bf5af2, #ff375f);
+  background: linear-gradient(135deg, #d4af37 0%, #f0d060 50%, #d4af37 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  margin-bottom: 8px;
 }
 
-.subtitle {
-  font-size: 1.1rem;
-  color: #888;
+.headerSubtitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  color: #a0a0b8;
+  margin-bottom: 16px;
 }
 
-.contact {
+.headerLinks {
   display: flex;
-  gap: 2rem;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.buttonGroup {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 16px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
-.downloadBtn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  background: linear-gradient(135deg, #00d4ff, #bf5af2);
-  color: #fff;
-  font-weight: 600;
-  border-radius: 12px;
+.headerLinks a {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: #d4af37;
   text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+  padding: 6px 12px;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
-.printBtn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  background: transparent;
-  color: #fff;
-  font-weight: 600;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.headerLinks a:hover {
+  border-color: rgba(212, 175, 55, 0.3);
 }
 
-.printBtn:hover {
-  border-color: #bf5af2;
-  box-shadow: 0 0 20px rgba(191, 90, 242, 0.3);
-}
-
+/* Section */
 .section {
-  padding: 4rem 0;
+  margin-bottom: 60px;
 }
 
 .sectionTitle {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 2rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8e8f0;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
 }
 
-.sectionNumber {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.9rem;
-  color: #bf5af2;
-  padding: 0.3rem 0.8rem;
-  background: rgba(191, 90, 242, 0.1);
-  border-radius: 6px;
-}
-
-.summary {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 2rem;
-  background: rgba(18, 18, 26, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-}
-
-.summary p {
-  font-size: 1rem;
-  line-height: 1.8;
-  color: #aaa;
-}
-
-.summary strong {
-  color: #00d4ff;
-}
-
-.skillsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.skillCard {
-  padding: 1.5rem;
-  background: rgba(18, 18, 26, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+/* Timeline item */
+.timelineItem {
+  padding: 20px 24px;
+  background: rgba(10, 14, 39, 0.5);
+  border: 1px solid rgba(212, 175, 55, 0.08);
   border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.period {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #d4af37;
+  letter-spacing: 1px;
+}
+
+.itemTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e8e8f0;
+  margin: 8px 0;
+}
+
+.itemDesc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  color: #a0a0b8;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: #a0a0b8;
+  padding: 3px 8px;
+  background: rgba(212, 175, 55, 0.06);
+  border-radius: 4px;
+}
+
+/* Skill categories */
+.skillCategories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .skillCategory {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #e0e0e0;
-  margin-bottom: 1rem;
+  padding: 20px;
+  background: rgba(10, 14, 39, 0.4);
+  border: 1px solid rgba(212, 175, 55, 0.08);
+  border-radius: 12px;
 }
 
-.skillTags {
+.skillCatTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #d4af37;
+  margin-bottom: 12px;
+}
+
+.skillList {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
-.skillTag {
-  padding: 0.3rem 0.7rem;
+.skillItem {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem;
-  color: #00d4ff;
-  background: rgba(0, 212, 255, 0.1);
-  border: 1px solid rgba(0, 212, 255, 0.2);
-  border-radius: 20px;
+  font-size: 0.75rem;
+  color: #a0a0b8;
+  padding: 4px 10px;
+  background: rgba(2, 5, 16, 0.4);
+  border: 1px solid rgba(212, 175, 55, 0.06);
+  border-radius: 6px;
 }
 
-.expCard,
-.eduCard {
-  padding: 2rem;
-  background: rgba(18, 18, 26, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  margin-bottom: 1.5rem;
-}
-
-.expHeader,
-.eduHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-}
-
-.expTitle,
-.eduDegree {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #e0e0e0;
-}
-
-.expCompany,
-.eduSchool {
-  font-size: 0.9rem;
-  color: #bf5af2;
-}
-
-.expPeriod,
-.eduPeriod {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  color: #666;
-}
-
-.expDesc,
-.eduDesc {
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: #888;
-}
-
-.cta {
-  padding: 6rem 0;
-  background: linear-gradient(180deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
-}
-
-.ctaContent {
+/* Download */
+.download {
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
+  padding: 40px;
 }
 
-.ctaTitle {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #fff;
-}
-
-.ctaDesc {
-  font-size: 1.1rem;
-  color: #888;
-}
-
-.ctaBtn {
-  padding: 1rem 3rem;
-  background: linear-gradient(135deg, #00d4ff, #bf5af2);
-  color: #fff;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 12px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+.downloadText {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: #6b6b80;
 }
 
 @media (max-width: 768px) {
-  .contact {
-    flex-direction: column;
-    gap: 0.5rem;
+  .page {
+    padding: 80px 16px;
   }
 
-  .skillsGrid {
+  .headerTitle {
+    font-size: 1.8rem;
+  }
+
+  .skillCategories {
     grid-template-columns: 1fr;
-  }
-
-  .expHeader,
-  .eduHeader {
-    flex-direction: column;
-    gap: 0.5rem;
   }
 }

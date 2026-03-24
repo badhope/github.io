@@ -1,7 +1,7 @@
-.container {
+.loader {
   position: fixed;
   inset: 0;
-  z-index: 10000;
+  z-index: 9999;
   background: #020510;
   display: flex;
   align-items: center;
@@ -12,164 +12,380 @@
 .canvas {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  z-index: 1;
 }
 
+/* Nebula background effects */
+.nebula1 {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(26, 115, 232, 0.08) 0%, transparent 70%);
+  top: -200px;
+  right: -100px;
+  animation: nebula-drift 20s ease-in-out infinite;
+  z-index: 0;
+}
+
+.nebula2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.06) 0%, transparent 70%);
+  bottom: -150px;
+  left: -100px;
+  animation: nebula-drift 25s ease-in-out infinite reverse;
+  z-index: 0;
+}
+
+.nebula3 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: nebula-drift 18s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* Meteors */
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.3);
+  animation: meteor 3s linear infinite;
+  z-index: 1;
+}
+
+.meteor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.6), transparent);
+  transform-origin: left center;
+  transform: rotate(0deg);
+}
+
+/* Central content */
 .content {
   position: relative;
-  z-index: 2;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  pointer-events: none;
 }
 
-.logo {
-  margin-bottom: 24px;
+/* Logo */
+.logoContainer {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
 }
 
-.starIcon {
+.logoStar {
   font-size: 64px;
-  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)) drop-shadow(0 0 40px rgba(212, 175, 55, 0.3));
-  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
+  animation: star-pulse 3s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-10px) scale(1.05); }
+.logoGlow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+  animation: pulse-gold 2s ease-in-out infinite;
 }
 
+/* Title */
 .title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  margin-bottom: 12px;
-  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 16px;
 }
 
-.titleGold {
-  background: linear-gradient(135deg, #d4af37, #ffd700);
+.titleLine1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: #a0a0b8;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+}
+
+.titleLine2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #d4af37 0%, #f0d060 40%, #d4af37 60%, #1a73e8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-.titleWhite {
-  color: #e8e8f0;
-  margin-left: 12px;
+  letter-spacing: 4px;
+  text-shadow: none;
+  filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.3));
 }
 
 .subtitle {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: 0.15em;
+  font-size: 0.9rem;
+  color: #6b6b80;
+  letter-spacing: 3px;
+  margin-bottom: 48px;
+}
+
+/* Enter button */
+.enterBtnContainer {
   margin-bottom: 32px;
 }
 
-.progressContainer {
+.enterBtn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 48px;
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.enterBtn:hover {
+  border-color: rgba(212, 175, 55, 0.8);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.2), inset 0 0 30px rgba(212, 175, 55, 0.05);
+  transform: scale(1.05);
+}
+
+.enterBtnText {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #d4af37;
+  letter-spacing: 6px;
+}
+
+.enterBtnSub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: #6b6b80;
+  letter-spacing: 2px;
+}
+
+.enterBtnGlow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 50%, rgba(26, 115, 232, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.enterBtn:hover .enterBtnGlow {
+  opacity: 1;
+}
+
+/* Hint text */
+.hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+}
+
+.hintText {
+  color: #3a3a50;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+/* Warp content */
+.warpContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.warpText {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
 }
 
+.warpLabel {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #d4af37;
+  letter-spacing: 8px;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+/* Progress bar */
+.progressContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 300px;
+}
+
 .progressTrack {
-  width: 200px;
+  flex: 1;
   height: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(212, 175, 55, 0.15);
   border-radius: 2px;
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, #d4af37, #ffd700);
+  background: linear-gradient(90deg, #d4af37, #f0d060);
   border-radius: 2px;
+  transition: width 0.1s linear;
   box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
 .progressText {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: rgba(212, 175, 55, 0.6);
-  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+  color: #d4af37;
+  min-width: 40px;
+  text-align: right;
 }
 
+/* Speed indicator */
+.speedIndicator {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.speedLabel {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: #6b6b80;
+  letter-spacing: 2px;
+}
+
+.speedValue {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a73e8;
+  text-shadow: 0 0 15px rgba(26, 115, 232, 0.5);
+}
+
+/* Skip button */
 .skipBtn {
   position: absolute;
   bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.5);
-  padding: 8px 24px;
-  border-radius: 20px;
-  font-family: 'JetBrains Mono', monospace;
+  right: 40px;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 0.8rem;
+  color: #6b6b80;
+  background: none;
+  border: 1px solid rgba(107, 107, 128, 0.3);
+  padding: 8px 16px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s;
-  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  z-index: 20;
 }
 
 .skipBtn:hover {
-  background: rgba(212, 175, 55, 0.1);
-  border-color: rgba(212, 175, 55, 0.3);
-  color: #d4af37;
+  color: #a0a0b8;
+  border-color: rgba(107, 107, 128, 0.6);
 }
 
-/* Corner decorations - sci-fi frame */
-.cornerTL,
-.cornerTR,
-.cornerBL,
-.cornerBR {
+/* Transition overlay */
+.transitionOverlay {
   position: absolute;
-  width: 60px;
-  height: 60px;
-  z-index: 2;
-  pointer-events: none;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, rgba(2, 5, 16, 0.95) 100%);
 }
 
-.cornerTL {
-  top: 20px;
-  left: 20px;
-  border-top: 1px solid rgba(212, 175, 55, 0.3);
-  border-left: 1px solid rgba(212, 175, 55, 0.3);
+.transitionFlash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
+  animation: flash 0.5s ease-out;
 }
 
-.cornerTR {
-  top: 20px;
-  right: 20px;
-  border-top: 1px solid rgba(212, 175, 55, 0.3);
-  border-right: 1px solid rgba(212, 175, 55, 0.3);
+@keyframes flash {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
-.cornerBL {
-  bottom: 20px;
-  left: 20px;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-  border-left: 1px solid rgba(212, 175, 55, 0.3);
+.transitionText {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  color: #d4af37;
+  letter-spacing: 4px;
+  text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
 }
 
-.cornerBR {
-  bottom: 20px;
-  right: 20px;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-  border-right: 1px solid rgba(212, 175, 55, 0.3);
-}
-
+/* Mobile */
 @media (max-width: 768px) {
-  .title {
-    font-size: 1.6rem;
+  .titleLine2 {
+    font-size: 2rem;
   }
 
-  .starIcon {
-    font-size: 48px;
+  .titleLine1 {
+    font-size: 0.9rem;
+    letter-spacing: 4px;
   }
 
   .subtitle {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+  }
+
+  .enterBtn {
+    padding: 12px 36px;
+  }
+
+  .enterBtnText {
+    font-size: 1rem;
+  }
+
+  .warpLabel {
+    font-size: 1rem;
+    letter-spacing: 4px;
+  }
+
+  .progressContainer {
+    width: 200px;
+  }
+
+  .speedValue {
+    font-size: 1.5rem;
+  }
+
+  .skipBtn {
+    bottom: 20px;
+    right: 20px;
   }
 }

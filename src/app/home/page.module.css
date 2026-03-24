@@ -1,101 +1,16 @@
+.container {
+  min-height: 100vh;
+  position: relative;
+}
+
 .main {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 50%, #FFFFFF 100%);
-}
-
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
   position: relative;
   z-index: 1;
 }
 
-.heroActions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.section {
-  padding: 6rem 2rem;
-  position: relative;
-  z-index: 1;
-  max-width: 1200px;
+.divider {
+  height: 1px;
   margin: 0 auto;
-}
-
-.sectionTitle {
-  font-size: 2.5rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 3rem;
-  background: linear-gradient(135deg, #667EEA, #764BA2, #F093FB);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.aboutCard {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(20px);
-  border-radius: 2rem;
-  padding: 3rem;
-  border: 1px solid rgba(102, 126, 234, 0.1);
-  box-shadow: 0 10px 60px rgba(102, 126, 234, 0.1);
-}
-
-.aboutText {
-  font-size: 1.125rem;
-  color: #4A4A68;
-  line-height: 1.8;
-  margin-bottom: 2rem;
-}
-
-.skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.skillTag {
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(240, 147, 251, 0.1));
-  color: #4A4A68;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.projectGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.footer {
-  padding: 3rem 2rem;
-  text-align: center;
-  border-top: 1px solid rgba(102, 126, 234, 0.1);
-  color: #4A4A68;
-  position: relative;
-  z-index: 1;
-}
-
-@media (max-width: 768px) {
-  .heroActions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .sectionTitle {
-    font-size: 2rem;
-  }
-
-  .projectGrid {
-    grid-template-columns: 1fr;
-  }
+  max-width: 600px;
+  background: linear-gradient(to right, transparent, rgba(212, 175, 55, 0.15), transparent);
 }
