@@ -10,12 +10,13 @@ const ParticleRain = dynamic(
   { ssr: false }
 );
 
-export default function Providers() {
+export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SettingsProvider>
       <LanguageProvider>
         <NetworkStatus />
         <ParticleRain color="rgba(212, 175, 55, 0.15)" count={60} />
+        {children}
       </LanguageProvider>
     </SettingsProvider>
   );
