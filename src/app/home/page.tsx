@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import StarNavigation from '@/components/ui/StarNavigation';
 import SettingsPanel from '@/components/settings/SettingsPanel';
-import WarpLoader from '@/components/animations/WarpLoader';
 import HeroSection from '@/components/sections/HeroSection';
 import AboutSection from '@/components/sections/AboutSection';
 import DailyQuote from '@/components/sections/DailyQuote';
@@ -18,61 +17,40 @@ const MouseTrail = dynamic(() => import('@/components/animations/MouseTrail'), {
 const CosmicOrbit = dynamic(() => import('@/components/animations/CosmicOrbit'), { ssr: false });
 
 export default function HomePage() {
-  const [showLoader, setShowLoader] = useState(true);
+  // /home 路径：同样跳过 WarpLoader，与根页面保持一致
   const [settingsOpen, setSettingsOpen] = useState(false);
-
-  const handleLoaderComplete = useCallback(() => {
-    setShowLoader(false);
-  }, []);
 
   return (
     <div className={styles.page}>
-      {showLoader && <WarpLoader onComplete={handleLoaderComplete} />}
+      <MouseTrail />
+      <StarNavigation />
 
-      {!showLoader && (
-        <>
-          <MouseTrail />
-          <StarNavigation />
-          <SettingsPanel isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      {/* SettingsPanel 必须在 main 外部，防止 z-index 被父容器限制 */}
+      <SettingsPanel isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
-          <main className={styles.main}>
-            {/* Hero Section */}
-            <HeroSection />
+      <main className={styles.main}>
+        <HeroSection />
+        <div className={styles.divider} />
 
-            <div className={styles.divider} />
+        <AboutSection />
+        <div className={styles.divider} />
 
-            {/* About Section */}
-            <AboutSection />
+        <CosmicOrbitSection />
+        <div className={styles.divider} />
 
-            <div className={styles.divider} />
+        <GitHubStats />
+        <div className={styles.divider} />
 
-            {/* Cosmic Orbit Section */}
-            <CosmicOrbitSection />
+        <DynamicStatusSection />
+        <div className={styles.divider} />
 
-            <div className={styles.divider} />
+        <FunZone />
+        <div className={styles.divider} />
 
-            {/* GitHub Live Stats */}
-            <GitHubStats />
+        <DailyQuote />
+      </main>
 
-            <div className={styles.divider} />
-
-            {/* Dynamic Status Panel */}
-            <DynamicStatusSection />
-
-            <div className={styles.divider} />
-
-            {/* Fun Zone */}
-            <FunZone />
-
-            <div className={styles.divider} />
-
-            {/* Daily Quote */}
-            <DailyQuote />
-          </main>
-
-          <Footer />
-        </>
-      )}
+      <Footer />
     </div>
   );
 }
