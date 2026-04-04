@@ -1,0 +1,173 @@
+.snakeGame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 16px;
+  background: rgba(15, 21, 53, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+}
+
+.icon { font-size: 1.5rem; }
+.title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  color: #d4af37;
+  letter-spacing: 2px;
+}
+
+.scores {
+  display: flex;
+  gap: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+}
+
+.score { color: #f0d060; }
+.highScore { color: #a0a0b8; }
+
+.canvasWrapper {
+  position: relative;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 0 20px rgba(212, 175, 55, 0.15),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.canvas {
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 5, 16, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: default;
+}
+
+.overlayContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.starIcon, .gameOverIcon, .pauseIcon {
+  font-size: 3rem;
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.5));
+}
+
+.pauseIcon { font-size: 2.5rem; }
+
+.overlayTitle {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.3rem;
+  color: #f0d060;
+  letter-spacing: 1px;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  margin: 0;
+}
+
+.overlayDesc {
+  color: #a0a0b8;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: #6b6b80;
+}
+
+.controls span {
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.startBtn {
+  background: linear-gradient(135deg, #d4af37 0%, #f0d060 50%, #d4af37 100%);
+  background-size: 200% 200%;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #020510;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  margin-top: 4px;
+}
+
+.startBtn:hover {
+  background-position: 100% 100%;
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+}
+
+.finalScore {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  color: #e8e8f0;
+  margin: 0;
+}
+
+.newHigh {
+  color: #f0d060;
+  font-size: 0.85rem;
+  margin: 0;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+.playingHint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: rgba(212, 175, 55, 0.6);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.footer {
+  padding: 4px 16px;
+}
+
+.footerText {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: #6b6b80;
+}

@@ -1,0 +1,220 @@
+.statusPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: rgba(15, 21, 53, 0.7);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.clock {
+  text-align: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.timeDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.time {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f0d060;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  letter-spacing: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
+.date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #6b6b80;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.greeting {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  color: #a0a0b8;
+  font-style: italic;
+}
+
+.weatherCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: rgba(212, 175, 55, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.weatherIcon { font-size: 2.5rem; }
+
+.weatherInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.weatherTemp {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #e8e8f0;
+}
+
+.weatherCity {
+  font-size: 0.75rem;
+  color: #6b6b80;
+}
+
+.weatherCondition {
+  font-size: 0.75rem;
+  color: #a0a0b8;
+}
+
+.weatherMeta {
+  font-size: 0.7rem;
+  color: #6b6b80;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.weatherLoading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #6b6b80;
+}
+
+.loadingIcon { font-size: 1.2rem; }
+
+.ghCard {
+  padding: 12px;
+  background: rgba(26, 115, 232, 0.05);
+  border: 1px solid rgba(26, 115, 232, 0.15);
+  border-radius: 12px;
+}
+
+.ghHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #a0a0b8;
+  margin-bottom: 8px;
+}
+
+.livePulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: pulse 1.5s ease-in-out infinite;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.ghStats {
+  display: flex;
+  gap: 16px;
+}
+
+.ghStats span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8e8f0;
+}
+
+.ghStats small {
+  font-size: 0.65rem;
+  color: #6b6b80;
+}
+
+.ghLoading {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #6b6b80;
+}
+
+.funStats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.funStat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(124, 58, 237, 0.05);
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  border-radius: 8px;
+}
+
+.funValue {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: #a78bfa;
+}
+
+.funLabel {
+  font-size: 0.7rem;
+  color: #6b6b80;
+}
+
+.progressBar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.progressTrack {
+  position: relative;
+  height: 4px;
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #d4af37, #f0d060);
+  border-radius: 2px;
+  min-width: 2px;
+}
+
+.progressGlow {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, rgba(240, 208, 96, 0.5), transparent);
+  filter: blur(4px);
+}
+
+.progressLabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: #6b6b80;
+}
