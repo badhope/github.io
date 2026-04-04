@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import Providers from '@/components/Providers';
 
 export const metadata: Metadata = {
   title: "badhope's Starbase | 启明星空间站",
@@ -63,7 +64,9 @@ export default function RootLayout({
         <meta name="theme-color" content="#020510" />
       </head>
       <body className="bg-background text-foreground antialiased">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
