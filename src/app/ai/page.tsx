@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import StarNavigation from '@/components/ui/StarNavigation';
 import CosmicParticleBackground from '@/components/effects/CosmicParticleBackground';
+import PageTransition from '@/components/animations/PageTransition';
 import { generateResponse, getSuggestedQuestions } from '@/lib/ai/response-engine';
 import { getActiveModel, AI_MODELS } from '@/config/ai';
 import styles from './page.module.css';
@@ -27,18 +28,15 @@ export default function AIPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Check active AI model
   useEffect(() => {
     const model = getActiveModel();
     setActiveModel(model ? model.name : null);
   }, []);
 
-  // Scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  // Initialize with welcome message
   useEffect(() => {
     if (messages.length === 0) {
       setMessages([{
@@ -66,10 +64,8 @@ export default function AIPage() {
     setInput('');
     setIsTyping(true);
 
-    // Simulate typing delay
     await new Promise((resolve) => setTimeout(resolve, 500 + Math.random() * 1000));
 
-    // Try real AI API first
     const model = getActiveModel();
     let response: string;
 
@@ -105,7 +101,6 @@ export default function AIPage() {
         response = generateResponse(text);
       }
     } else {
-      // Use local knowledge base
       response = generateResponse(text);
     }
 
@@ -130,149 +125,146 @@ export default function AIPage() {
   const suggestions = getSuggestedQuestions();
 
   return (
-    <div className={styles.page}>
-      <CosmicParticleBackground preset="nebula" intensity="medium" />
-      <StarNavigation />
-      <div className={styles.container}>
-        {/* Header */}
-        <motion.div
-          className={styles.header}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className={styles.headerLeft}>
-            <div className={styles.headerIcon}>🤖</div>
-            <div>
-              <h1 className={styles.headerTitle}>Star AI</h1>
-              <p className={styles.headerStatus}>
-                {activeModel
-                  ? `🟢 ${activeModel} ${isZh ? '已连接' : 'Connected'}`
-                  : `🟡 ${isZh ? '本地模式' : 'Local Mode'}`}
-              </p>
-            </div>
-          </div>
-          <button
-            className={styles.configBtn}
-            onClick={() => setShowConfig(!showConfig)}
+    <PageTransition>
+      <div className={styles.page}>
+        <CosmicParticleBackground preset="nebula" intensity="medium" />
+        <StarNavigation />
+        <div className={styles.container}>
+          <motion.div
+            className={styles.header}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            ⚙️
-          </button>
-        </motion.div>
-
-        {/* Config panel */}
-        <AnimatePresence>
-          {showConfig && (
-            <motion.div
-              className={styles.configPanel}
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-            >
-              <div className={styles.configContent}>
-                <h3 className={styles.configTitle}>
-                  {isZh ? 'AI 模型配置' : 'AI Model Config'}
-                </h3>
-                <p className={styles.configDesc}>
-                  {isZh
-                    ? '在 src/config/ai.ts 中配置 API 密钥以启用真实 AI 对话'
-                    : 'Configure API keys in src/config/ai.ts to enable real AI chat'}
+            <div className={styles.headerLeft}>
+              <div className={styles.headerIcon}>🤖</div>
+              <div>
+                <h1 className={styles.headerTitle}>Star AI</h1>
+                <p className={styles.headerStatus}>
+                  {activeModel
+                    ? `🟢 ${activeModel} ${isZh ? '已连接' : 'Connected'}`
+                    : `🟡 ${isZh ? '本地模式' : 'Local Mode'}`}
                 </p>
-                <div className={styles.modelList}>
-                  {AI_MODELS.map((model) => (
-                    <div key={model.name} className={styles.modelItem}>
-                      <span className={styles.modelName}>{model.name}</span>
-                      <span className={`${styles.modelStatus} ${model.enabled && model.apiKey ? styles.modelActive : ''}`}>
-                        {model.enabled && model.apiKey ? '🟢' : '⚪'}
-                      </span>
-                    </div>
-                  ))}
-                </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Messages */}
-        <div className={styles.messages}>
-          {messages.map((msg) => (
-            <motion.div
-              key={msg.id}
-              className={`${styles.message} ${styles[msg.role]}`}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+            </div>
+            <button
+              className={styles.configBtn}
+              onClick={() => setShowConfig(!showConfig)}
             >
-              <div className={styles.messageAvatar}>
-                {msg.role === 'assistant' ? '⭐' : '👤'}
-              </div>
-              <div className={styles.messageContent}>
-                <div className={styles.messageBubble}>
-                  {msg.content.split('\n').map((line, i) => (
-                    <p key={i}>{line}</p>
-                  ))}
-                </div>
-                <span className={styles.messageTime}>
-                  {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </span>
-              </div>
-            </motion.div>
-          ))}
+              ⚙️
+            </button>
+          </motion.div>
 
-          {isTyping && (
-            <motion.div
-              className={`${styles.message} ${styles.assistant}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              <div className={styles.messageAvatar}>⭐</div>
-              <div className={styles.messageContent}>
-                <div className={styles.typingIndicator}>
-                  <span /><span /><span />
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Suggestions */}
-        {messages.length <= 1 && (
-          <div className={styles.suggestions}>
-            {suggestions.map((q) => (
-              <button
-                key={q}
-                className={styles.suggestionBtn}
-                onClick={() => sendMessage(q)}
+          <AnimatePresence>
+            {showConfig && (
+              <motion.div
+                className={styles.configPanel}
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
               >
-                {q}
-              </button>
-            ))}
-          </div>
-        )}
+                <div className={styles.configContent}>
+                  <h3 className={styles.configTitle}>
+                    {isZh ? 'AI 模型配置' : 'AI Model Config'}
+                  </h3>
+                  <p className={styles.configDesc}>
+                    {isZh
+                      ? '在 src/config/ai.ts 中配置 API 密钥以启用真实 AI 对话'
+                      : 'Configure API keys in src/config/ai.ts to enable real AI chat'}
+                  </p>
+                  <div className={styles.modelList}>
+                    {AI_MODELS.map((model) => (
+                      <div key={model.name} className={styles.modelItem}>
+                        <span className={styles.modelName}>{model.name}</span>
+                        <span className={`${styles.modelStatus} ${model.enabled && model.apiKey ? styles.modelActive : ''}`}>
+                          {model.enabled && model.apiKey ? '🟢' : '⚪'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-        {/* Input */}
-        <div className={styles.inputContainer}>
-          <textarea
-            ref={inputRef}
-            className={styles.input}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={isZh ? '输入消息... (Enter 发送)' : 'Type a message... (Enter to send)'}
-            rows={1}
-            disabled={isTyping}
-          />
-          <button
-            className={styles.sendBtn}
-            onClick={() => sendMessage(input)}
-            disabled={!input.trim() || isTyping}
-          >
-            🚀
-          </button>
+          <div className={styles.messages}>
+            {messages.map((msg) => (
+              <motion.div
+                key={msg.id}
+                className={`${styles.message} ${styles[msg.role]}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className={styles.messageAvatar}>
+                  {msg.role === 'assistant' ? '⭐' : '👤'}
+                </div>
+                <div className={styles.messageContent}>
+                  <div className={styles.messageBubble}>
+                    {msg.content.split('\n').map((line, i) => (
+                      <p key={i}>{line}</p>
+                    ))}
+                  </div>
+                  <span className={styles.messageTime}>
+                    {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+
+            {isTyping && (
+              <motion.div
+                className={`${styles.message} ${styles.assistant}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <div className={styles.messageAvatar}>⭐</div>
+                <div className={styles.messageContent}>
+                  <div className={styles.typingIndicator}>
+                    <span /><span /><span />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            <div ref={messagesEndRef} />
+          </div>
+
+          {messages.length <= 1 && (
+            <div className={styles.suggestions}>
+              {suggestions.map((q) => (
+                <button
+                  key={q}
+                  className={styles.suggestionBtn}
+                  onClick={() => sendMessage(q)}
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className={styles.inputContainer}>
+            <textarea
+              ref={inputRef}
+              className={styles.input}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={isZh ? '输入消息... (Enter 发送)' : 'Type a message... (Enter to send)'}
+              rows={1}
+              disabled={isTyping}
+            />
+            <button
+              className={styles.sendBtn}
+              onClick={() => sendMessage(input)}
+              disabled={!input.trim() || isTyping}
+            >
+              🚀
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }

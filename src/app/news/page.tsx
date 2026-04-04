@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import StarNavigation from '@/components/ui/StarNavigation';
 import CosmicParticleBackground from '@/components/effects/CosmicParticleBackground';
+import PageTransition from '@/components/animations/PageTransition';
 import styles from './page.module.css';
 
 interface NewsItem {
@@ -32,7 +33,6 @@ export default function NewsPage() {
   const [githubTrending, setGithubTrending] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch AI model rankings
   useEffect(() => {
     const fetchAIRankings = async () => {
       try {
@@ -54,7 +54,6 @@ export default function NewsPage() {
           setAiModels(models);
         }
       } catch {
-        // Use fallback data
         setAiModels([
           { name: 'GPT-4o', score: 1287, org: 'OpenAI', category: 'Proprietary' },
           { name: 'Claude 3.5 Sonnet', score: 1271, org: 'Anthropic', category: 'Proprietary' },
@@ -72,7 +71,6 @@ export default function NewsPage() {
     fetchAIRankings();
   }, []);
 
-  // Fetch GitHub trending
   useEffect(() => {
     const fetchTrending = async () => {
       try {
@@ -109,231 +107,226 @@ export default function NewsPage() {
   ];
 
   return (
-    <div className={styles.page}>
-      <CosmicParticleBackground preset="aurora" intensity="medium" />
-      <StarNavigation />
-      <div className={styles.container}>
-        {/* Header */}
-        <motion.div
-          className={styles.header}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <span className={styles.headerTag}>
-            {'// ' + (isZh ? '资讯中心' : 'News Hub')}
-          </span>
-          <h1 className={styles.headerTitle}>
-            {isZh ? 'Tech Pulse' : 'Tech Pulse'}
-          </h1>
-          <p className={styles.headerDesc}>
-            {isZh ? '实时追踪技术世界的脉搏' : 'Track the pulse of the tech world in real-time'}
-          </p>
-        </motion.div>
+    <PageTransition>
+      <div className={styles.page}>
+        <CosmicParticleBackground preset="aurora" intensity="medium" />
+        <StarNavigation />
+        <div className={styles.container}>
+          <motion.div
+            className={styles.header}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <span className={styles.headerTag}>
+              {'// ' + (isZh ? '资讯中心' : 'News Hub')}
+            </span>
+            <h1 className={styles.headerTitle}>
+              {isZh ? 'Tech Pulse' : 'Tech Pulse'}
+            </h1>
+            <p className={styles.headerDesc}>
+              {isZh ? '实时追踪技术世界的脉搏' : 'Track the pulse of the tech world in real-time'}
+            </p>
+          </motion.div>
 
-        {/* Tabs */}
-        <div className={styles.tabs}>
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {isZh ? tab.labelZh : tab.labelEn}
-            </button>
-          ))}
-        </div>
+          <div className={styles.tabs}>
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                {isZh ? tab.labelZh : tab.labelEn}
+              </button>
+            ))}
+          </div>
 
-        {/* Content */}
-        <motion.div
-          className={styles.content}
-          key={activeTab}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          {/* AI Rankings */}
-          {activeTab === 'ai' && (
-            <div className={styles.rankings}>
-              <div className={styles.rankHeader}>
-                <span className={styles.rankCol1}>#</span>
-                <span className={styles.rankCol2}>{isZh ? '模型' : 'Model'}</span>
-                <span className={styles.rankCol3}>{isZh ? '组织' : 'Org'}</span>
-                <span className={styles.rankCol4}>{isZh ? '评分' : 'Score'}</span>
-              </div>
-              {aiModels.map((model, index) => (
-                <motion.div
-                  key={model.name}
-                  className={styles.rankRow}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  whileHover={{ backgroundColor: 'rgba(212, 175, 55, 0.06)' }}
-                >
-                  <span className={styles.rankCol1}>
-                    {index < 3 ? ['🥇', '🥈', '🥉'][index] : index + 1}
-                  </span>
-                  <span className={styles.rankCol2}>{model.name}</span>
-                  <span className={styles.rankCol3}>{model.org}</span>
-                  <span className={styles.rankCol4}>
-                    <span className={styles.score}>{model.score}</span>
-                  </span>
-                </motion.div>
-              ))}
-              <div className={styles.dataSource}>
-                {isZh ? '数据来源：LMSYS Chatbot Arena' : 'Source: LMSYS Chatbot Arena'}
-              </div>
-            </div>
-          )}
-
-          {/* Tech News */}
-          {activeTab === 'tech' && (
-            <div className={styles.newsList}>
-              <div className={styles.newsSection}>
-                <h3 className={styles.newsSectionTitle}>CSDN {isZh ? '热门文章' : 'Hot'}</h3>
-                <a
-                  href="https://blog.csdn.net/rank/list"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.newsLink}
-                >
-                  {isZh ? '查看 CSDN 热门排行 →' : 'View CSDN Rankings →'}
-                </a>
-              </div>
-              <div className={styles.newsSection}>
-                <h3 className={styles.newsSectionTitle}>掘金 {isZh ? '热门文章' : 'Hot'}</h3>
-                <a
-                  href="https://juejin.cn/hot/articles"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.newsLink}
-                >
-                  {isZh ? '查看掘金热门排行 →' : 'View Juejin Rankings →'}
-                </a>
-              </div>
-              <div className={styles.newsSection}>
-                <h3 className={styles.newsSectionTitle}>Hacker News</h3>
-                <a
-                  href="https://news.ycombinator.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.newsLink}
-                >
-                  {isZh ? '查看 Hacker News →' : 'View Hacker News →'}
-                </a>
-              </div>
-              <div className={styles.newsSection}>
-                <h3 className={styles.newsSectionTitle}>Product Hunt</h3>
-                <a
-                  href="https://www.producthunt.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.newsLink}
-                >
-                  {isZh ? '查看 Product Hunt →' : 'View Product Hunt →'}
-                </a>
-              </div>
-              <div className={styles.dataSource}>
-                {isZh ? '💡 提示：点击链接跳转到对应平台查看最新内容' : '💡 Tip: Click links to view latest content on each platform'}
-              </div>
-            </div>
-          )}
-
-          {/* GitHub Trending */}
-          {activeTab === 'github' && (
-            <div className={styles.trendingList}>
-              {loading ? (
-                <div className={styles.loading}>
-                  <span className={styles.loadingText}>
-                    {isZh ? '正在加载...' : 'Loading...'}
-                  </span>
+          <motion.div
+            className={styles.content}
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            {activeTab === 'ai' && (
+              <div className={styles.rankings}>
+                <div className={styles.rankHeader}>
+                  <span className={styles.rankCol1}>#</span>
+                  <span className={styles.rankCol2}>{isZh ? '模型' : 'Model'}</span>
+                  <span className={styles.rankCol3}>{isZh ? '组织' : 'Org'}</span>
+                  <span className={styles.rankCol4}>{isZh ? '评分' : 'Score'}</span>
                 </div>
-              ) : (
-                githubTrending.map((repo, index) => (
-                  <motion.a
-                    key={repo.title}
-                    href={repo.url}
+                {aiModels.map((model, index) => (
+                  <motion.div
+                    key={model.name}
+                    className={styles.rankRow}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    whileHover={{ backgroundColor: 'rgba(212, 175, 55, 0.06)' }}
+                  >
+                    <span className={styles.rankCol1}>
+                      {index < 3 ? ['🥇', '🥈', '🥉'][index] : index + 1}
+                    </span>
+                    <span className={styles.rankCol2}>{model.name}</span>
+                    <span className={styles.rankCol3}>{model.org}</span>
+                    <span className={styles.rankCol4}>
+                      <span className={styles.score}>{model.score}</span>
+                    </span>
+                  </motion.div>
+                ))}
+                <div className={styles.dataSource}>
+                  {isZh ? '数据来源：LMSYS Chatbot Arena' : 'Source: LMSYS Chatbot Arena'}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'tech' && (
+              <div className={styles.newsList}>
+                <div className={styles.newsSection}>
+                  <h3 className={styles.newsSectionTitle}>CSDN {isZh ? '热门文章' : 'Hot'}</h3>
+                  <a
+                    href="https://blog.csdn.net/rank/list"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={styles.trendingItem}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    whileHover={{ x: 5, borderColor: 'rgba(212, 175, 55, 0.3)' }}
+                    className={styles.newsLink}
                   >
-                    <div className={styles.trendingHeader}>
-                      <span className={styles.trendingIcon}>{repo.icon}</span>
-                      <span className={styles.trendingName}>{repo.title}</span>
-                      <span className={styles.trendingStars}>{repo.source}</span>
-                    </div>
-                    <p className={styles.trendingDesc}>{repo.desc}</p>
-                  </motion.a>
-                ))
-              )}
-              <a
-                href="https://github.com/trending"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.viewAll}
-              >
-                {isZh ? '查看 GitHub Trending →' : 'View GitHub Trending →'}
-              </a>
-            </div>
-          )}
+                    {isZh ? '查看 CSDN 热门排行 →' : 'View CSDN Rankings →'}
+                  </a>
+                </div>
+                <div className={styles.newsSection}>
+                  <h3 className={styles.newsSectionTitle}>掘金 {isZh ? '热门文章' : 'Hot'}</h3>
+                  <a
+                    href="https://juejin.cn/hot/articles"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.newsLink}
+                  >
+                    {isZh ? '查看掘金热门排行 →' : 'View Juejin Rankings →'}
+                  </a>
+                </div>
+                <div className={styles.newsSection}>
+                  <h3 className={styles.newsSectionTitle}>Hacker News</h3>
+                  <a
+                    href="https://news.ycombinator.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.newsLink}
+                  >
+                    {isZh ? '查看 Hacker News →' : 'View Hacker News →'}
+                  </a>
+                </div>
+                <div className={styles.newsSection}>
+                  <h3 className={styles.newsSectionTitle}>Product Hunt</h3>
+                  <a
+                    href="https://www.producthunt.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.newsLink}
+                  >
+                    {isZh ? '查看 Product Hunt →' : 'View Product Hunt →'}
+                  </a>
+                </div>
+                <div className={styles.dataSource}>
+                  {isZh ? '💡 提示：点击链接跳转到对应平台查看最新内容' : '💡 Tip: Click links to view latest content on each platform'}
+                </div>
+              </div>
+            )}
 
-          {/* Tech Calendar */}
-          {activeTab === 'calendar' && (
-            <div className={styles.calendar}>
-              <div className={styles.calendarCard}>
-                <h3 className={styles.calendarTitle}>
-                  {isZh ? '📅 历史上的今天' : '📅 Today in Tech History'}
-                </h3>
-                <div className={styles.calendarContent}>
-                  <p className={styles.calendarDate}>
-                    {new Date().toLocaleDateString(isZh ? 'zh-CN' : 'en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </p>
-                  <div className={styles.calendarEvents}>
-                    <div className={styles.event}>
-                      <span className={styles.eventYear}>1989</span>
-                      <span className={styles.eventText}>
-                        {isZh ? '万维网（WWW）在CERN被发明' : 'World Wide Web invented at CERN'}
-                      </span>
-                    </div>
-                    <div className={styles.event}>
-                      <span className={styles.eventYear}>2007</span>
-                      <span className={styles.eventText}>
-                        {isZh ? 'iPhone 发布，开启智能手机时代' : 'iPhone released, starting the smartphone era'}
-                      </span>
-                    </div>
-                    <div className={styles.event}>
-                      <span className={styles.eventYear}>2015</span>
-                      <span className={styles.eventText}>
-                        {isZh ? 'TensorFlow 开源发布' : 'TensorFlow open-sourced'}
-                      </span>
+            {activeTab === 'github' && (
+              <div className={styles.trendingList}>
+                {loading ? (
+                  <div className={styles.loading}>
+                    <span className={styles.loadingText}>
+                      {isZh ? '正在加载...' : 'Loading...'}
+                    </span>
+                  </div>
+                ) : (
+                  githubTrending.map((repo, index) => (
+                    <motion.a
+                      key={repo.title}
+                      href={repo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.trendingItem}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      whileHover={{ x: 5, borderColor: 'rgba(212, 175, 55, 0.3)' }}
+                    >
+                      <div className={styles.trendingHeader}>
+                        <span className={styles.trendingIcon}>{repo.icon}</span>
+                        <span className={styles.trendingName}>{repo.title}</span>
+                        <span className={styles.trendingStars}>{repo.source}</span>
+                      </div>
+                      <p className={styles.trendingDesc}>{repo.desc}</p>
+                    </motion.a>
+                  ))
+                )}
+                <a
+                  href="https://github.com/trending"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.viewAll}
+                >
+                  {isZh ? '查看 GitHub Trending →' : 'View GitHub Trending →'}
+                </a>
+              </div>
+            )}
+
+            {activeTab === 'calendar' && (
+              <div className={styles.calendar}>
+                <div className={styles.calendarCard}>
+                  <h3 className={styles.calendarTitle}>
+                    {isZh ? '📅 历史上的今天' : '📅 Today in Tech History'}
+                  </h3>
+                  <div className={styles.calendarContent}>
+                    <p className={styles.calendarDate}>
+                      {new Date().toLocaleDateString(isZh ? 'zh-CN' : 'en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </p>
+                    <div className={styles.calendarEvents}>
+                      <div className={styles.event}>
+                        <span className={styles.eventYear}>1989</span>
+                        <span className={styles.eventText}>
+                          {isZh ? '万维网（WWW）在CERN被发明' : 'World Wide Web invented at CERN'}
+                        </span>
+                      </div>
+                      <div className={styles.event}>
+                        <span className={styles.eventYear}>2007</span>
+                        <span className={styles.eventText}>
+                          {isZh ? 'iPhone 发布，开启智能手机时代' : 'iPhone released, starting the smartphone era'}
+                        </span>
+                      </div>
+                      <div className={styles.event}>
+                        <span className={styles.eventYear}>2015</span>
+                        <span className={styles.eventText}>
+                          {isZh ? 'TensorFlow 开源发布' : 'TensorFlow open-sourced'}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className={styles.calendarCard}>
-                <h3 className={styles.calendarTitle}>
-                  {isZh ? '🎯 即将到来' : '🎯 Upcoming'}
-                </h3>
-                <div className={styles.calendarContent}>
-                  <p className={styles.calendarNote}>
-                    {isZh
-                      ? '更多科技日历功能正在开发中...'
-                      : 'More tech calendar features coming soon...'}
-                  </p>
+                <div className={styles.calendarCard}>
+                  <h3 className={styles.calendarTitle}>
+                    {isZh ? '🎯 即将到来' : '🎯 Upcoming'}
+                  </h3>
+                  <div className={styles.calendarContent}>
+                    <p className={styles.calendarNote}>
+                      {isZh
+                        ? '更多科技日历功能正在开发中...'
+                        : 'More tech calendar features coming soon...'}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </motion.div>
+            )}
+          </motion.div>
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }

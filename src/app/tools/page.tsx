@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import StarNavigation from '@/components/ui/StarNavigation';
 import CosmicParticleBackground from '@/components/effects/CosmicParticleBackground';
+import PageTransition from '@/components/animations/PageTransition';
 import { TOOL_CATEGORIES, searchTools } from '@/config/tools';
 import styles from './page.module.css';
 
@@ -29,96 +30,83 @@ export default function ToolsPage() {
   const totalTools = TOOL_CATEGORIES.reduce((sum, cat) => sum + cat.tools.length, 0);
 
   return (
-    <div className={styles.page}>
-      <CosmicParticleBackground preset="matrix" intensity="medium" />
-      <StarNavigation />
-      <div className={styles.container}>
-        {/* Header */}
-        <motion.div
-          className={styles.header}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <span className={styles.headerTag}>
-            {'// ' + (isZh ? '工具集' : 'Tools')}
-          </span>
-          <h1 className={styles.headerTitle}>
-            {isZh ? '开发者工具箱' : 'Developer Toolbox'}
-          </h1>
-          <p className={styles.headerDesc}>
-            {isZh
-              ? `精选 ${totalTools}+ 专业开发工具，覆盖 ${TOOL_CATEGORIES.length} 个分类`
-              : `${totalTools}+ curated developer tools across ${TOOL_CATEGORIES.length} categories`}
-          </p>
-        </motion.div>
-
-        {/* Search */}
-        <motion.div
-          className={styles.searchContainer}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <span className={styles.searchIcon}>🔍</span>
-          <input
-            type="text"
-            className={styles.searchInput}
-            placeholder={isZh ? '搜索工具...' : 'Search tools...'}
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setActiveCategory(null);
-            }}
-          />
-          {searchQuery && (
-            <button className={styles.searchClear} onClick={() => setSearchQuery('')}>
-              ✕
-            </button>
-          )}
-        </motion.div>
-
-        {/* Category tabs */}
-        <div className={styles.categories}>
-          <button
-            className={`${styles.catBtn} ${!activeCategory && !searchQuery ? styles.catActive : ''}`}
-            onClick={() => { setActiveCategory(null); setSearchQuery(''); }}
-          >
-            {isZh ? '🌟 全部' : '🌟 All'}
-          </button>
-          {TOOL_CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              className={`${styles.catBtn} ${activeCategory === cat.id ? styles.catActive : ''}`}
-              onClick={() => { setActiveCategory(cat.id); setSearchQuery(''); }}
-            >
-              {cat.icon} {isZh ? cat.nameZh : cat.nameEn}
-            </button>
-          ))}
-        </div>
-
-        {/* Tools grid */}
-        <AnimatePresence mode="wait">
+    <PageTransition>
+      <div className={styles.page}>
+        <CosmicParticleBackground preset="matrix" intensity="medium" />
+        <StarNavigation />
+        <div className={styles.container}>
           <motion.div
-            className={styles.toolsGrid}
-            key={activeCategory || searchQuery || 'all'}
+            className={styles.header}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <span className={styles.headerTag}>
+              {'// ' + (isZh ? '工具集' : 'Tools')}
+            </span>
+            <h1 className={styles.headerTitle}>
+              {isZh ? '开发者工具箱' : 'Developer Toolbox'}
+            </h1>
+            <p className={styles.headerDesc}>
+              {isZh
+                ? `精选 ${totalTools}+ 专业开发工具，覆盖 ${TOOL_CATEGORIES.length} 个分类`
+                : `${totalTools}+ curated developer tools across ${TOOL_CATEGORIES.length} categories`}
+            </p>
+          </motion.div>
+
+          <motion.div
+            className={styles.searchContainer}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            transition={{ delay: 0.2 }}
           >
-            {(filteredTools
-              ? filteredTools.map((tool) => (
-                  <ToolCard
-                    key={tool.name}
-                    tool={tool}
-                    isZh={isZh}
-                    isExpanded={expandedTool === tool.name}
-                    onToggle={() => setExpandedTool(expandedTool === tool.name ? null : tool.name)}
-                  />
-                ))
-              : TOOL_CATEGORIES.flatMap((cat) =>
-                  cat.tools.map((tool) => (
+            <span className={styles.searchIcon}>🔍</span>
+            <input
+              type="text"
+              className={styles.searchInput}
+              placeholder={isZh ? '搜索工具...' : 'Search tools...'}
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setActiveCategory(null);
+              }}
+            />
+            {searchQuery && (
+              <button className={styles.searchClear} onClick={() => setSearchQuery('')}>
+                ✕
+              </button>
+            )}
+          </motion.div>
+
+          <div className={styles.categories}>
+            <button
+              className={`${styles.catBtn} ${!activeCategory && !searchQuery ? styles.catActive : ''}`}
+              onClick={() => { setActiveCategory(null); setSearchQuery(''); }}
+            >
+              {isZh ? '🌟 全部' : '🌟 All'}
+            </button>
+            {TOOL_CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                className={`${styles.catBtn} ${activeCategory === cat.id ? styles.catActive : ''}`}
+                onClick={() => { setActiveCategory(cat.id); setSearchQuery(''); }}
+              >
+                {cat.icon} {isZh ? cat.nameZh : cat.nameEn}
+              </button>
+            ))}
+          </div>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              className={styles.toolsGrid}
+              key={activeCategory || searchQuery || 'all'}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {(filteredTools
+                ? filteredTools.map((tool) => (
                     <ToolCard
                       key={tool.name}
                       tool={tool}
@@ -127,12 +115,23 @@ export default function ToolsPage() {
                       onToggle={() => setExpandedTool(expandedTool === tool.name ? null : tool.name)}
                     />
                   ))
-                )
-            )}
-          </motion.div>
-        </AnimatePresence>
+                : TOOL_CATEGORIES.flatMap((cat) =>
+                    cat.tools.map((tool) => (
+                      <ToolCard
+                        key={tool.name}
+                        tool={tool}
+                        isZh={isZh}
+                        isExpanded={expandedTool === tool.name}
+                        onToggle={() => setExpandedTool(expandedTool === tool.name ? null : tool.name)}
+                      />
+                    ))
+                  )
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }
 

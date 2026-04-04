@@ -1,5 +1,17 @@
+.wrapper {
+  position: relative;
+  min-height: 100vh;
+}
+
+.skeleton {
+  min-height: 100vh;
+  background: #04071a;
+}
+
 .pageContainer {
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 .overlay {
@@ -7,9 +19,26 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 100vh;
-  background: linear-gradient(135deg, #00d4ff, #bf5af2);
+  bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.08) 0%, rgba(4, 7, 26, 0.95) 100%);
   z-index: 9998;
   pointer-events: none;
-  transform-origin: left;
+}
+
+.starsPattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 30% 60%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 50% 10%, rgba(212, 175, 55, 0.8), transparent),
+    radial-gradient(1px 1px at 70% 50%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(2px 2px at 15% 80%, rgba(212, 175, 55, 0.6), transparent),
+    radial-gradient(1px 1px at 85% 30%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 25% 45%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(2px 2px at 65% 85%, rgba(212, 175, 55, 0.5), transparent),
+    radial-gradient(1px 1px at 45% 75%, rgba(77, 159, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 90% 70%, rgba(167, 139, 250, 0.5), transparent);
+  background-size: 250px 250px;
+  opacity: 0.6;
 }

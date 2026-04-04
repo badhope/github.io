@@ -2,17 +2,18 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import styles from './PageTransition.module.css';
 
 interface PageTransitionProps {
   children: ReactNode;
+  className?: string;
 }
 
 const pageVariants = {
   initial: {
     opacity: 0,
-    y: 40,
+    y: 20,
     scale: 0.98,
   },
   enter: {
@@ -22,15 +23,15 @@ const pageVariants = {
     transition: {
       duration: 0.5,
       ease: [0.22, 1, 0.36, 1],
-      staggerChildren: 0.08,
+      staggerChildren: 0.06,
     },
   },
   exit: {
     opacity: 0,
-    y: -20,
-    scale: 1.02,
+    y: -15,
+    scale: 1.01,
     transition: {
-      duration: 0.3,
+      duration: 0.25,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -39,33 +40,42 @@ const pageVariants = {
 const overlayVariants = {
   initial: {
     opacity: 0,
-    scaleX: 0,
-    originX: 0,
+    clipPath: 'circle(0% at 50% 50%)',
   },
   enter: {
     opacity: 1,
-    scaleX: 1,
+    clipPath: 'circle(150% at 50% 50%)',
     transition: {
-      duration: 0.4,
+      duration: 0.5,
       ease: [0.22, 1, 0.36, 1],
     },
   },
   exit: {
     opacity: 0,
-    scaleX: 1,
-    originX: 1,
+    clipPath: 'circle(0% at 50% 50%)',
     transition: {
-      duration: 0.3,
+      duration: 0.35,
       ease: [0.22, 1, 0.36, 1],
     },
   },
 };
 
-export default function PageTransition({ children }: PageTransitionProps) {
+export default function PageTransition({ children, className }: PageTransitionProps) {
   const pathname = usePathname();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return (
+      <div className={styles.skeleton} />
+    );
+  }
 
   return (
-    <>
+    <div className={`${styles.wrapper} ${className || ''}`}>
       <AnimatePresence mode="wait">
         <motion.div
           key={pathname}
@@ -87,19 +97,25 @@ export default function PageTransition({ children }: PageTransitionProps) {
           animate="enter"
           exit="exit"
           variants={overlayVariants}
-        />
+        >
+          <div className={styles.starsPattern} />
+        </motion.div>
       </AnimatePresence>
-    </>
+    </div>
   );
 }
 
-export function StaggerItem({ children, className }: { children: ReactNode; className?: string }) {
+export function StaggerItem({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: 0.5,
+        delay,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
       {children}
     </motion.div>
@@ -118,10 +134,10 @@ export function FadeIn({
   className?: string;
 }) {
   const directions = {
-    up: { y: 40, x: 0 },
-    down: { y: -40, x: 0 },
-    left: { x: 40, y: 0 },
-    right: { x: -40, y: 0 },
+    up: { y: 35, x: 0 },
+    down: { y: -35, x: 0 },
+    left: { x: 35, y: 0 },
+    right: { x: -35, y: 0 },
   };
 
   return (
@@ -129,9 +145,9 @@ export function FadeIn({
       className={className}
       initial={{ opacity: 0, ...directions[direction] }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
+      viewport={{ once: true, margin: '-60px' }}
       transition={{
-        duration: 0.6,
+        duration: 0.55,
         delay,
         ease: [0.22, 1, 0.36, 1],
       }}
