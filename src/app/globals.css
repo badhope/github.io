@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-bg-dark text-text-normal antialiased;
+  }
+}
+
+@layer utilities {
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-primaryLight via-primary to-primaryLight bg-clip-text text-transparent;
+  }
+  .glass-card {
+    @apply bg-bg-glass backdrop-blur-xl border border-primary/20 rounded-xl;
+  }
+  .text-shadow-glow {
+    text-shadow: 0 0 10px rgba(245, 215, 110, 0.5);
+  }
+}
